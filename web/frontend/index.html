@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div id="app"><!--index.jsx injects App.jsx here--></div>
+    <script>
+      pathname = new URL(location.ancestorOrigins[0]);
+      Shop_name = pathname.hostname;
+      session='';
+     </script>
+    <script type="module" src="/index.jsx"></script>
+  </body>
+</html>

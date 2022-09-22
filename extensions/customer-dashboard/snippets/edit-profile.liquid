@@ -1,0 +1,55 @@
+     <section id="cd_edit_profile_page" class="cd_main-section cd_main-section-2">
+        <form id="cd_form_customer"> 
+          <div>
+            <div class="cd_form-header">
+            <div style="display:flex">
+              <div style="cursor: pointer;" class="cd_backFunction"><svg class="cd_back_button" id="cd_Layer_1" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg></div> 
+              <p id="cd_heading">Edit Profile</p>
+              </div>
+            <div class="cd_row">
+              <div class="cd_col-25">
+                <label for="fname">First Name</label>
+              </div>
+              <div class="cd_col-75">
+               <input type="hidden" id="id" name="id" value="{{ customer.id }}">
+                <input type="text" id="fname" name="first_name" value="{{ customer.first_name }}">
+              </div>
+            </div>
+            <div class="cd_row">
+              <div class="cd_col-25">
+                <label for="lname">Last Name</label>
+              </div>
+              <div class="cd_col-75">
+                <input type="text" id="lname" name="last_name" value="{{ customer.last_name }}">
+              </div>
+            </div>
+            <div class="cd_row">
+              <div class="cd_col-25">
+                <label for="email">Email</label>
+              </div>
+              <div class="cd_col-75">
+                <input type="email" disabled id="email" name="email" value="{{ customer.email }}">
+              </div>
+            </div>
+            <div class="cd_row">
+              <div class="cd_col-25">
+                <label for="phone">Phone Number</label>
+              </div>
+              
+              <div class="cd_col-75">
+                <input type="text" id="phone" name="phone" value="{{ customer.phone }}">
+              </div>
+
+            </div>
+            <div class="cd_check-marketing">
+              <input type="checkbox" name="check" id="checkbox" {% if customer.accepts_marketing %}checked="checked"{% endif %}>
+              <label for="checkbox">Accepts Marketing from {{ shop.name }} store </label>
+            </div>
+            
+            <div class="cd_row">
+              <button type="submit" id="cd_submit_loader">Save</button>
+            </div>
+            <div id="cd_success_message">Update Successfully</div>
+          </div></div>
+        </form>
+</section>

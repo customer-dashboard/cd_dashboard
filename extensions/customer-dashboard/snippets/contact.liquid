@@ -1,0 +1,67 @@
+<section id="cd_contact_page" class="cd_main-section cd_main-section-2">
+    <div class="cd_container">
+        <div>
+            <div class="cd_form-header">
+                 <div style="display:flex">
+              <div style="cursor: pointer;" class="cd_backContact"><svg class="cd_back_button" id="cd_Layer_1" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg></div> 
+              <p id="cd_heading">Contact</p>
+              </div>
+            </div>
+            {% form 'contact', class:'cd_contact' %}
+             {{ form.errors | default_errors }}
+                {%- if form.posted_successfully? -%}
+                <script>
+                localStorage.setItem("contact_posted", "yes");
+                window.location = "/account?a=orders";
+                </script>
+                {%-endif -%}
+            <div class="cd_container">
+                <div class="cd_flex-row">
+                    <div class="cd_row">
+                        <div class="cd_col-25">
+                            <label for="first-name">First Name</label>
+                        </div>
+                        <div class="cd_col-75">
+                            <input type="text" name="contact[first_name]" id="first-name" value="{{ customer.first_name }}" />
+                        </div>
+                    </div>
+                    <div class="cd_row">
+                        <div class="cd_col-25">
+                            <label for="last-name">Last Name</label>
+                        </div>
+                        <div class="cd_col-75">
+                            <input type="text" name="contact[last_name]" id="last-name" value="{{ customer.last_name }}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="cd_flex-row">
+                    <div class="cd_row">
+                        <div class="cd_col-25">
+                            <label for="phone">Phone</label>
+                        </div>
+                        <div class="cd_col-75">
+                            <input type="text" name="contact[phone]" id="phone" value="{{ customer.phone }}" />
+                        </div>
+                    </div>
+                    <div class="cd_row">
+                        <div class="cd_col-25">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="cd_col-75">
+                            <input type="email" name="contact[email]" id="email" readonly value="{{ customer.email }}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="cd_message">
+                    <label for="message">Message</label>
+                    <textarea name="contact[body]" id="message" value="{{ form.body }}" ></textarea>
+                  </div>
+                <div class="cd_row" style="margin-top:15px;">
+                    <button type="submit">Save</button>
+                </div>                
+            </div>
+            {% endform %}
+        </div>         
+         
+    </div>
+</section>

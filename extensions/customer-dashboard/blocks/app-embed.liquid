@@ -1,0 +1,44 @@
+<script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
+{% render "css-variables" %}
+<style>
+.customerdb-parent > *{
+  display:none!important;
+}
+#customer_dashboard{
+  display:flex!important;
+}
+</style>
+<div id="customer_dashboard" style="display:none!important;">
+<div class="cd_main_box">
+{% render "header" %}
+<div class="cd_main-content">
+{% render "profile" %}
+{% render "edit-profile" %}
+{% render "orders" %}
+{% render "addresses" %}
+{% render "add-address" %}
+{% render "contact" %}
+{% render "change-password" %}
+{% render "privacy-policy" %}
+{% render "return-policy" %}
+</div>
+</div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Customer Dashboard",
+  "target": "head",
+  "templates": ["customers/account", "customers/addresses"],
+  "stylesheet": "customer-dashboard.css",
+  "settings": [
+    {
+        "type": "text",
+        "id": "cd_heading",
+        "label": "Heading",
+        "default": "Heading 1"
+    }
+  ]
+}
+{% endschema %}

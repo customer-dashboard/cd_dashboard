@@ -1,0 +1,26 @@
+.color_picker{
+    background: gray;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.link{
+    text-decoration: none;
+}
+
+/* a:visited :not(.sidebar_navigation) {
+    color: #2c6ecb;
+  } */
+
+.sidebar_navigation{
+color: black;
+text-decoration: none;
+display: inline-block;
+width: 100%;
+}
+
+.paidCard{
+    font-size:medium;
+    padding-bottom: 8px;
+}

@@ -1,0 +1,24 @@
+<p> 
+  To learn more about Conditional App Blocks, visit the development <a rel="nofollow" href="https://shopify.dev/changelog/theme-app-extensions-now-support-conditional-app-blocks"> changelog </a>
+</p>
+{% schema %}
+  {
+    "name": "Conditional App Block",
+    "target": "head",
+    "available_if": "{{ app.metafields.sample_app.feature1 }}",
+    "settings": [
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Color",
+          "default": "#000000"
+        },
+        {
+          "type": "number",
+          "id": "star_size",
+          "label": "Font size",
+          "default": 24
+        }
+   ]
+  }
+{% endschema %}

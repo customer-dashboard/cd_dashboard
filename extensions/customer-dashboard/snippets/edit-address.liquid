@@ -1,0 +1,111 @@
+     <section id="cd_edit_address_page" class="cd_main-section cd_main-section-2">
+      <div class="cd_header">
+        <div><p id="cd_heading">Edit Address</p></div>
+      </div>
+
+{% for address in customer.addresses %}
+  {% form 'customer_address', address %}
+       <div>
+        <form action="index.html">
+        <div class="cd_flex-row">
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="fname">First Name</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="fname" name="firstname" value="{{ form.first_name }}">
+            </div>
+          </div>
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="lname">Last Name</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="lname" name="lastname" value="{{ form.last_name }}">
+            </div>
+          </div>
+        </div>
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="company">Company</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="company" name="company" value="{{ form.company }}">
+            </div>
+          </div>  
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="address">Address</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="address" name="address" value="{{ form.address1 }}" >
+            </div>            
+          </div>
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="apartment">Apartment, suite, etc. :-</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="apartment" name="apartment" value="{{ form.company }}" >
+            </div>            
+          </div>
+
+          <div class="cd_flex-row">
+            <div class="cd_row">
+              <div class="cd_col-25">
+                <label for="city">City</label>
+              </div>
+              <div class="cd_col-75">
+                <input type="text" id="city" name="city" value="{{ form.city }}" >
+              </div>
+            </div>
+            <div class="cd_row">
+              <div class="cd_col-25">
+                <label for="country">Country/Region:-</label>
+              </div>
+              <div class="cd_col-75">
+                <select id="country" name="country">
+                  <option value="australia">Australia</option>
+                  <option value="canada">Canada</option>
+                  <option value="usa">USA</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="province">Province :-</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="province" name="province" value="{{ form.province }}" >
+            </div>            
+          </div>
+
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="postal">Postal/Zip Code :-</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="postal" name="postal" value="{{ form.zip }}">
+            </div>            
+          </div>
+
+          <div class="cd_row">
+            <div class="cd_col-25">
+              <label for="phone">Phone :-</label>
+            </div>
+            <div class="cd_col-75">
+              <input type="text" id="phone" name="phone" value="{{ form.phone }}">
+            </div>            
+          </div>
+
+          <div class="cd_row" style="margin-top:15px;">
+            <input type="submit" value="Save">
+          </div>
+        </form>
+      </div>
+  {% endform %}
+{% endfor %}
+     
+     </section>
