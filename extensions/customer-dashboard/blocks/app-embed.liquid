@@ -1,8 +1,20 @@
+{% if customer %}
+<script> 
+customerVarOnLoad = {{ customer.id }};
+customerFirstNameOnload = "{{ customer.first_name }}";
+customerLastNameOnload = "{{ customer.last_name }}";
+customerEmailOnload = "{{ customer.email }}";
+customerPhoneOnload = "{{ customer.phone }}";
+defaultLanguage = Shopify.locale;
+themeId = Shopify.theme.id;
+ </script>
+{% endif %}
+
 <script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
 {% render "css-variables" %}
 <style>
 .customerdb-parent > *{
-  display:none!important;
+  display:none;
 }
 #customer_dashboard{
   display:flex!important;

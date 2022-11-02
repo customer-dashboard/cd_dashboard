@@ -5,16 +5,14 @@ import axios from 'axios';
 
 
 export const DeleteMenu = (props) => {
-  const Result = props.value;
-  const getProfileData = props.getProfileData;
+  const {value,getProfileData,id,table} = props;
   const [active, setActive] = useState(false);
   const handleChange = () => setActive(!active);
   const activator = <span style={{width:"20px", float:"right",cursor:"pointer"}} onClick={handleChange}> <DeleteMinor/></span>;
 
     const deleteField = ()=>{
-      const data = Result.filter(data => data.id != props.id);
-         axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=menu_builder_fields`,data).then((response) => {
-         console.log(response);
+      const data = value.filter(data => data.id != id);
+         axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=${table}`,data).then((response) => {
          getProfileData();
          handleChange();
          });

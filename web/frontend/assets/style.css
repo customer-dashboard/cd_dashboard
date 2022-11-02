@@ -5,6 +5,10 @@
     border-radius: 50%;
 }
 
+.cd_svg_icon svg{
+    width: 22px;
+}
+
 .link{
     text-decoration: none;
 }

@@ -13,13 +13,14 @@
     "node": ">=16.15.0"
   },
   "dependencies": {
-    "@shopify/shopify-api": "^4.2.0",
+    "@shopify/shopify-api": "^5.2.0",
     "axios": "^0.27.2",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "express": "^4.17.3",
+    "html-react-parser": "^3.0.4",
     "mysql": "^2.18.1",
     "react-beautiful-dnd": "^13.1.0",
     "react-drag-listview": "^0.2.1",

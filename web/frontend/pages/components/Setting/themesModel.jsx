@@ -14,13 +14,13 @@ export const ThemesModel=(props)=>{
     const data = {
       data:selected
     }
-    if(selected!==""){
-    axios.post(`/api/theme-id?shop=${Shop_name}`,data).then((res) => {
-    if(res.status===200){
-      setMessage(res.data);
-      setActive2(true);
-    }
-    })
+    if(selected!==""){ 
+    // axios.post(`/api/theme-id?shop=${Shop_name}`,data).then((res) => {
+    // if(res.status===200){
+    //   setMessage(res.data);
+    //   setActive2(true);
+    // }
+    // }) 
     }
     else{
       setActive2(true);

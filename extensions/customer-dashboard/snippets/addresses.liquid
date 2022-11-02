@@ -8,7 +8,7 @@
       </div>
          <div class="cd_address-main-section">
           <div class="cd_address-box">
-              <div class="cd_address-box-logo">
+              <div class="cd_address-box-logo" onclick="myFunction('cd_add-address')">
                   <div class="cd_address_box_logo_content">
                       <svg id="cd_add-icon-svg" width="55" height="55" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path
@@ -18,7 +18,7 @@
                       <div>
                           <p>Addresses</p>
                       </div>
-                      <div id="cd_add-icon" onclick="myFunction('add-address')">
+                      <div id="cd_add-address">
                           <svg id="cd_add-icon-svg" width="52" height="52" viewBox="0 0 52 52" fill="none"
                               xmlns="http://www.w3.org/2000/svg">
                               <path d="M51.3 29H29V51.5H22.5V29H0.300001V23H22.5V0.5H29V23H51.3V29Z" fill="#202020"
@@ -90,7 +90,6 @@
           {% form 'customer_address', address, class:'cd_address_edit cd_hide' %}
               <div class="cd_header cd_address_heading_2">
               <div class="cd_header2">
-              <div style="cursor: pointer;" onclick="backFunction()"><svg class="cd_back_button" id="Layer_1" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "/></svg></div> 
               <p id="cd_heading" class="cd_toggle_address">Edit Addresses</p>
               </div>
               </div>
@@ -201,6 +200,7 @@
               </div>
               <div class="cd_row" style="margin-top:15px;">
                   <button type="submit">Save</button>
+                  <input onclick="backFunction()" type="button" id="cd_submit_loader" value="Cancel"/>
               </div>
           </div>
           {% endform %}

@@ -2,15 +2,18 @@ import { Button,  ButtonGroup,  FormLayout,  Frame,  Icon,  Modal, Select, TextF
 import {
   MinusMinor,PlusMinor
 } from '@shopify/polaris-icons'; 
-import axios from 'axios';
 import { useCallback, useState } from 'react'
-export const AddFieldsModel = ({getAdditionalData}) => {
+export const AddFieldsModel = (props) => {
+  const {getAdditionalData}=props;
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(true);
   const [group, setGroup] = useState([{}])
   const [state, setState] = useState({
     label:"",
-    field:"",
+    value:"",
+    name:"",
+    type:"additional",
+    multipleValue:[]
   })
   const [result, setResult] = useState('')
   
@@ -27,7 +30,6 @@ export const AddFieldsModel = ({getAdditionalData}) => {
 }
   const options = [
     {label: 'Input', value: 'text'},
-    {label: 'Email', value: 'email'},
     {label: 'Date', value: 'date'},  
     {label: 'Textarea', value: 'textarea'},
     {label: 'Radio-Button', value:'radio'},
@@ -54,21 +56,13 @@ export const AddFieldsModel = ({getAdditionalData}) => {
 
   const Clear = ()=>{
     setGroup([{}]);
-    setState({label:"", field:""});
+    setState({label:"", value:"",type:"additional",});
   }
 
   const Submit = () =>{
-   const data = {
-    singleFields:state,
-    multipleFields:group
-   }
-    axios.post(`/api/post-profile-additional-fields?shop=${Shop_name}`,data).then((response) => {
-    if(response.status===200){
-      setResult(response.data);
-      setActive(false);
-      getAdditionalData();
-    }
-    })
+   state.multipleValue=group;
+   getAdditionalData(state);
+   setActive(false);
   }
 
   const toastMarkup = active2 ? (
@@ -90,9 +84,9 @@ export const AddFieldsModel = ({getAdditionalData}) => {
                   label="Select field type"
                   placeholder="Select Type"
                   options={options}
-                  onChange={(val)=>handleChange2("field",val)}   
-                  value={state.field}
-                  name="field"
+                  onChange={(val)=>handleChange2("value",val)}   
+                  value={state.value}
+                  name="value"
                   />        
                   </FormLayout.Group>   
                   <FormLayout.Group>
@@ -106,7 +100,7 @@ export const AddFieldsModel = ({getAdditionalData}) => {
                 </FormLayout>
                 {group.map((element, index) => (
             <div key={index}>
-             {state&&state.field=='radio'||state.field=='checkbox'?
+             {state&&state.value=='radio'||state.value=='checkbox'?
                     <TextField        
                     value={element.value}      
                     onChange={(val) => groupChangval(index,"value",val)}

@@ -1,10 +1,9 @@
 import { Shopify } from "@shopify/shopify-api";
 import { gdprTopics } from "@shopify/shopify-api/dist/webhooks/registry.js";
-import {ScriptTag} from '@shopify/shopify-api/dist/rest-resources/2022-07/index.js';
 import ensureBilling from "../helpers/ensure-billing.js";
 import topLevelAuthRedirect from "../helpers/top-level-auth-redirect.js";
 
-export default function applyAuthMiddleware(app,{billing = { required: false } }) {
+export default function applyAuthMiddleware(app, { billing = { required: false } } = { billing: { required: false } }) {
   app.get("/api/auth", async (req, res) => {
     if (!req.query.shop) {
       res.status(500);
@@ -87,14 +86,8 @@ export default function applyAuthMiddleware(app,{billing = { required: false } }
         if (!hasPayment) {
           redirectUrl = confirmationUrl;
         }
+      console.log(confirmationUrl);
       } 
-      const script_tag = new ScriptTag({session: session});
-      script_tag.id = 176124985403;
-      script_tag.src = "https://www.pscadda.com/LAHIVE/script.js";
-      await script_tag.save({
-        update: true,
-      });
-      // Redirect to app with shop parameter upon auth
       res.redirect(redirectUrl);
     } catch (e) {
       console.warn(e);

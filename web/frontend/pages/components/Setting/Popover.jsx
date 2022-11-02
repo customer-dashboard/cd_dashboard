@@ -1,72 +1,216 @@
-import { useCallback, useState } from 'react'
-import { Button, Popover, ColorPicker} from '@shopify/polaris'
-export const PopoverSetting = () => {
+import {useState } from 'react'
+import {Popover, ColorPicker, TextField, FormLayout, DescriptionList,} from '@shopify/polaris'
+export const PopoverSetting = (props) => {
+  const {cd_title,ColorChange,value} = props;
+  const ShopifyAdmin = { r: 28, g: 34, b: 96 };
+  const MINIMUM_DIFFERENCE = 100;
 const [popoverActive, setPopoverActive] = useState(false);
-const togglePopoverActive = useCallback(
-() => setPopoverActive((popoverActive) => !popoverActive),
-[],
-);
-    const [color, setColor] = useState({
-      hue: 100,
-      brightness: 255,
-      saturation: 255,
+const [first, setfirst] = useState(value);
+const [toggle, setToggle] = useState(false);
+const togglePopoverActive = () =>{
+  setToggle(true)
+  setPopoverActive(!popoverActive);
+}
+    const [state, setState] = useState({
+      color: {
+        hue: 100,
+        brightness: 1,
+        saturation: 1
+      },
+      invalidHex: undefined,
+      focusHex: null,
+      focusColor: null
     });
-const activator = (
-<div className='color_picker' 
-style={{background:HSLToHex(color.hue,color.hue,color.hue)}} 
-onClick={togglePopoverActive}></div>
-);
+
+    
+
+
+const { color } = state;
+const { hue, brightness, saturation } = color;
+const rgb = hsbToRgb(hue / 360, saturation, brightness);
+const { r, g, b } = rgb;
+const hex = rgbToHex(r, g, b);
+const diff = calcColorDifference(ShopifyAdmin, rgb);
+const isOkay = isColorOkay(diff);
+const error = isOkay ? null : "Color is not okay";
+
+const divStyle = {
+  width: "60px",
+  height: "20px",
+  backgroundColor: hex,
+  borderRadius: "3px 3px 3px 3px"
+};
+
+  
+  
+const handleColorChange = color => {
+const { hue, brightness, saturation } = color;
+const rgb = hsbToRgb(hue / 360, saturation, brightness);
+const { r, g, b } = rgb;
+const hex = rgbToHex(r, g, b);
+  setState({
+    color,
+    invalidHex: undefined,
+    focusColor: true,
+    focusHex: null
+  });
+  setfirst(hex)
+  ColorChange({[cd_title]:hex});
+};
+
+
+const handleHexChange = hex => {
+  const rgb = hexToRgb(hex);
+  if (rgb == null) {
+    setState({ invalidHex: hex, focusColor: null, focusHex: true });
+    return;
+  }
+  // const color = rgbToHsv(rgb);
+  // setState({
+  //   color,
+  //   invalidHex: undefined,
+  //   focusColor: null,
+  //   focusHex: true
+  // });
+};
 
 return (
 <div>
 <Popover
 active={popoverActive}
-activator={activator}
+activator={toggle?<div className='color_picker' style={{backgroundColor:first}} onClick={togglePopoverActive}></div>:<div className='color_picker' style={{backgroundColor:value}} onClick={togglePopoverActive}></div>}
 onClose={togglePopoverActive}
 ariaHaspopup={false}
 sectioned
 >
-<ColorPicker onChange={setColor} color={color} />
+
+<FormLayout>
+        <ColorPicker
+          onChange={handleColorChange}
+          color={color}
+          autoFocus={state.focusColor}
+        />
+        <DescriptionList
+          items={[
+            {
+              term: "Your color",
+              description: (
+                <TextField
+                  label="Your color"
+                  labelHidden
+                  disabled 
+                  onChange={handleHexChange}
+                  value={state.invalidHex || hex}
+                  error={error}
+                  prefix={<div style={divStyle} />}
+                  autoFocus={state.focusHex}
+                />
+              )
+            },
+  
+          ]}
+        />
+      </FormLayout>
 </Popover>
 </div>
 );
+function rgbToHex(r, g, b) {
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
-const HSLToHex = (h,s,l)=> {
-    s /= 100;
-    l /= 100;
-  
-    let c = (1 - Math.abs(2 * l - 1)) * s,
-        x = c * (1 - Math.abs((h / 60) % 2 - 1)),
-        m = l - c/2,
-        r = 0,
-        g = 0, 
-        b = 0; 
-  
-    if (0 <= h && h < 60) {
-      r = c; g = x; b = 0;
-    } else if (60 <= h && h < 120) {
-      r = x; g = c; b = 0;
-    } else if (120 <= h && h < 180) {
-      r = 0; g = c; b = x;
-    } else if (180 <= h && h < 240) {
-      r = 0; g = x; b = c;
-    } else if (240 <= h && h < 300) {
-      r = x; g = 0; b = c;
-    } else if (300 <= h && h < 360) {
-      r = c; g = 0; b = x;
-    }
-    // Having obtained RGB, convert channels to hex
-    r = Math.round((r + m) * 255).toString(16);
-    g = Math.round((g + m) * 255).toString(16);
-    b = Math.round((b + m) * 255).toString(16);
-  
-    // Prepend 0s, if necessary
-    if (r.length == 1)
-      r = "0" + r;
-    if (g.length == 1)
-      g = "0" + g;
-    if (b.length == 1)
-      b = "0" + b;
-  
-    return "#" + r + g + b;
+
+function hsbToRgb(h, s, v) {
+  let r, g, b, i, f, p, q, t;
+  if (arguments.length === 1) {
+    (s = h.s), (v = h.v), (h = h.h);
   }
+  i = Math.floor(h * 6);
+  f = h * 6 - i;
+  p = v * (1 - s);
+  q = v * (1 - f * s);
+  t = v * (1 - (1 - f) * s);
+  switch (i % 6) {
+    case 0:
+      (r = v), (g = t), (b = p);
+      break;
+    case 1:
+      (r = q), (g = v), (b = p);
+      break;
+    case 2:
+      (r = p), (g = v), (b = t);
+      break;
+    case 3:
+      (r = p), (g = q), (b = v);
+      break;
+    case 4:
+      (r = t), (g = p), (b = v);
+      break;
+    case 5:
+      (r = v), (g = p), (b = q);
+      break;
+  }
+  return {
+    r: Math.round(r * 255),
+    g: Math.round(g * 255),
+    b: Math.round(b * 255)
+  };
+}
+
+function calcColorDifference(c1, c2) {
+  return Math.sqrt(
+    Math.pow(c2.r - c1.r, 2) +
+    Math.pow(c2.g - c1.g, 2) +
+    Math.pow(c2.b - c1.b, 2)
+  );
+}
+
+function isColorOkay(colorDiff) {
+  return colorDiff > MINIMUM_DIFFERENCE;
+}
+
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    }
+    : null;
+}
+
+function rgbToHsv(r, g, b) {
+  if (arguments.length === 1) {
+    (g = r.g), (b = r.b), (r = r.r);
+  }
+  let max = Math.max(r, g, b),
+    min = Math.min(r, g, b),
+    d = max - min,
+    h,
+    s = max === 0 ? 0 : d / max,
+    v = max / 255;
+
+  switch (max) {
+    case min:
+      h = 0;
+      break;
+    case r:
+      h = g - b + d * (g < b ? 6 : 0);
+      h /= 6 * d;
+      break;
+    case g:
+      h = b - r + d * 2;
+      h /= 6 * d;
+      break;
+    case b:
+      h = r - g + d * 4;
+      h /= 6 * d;
+      break;
+  }
+
+  return {
+    hue: h * 360,
+    saturation: s,
+    brightness: v
+  };
+}
+}

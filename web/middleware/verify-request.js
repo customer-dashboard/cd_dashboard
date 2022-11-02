@@ -11,11 +11,11 @@ const TEST_GRAPHQL_QUERY = `
     name
   }
 }`;
-
+ 
 export default function verifyRequest(
-  app,{billing = { required: false } }) {
+  app,{ billing = { required: false } } = { billing: { required: false } }) {
   return async (req, res, next) => {
-    const session = await Shopify.Utils.loadCurrentSession(
+    const session = await Shopify.Utils.loadOfflineSession(
       req,
       res,
       app.get("use-online-tokens")
@@ -41,6 +41,7 @@ export default function verifyRequest(
             returnTopLevelRedirection(req, res, confirmationUrl);
             return;
           }
+         console.log(confirmationUrl);
         } else {
           // Make a request to ensure the access token is still valid. Otherwise, re-authenticate the user.
           const client = new Shopify.Clients.Graphql(

@@ -1,39 +1,27 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Page,Card,Layout,TextField, Toast, Form} from '@shopify/polaris'
 import axios from 'axios';
-import jsonLocals from "./TranslateJson/en.json";
 export const TranslationsFields = (props) => {
 const [active, setActive] = useState(false);
-const [state, setState] = useState(jsonLocals['en']);
-const [themeId, setThemeId] = useState('')
+const [state, setState] = useState([]);
 const {value,back} = props;
 useEffect(() => {
-  getThemeId();
   getJson();
   }, [])
-
   const toggleActive = useCallback(() => setActive((active2) => !active2), []);
-
+console.log(value);
   const getJson = () => {
-    axios.get(`/api/get-json?shop=${Shop_name}&locale=${value.locale}`).then((response) => {
-     if(response.status===200){
-      const data = [];
-      const array = JSON.parse(response.data[0].value);
-      var size = Object.keys(array).length;
-      for (let index = 0; index<size; index++) {
-        data.push(array[index]);
-      }
-      setState(data);
-     }
+    axios.get(`/api/get-json?shop=${Shop_name}&theme_id=${parseInt(value.theme_id)}&locale=${value.language}`).then((response) => {
+      var arr = response.data;
+     axios.get(`/api/get-menu_builder?shop=${Shop_name}`).then((res) => {
+      const res_1 = JSON.parse(res.data[0].fields);
+     res_1.map((ele)=>{
+      arr =[...arr,{heading: ele.label,value: ele.label,name: "Navigation"}] 
+     });
+     setState(arr);
+    });
     })
 }
-
-const getThemeId = () => {
-  axios.get(`/api/get-theme-id?shop=${Shop_name}`).then((response) => {
-    if(response.status===200)setThemeId(response.data[0].theme_id);
-  })
-}
-
 
   const hendleChangeUpdate = (value,name,index) =>{
     setState((preValue)=>{
@@ -49,21 +37,21 @@ const getThemeId = () => {
 
 const handleChange = ()=>{
 const array = state;
-const id = parseInt(themeId)
+const id = parseInt(value.theme_id)
 var rv = {};
 for (var i = 0; i < array.length; ++i)
 if (array[i] !== undefined) rv[i] = array[i];
 const data = {
   value:rv,
-  locale:value.locale
+  locale:value.language
 }
   axios.post(`/api/create-jsonfile?id=${id}&shop=${Shop_name}`,data).then((response) => {
-    console.log(response);
+    getJson();
   })
 }
 
   return (
-   <Page title={value.name} 
+   <Page title={value.language} 
     breadcrumbs={[{content: 'Products',onAction:()=>back(false)}]}
     primaryAction={{
       content:"Save",

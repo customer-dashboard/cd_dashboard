@@ -1,15 +1,13 @@
 // @ts-check
 import { join } from "path";
-import fs from "fs";
 import express from "express";
 import cookieParser from "cookie-parser";
 import {Shopify, LATEST_API_VERSION } from "@shopify/shopify-api";
-
+import { BillingInterval } from "./helpers/ensure-billing.js";
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
 import { setupGDPRWebHooks } from "./gdpr.js";
 import productCreator from "./helpers/product-creator.js";
-import { BillingInterval } from "./helpers/ensure-billing.js";
 import { Database } from "./middleware/db.js";
 import cors from 'cors';
 const USE_ONLINE_TOKENS = false;
@@ -27,12 +25,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY||"",
   API_SECRET_KEY: process.env.SHOPIFY_API_SECRET||"",
+  // @ts-ignore
   SCOPES: process.env.SCOPES.split(","),
+  // @ts-ignore
   HOST_NAME: process.env.HOST.replace(/https?:\/\//, ""),
+  // @ts-ignore
   HOST_SCHEME: process.env.HOST.split("://")[0],
   API_VERSION: LATEST_API_VERSION,
   IS_EMBEDDED_APP: true,
@@ -49,16 +49,16 @@ Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
     delete ACTIVE_SHOPIFY_SHOPS[shop]
   }
 });
-
+ 
 // The transactions with Shopify will always be marked as test transactions, unless NODE_ENV is production.
 // See the ensureBilling helper to learn more about billing in this template.
 const BILLING_SETTINGS = {
   required: false,
   // This is an example configuration that would do a one-time charge for $5 (only USD is currently supported)
-  // chargeName: "My Shopify One-Time Charge",
-  // amount: 5.0,
-  // currencyCode: "USD",
-  // interval: BillingInterval.OneTime,
+  chargeName: "My Shopify One-Time Charge",
+  amount: 5.0,
+  currencyCode: "USD",
+  interval: BillingInterval.OneTime,
 };
 
 // This sets up the mandatory GDPR webhooks. You’ll need to fill in the endpoint
@@ -81,7 +81,7 @@ export async function createServer(
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
   Database(app);
-  applyAuthMiddleware(app, {billing: billingSettings});  
+  applyAuthMiddleware(app,{billing: billingSettings});  
   app.post("/api/webhooks", async (req, res) => {
     try {
       await Shopify.Webhooks.Registry.process(req, res);
@@ -162,6 +162,7 @@ export async function createServer(
 
     // Detect whether we need to reinstall the app, any request from Shopify will
     // include a shop in the query parameters.
+    // @ts-ignore
     if (app.get("active-shopify-shops")[shop] === undefined && shop) {
       res.redirect(`/api/auth?shop=${shop}`);
     } else {

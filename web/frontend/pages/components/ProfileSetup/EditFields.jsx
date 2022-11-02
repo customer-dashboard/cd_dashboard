@@ -1,41 +1,39 @@
 import { Button,  ButtonGroup,  FormLayout,  Frame,  Icon,  Modal, Select, TextField, Toast } from '@shopify/polaris'
 import {
-  ThemeEditMajor,
-  MinusMinor,PlusMinor
+  MinusMinor,PlusMinor,ThemeEditMajor
 } from '@shopify/polaris-icons'; 
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react'
-export const EditFields = ({getAdditionalData,table,id}) => {
+import { useCallback, useState } from 'react'
+export const EditFields = (props) => {
+  const {value,id,getProfileData,table} = props;
   const [active, setActive] = useState(false);
   const [group, setGroup] = useState([{}])
-  const [getSigleField, setGetSigleField] = useState([])
   const [state, setState] = useState({
-    label:"sdsd",
-    field:"",
+    label:"",
+    value:"",
+    name:"",
+    type:"additional",
+    multipleValue:[]
   })
-  const [result, setResult] = useState('')
-  const [active2, setActive2] = useState(false);
 
-    const getField = ()=>{
-      axios.get(`/api/get-single-data/${id}?shop=${Shop_name}&query=${table}`).then((response) => {
-        setGetSigleField(response.data)
-        const res = JSON.parse(response.data[0].fields)
-        setState(res.singleFields);
-        if(res.multipleFields.length>0)setGroup(res.multipleFields);
-      });
-    }
+  const getField = ()=>{
+    axios.get(`/api/get-profile-fields?shop=${Shop_name}`).then((response) => {
+      const res = JSON.parse(response.data[0].fields);
+      console.log(res[id]);
+      setState(res[id]);
+      if(res[id].multipleValue.length>0)setGroup(res[id].multipleValue);
 
+    });
+  }
 
-  const toggleActive = useCallback(() => setActive2((active2) => !active2), []);
-  const handleChange = useCallback(() =>{getField();Clear();setActive(!active), [active]});
-  const activator = <span style={{width:"17px", float:"right",cursor:"pointer",margin:"2px 10px 0 0px"}} onClick={handleChange}> <ThemeEditMajor/></span>;
+const handleChange = useCallback(() =>{getField();setActive(!active), [active]});
+  const activator = <span style={{width:"15px", float:"right",cursor:"pointer",margin:"0px 10px 0"}} onClick={handleChange}> <ThemeEditMajor/></span>;
   const handleChange2=(name,value)=>{  
   setState((preValue)=>{
   return{...preValue,[name]:value,}});
 }
   const options = [
     {label: 'Input', value: 'text'},
-    {label: 'Email', value: 'email'},
     {label: 'Date', value: 'date'},  
     {label: 'Textarea', value: 'textarea'},
     {label: 'Radio-Button', value:'radio'},
@@ -60,37 +58,27 @@ export const EditFields = ({getAdditionalData,table,id}) => {
     }
   }
 
-  const Clear = ()=>{
-    setGroup([{}]);
-    setState({label:"", field:""});
-  }
 
   const Submit = () =>{
-   const data = {
-    singleFields:state,
-    multipleFields:group
-   }
-    axios.post(`/api/update-single-data?id=${id}&shop=${Shop_name}&query=profile_additional_fields`,data).then((response) => {
-    if(response.status===200){
-      setResult(response.data);
-      setActive(false);
-      getAdditionalData();
-    }
-    })
+   state.multipleValue=group;
+   const data = value.map((ele,index)=>{
+    return index!==id?ele:state;
+   })
+     axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=${table}`,data).then((response) => {
+     getProfileData();
+     handleChange();
+     });
   }
 
-  const toastMarkup = active2 ? (
-    <Toast content={result} onDismiss={toggleActive} />
-  ) : null;
+
 
 
   return (
-<>
- {activator}
     <Modal
+      activator={activator}
       open={active}
       onClose={handleChange}
-      title=" Edit Field"
+      title="Edit Field"
     >
       <Modal.Section>
               <FormLayout>
@@ -99,9 +87,9 @@ export const EditFields = ({getAdditionalData,table,id}) => {
                   label="Select field type"
                   placeholder="Select Type"
                   options={options}
-                  onChange={(val)=>handleChange2("field",val)}   
-                  value={state.field}
-                  name="field"
+                  onChange={(val)=>handleChange2("value",val)}   
+                  value={state.value}
+                  name="value"
                   />        
                   </FormLayout.Group>   
                   <FormLayout.Group>
@@ -115,7 +103,7 @@ export const EditFields = ({getAdditionalData,table,id}) => {
                 </FormLayout>
                 {group.map((element, index) => (
             <div key={index}>
-             {state&&state.field=='radio'||state.field=='checkbox'?
+             {state&&state.value=='radio'||state.value=='checkbox'?
                     <TextField        
                     value={element.value}      
                     onChange={(val) => groupChangval(index,"value",val)}
@@ -128,10 +116,8 @@ export const EditFields = ({getAdditionalData,table,id}) => {
             </div>
           ))} 
           <br/>
-        <ButtonGroup><Button primary onClick={Submit}>Update</Button><Button onClick={Clear}>Clear</Button></ButtonGroup>
-        {toastMarkup}
+          <ButtonGroup><Button primary onClick={Submit}>Update</Button></ButtonGroup>
       </Modal.Section>
     </Modal>
-    </>
   )
 }

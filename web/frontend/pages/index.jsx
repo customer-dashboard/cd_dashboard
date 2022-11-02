@@ -1,39 +1,97 @@
-import { Button, ButtonGroup, Card, FormLayout, Layout, Page, TextStyle} from '@shopify/polaris'
-import { Link } from 'react-router-dom'
+import { Button, ButtonGroup, Card, FormLayout, Layout, Page, TextStyle, ContextualSaveBar,Toast, Link} from '@shopify/polaris'
+import { useCallback, useEffect, useState } from 'react'
+import axios from 'axios'
+import {NavLink } from 'react-router-dom'
 import { Feedback } from './components/FeedbackModel/Feedback'
 import { Toggle } from './components/Toggle'
+import setting_json from "./components/Setting/json/setting.json";
 
-const Home = ()=>{
+  
+const Home = (props)=>{
+  const {count}=props;
+  const [setting, setSetting] = useState(setting_json);  
+const [save, setSave] = useState(false);  
+  const [active, setActive] = useState(false);
+  const toggleActive = useCallback(() => setActive((active) => !active), []);
     const cardData = [
-        {title:"Customers",content:"View Customers", link:"/components/customers/customers",value:125},
-        {title:"Order",content:"All Orders", link:"/orders",value:999},
-        {title:"Current Plan",content:"", link:"",value:"Basic-Free"},
+        {title:"Customers", content:<NavLink to="/components/customers/customers">View Customers</NavLink>,value:count.customer_count},
+        {title:"Order", content:<Link url={`https://${Shop_name}/admin/orders`} external>All Orders</Link> ,value:count.order_count},
+        {title:"Current Plan",content:"", value:"Basic-Free"},
     ]
     const dataCard = [
         {heading:"Translations",value:"Add translations to use Customer Dashboard in any language.",content:"Manage Translations",link:"/components/setting/translations"},
         {heading:"Plan",value:"Basic-Free",content:"Upgrade Plan",link:"/components/billing/plan"},
         {heading:"Need Help",value:"",content:"Go To Support",link:""},
-        {heading:"What Your Thinkable Customer",value:"",content:"Give Us Feedback",link:""},
+        {heading:"What Do You Think About This App",value:"",content:"Give Us Feedback",link:""},
         {heading:"Don't Have What You Need",value:"",content:"Request A Feature",link:""},
     ]
 
+useEffect(() => {
+  getSetting();
+}, [])
+
+const toastMarkup = active ? (
+  <Toast content="Data Saved" onDismiss={toggleActive} />
+) : null;
+
+    const contextualSaveBarMarkup = save ? (
+      <ContextualSaveBar
+        message="Unsaved changes"
+        saveAction={{
+          onAction:()=>submit(),
+        }}
+        discardAction={{
+          onAction:()=>setSave(false),
+        }}
+      />
+    ) : null;
+
+    const hendlChange = (e) =>{
+    setting.app_access_toggle=e.app_access_toggle;
+    setSave(true);
+    }
+
+    function removeLineBreak(str){
+      return str.replaceAll(/""/gm,'"');
+  }
+
+    const getSetting = () => {
+      axios.get(`/api/get-setting?shop=${Shop_name}`).then((response) => {
+        var res = response.data[0].setting
+        res = JSON.parse(removeLineBreak(res))
+      setSetting(res);
+      console.log(res);
+  })
+    }
+    
+    const submit =()=>{
+      setting.custom_css=JSON.stringify(setting.custom_css);
+      axios.post(`/api/set-setting?shop=${Shop_name}`,setting).then((response) => {
+      if(response.status===200){
+        setActive(true);
+        setSave(false);
+        getSetting();
+      }
+      })
+    }
     
   return (
 <>
 <Page title='Dashboard'>
+  {contextualSaveBarMarkup}
   <Layout>
     {cardData.map((ele,index)=>(
           <Layout.Section key={index} oneThird>
-          <Card title={ele.title} actions={ele.content?[{content:<Link to={ele.link}>{ele.content}</Link>}]:""}>
+          <Card title={ele.title} actions={ele.content?[{content:ele.content}]:""}>
             <Card.Section>
               <TextStyle variation="subdued">{ele.value}</TextStyle>
             </Card.Section>
           </Card>
         </Layout.Section>
     ))}
-  </Layout>
+  </Layout> 
 </Page>
-<Toggle content="Customers Dashboard Is" table=''/>
+<Toggle content="Customers Dashboard Is" name="app_access_toggle" value={setting.app_access_toggle} hendleChange={hendlChange}/>
   <Page title="Setting">
     <Layout>
         {
@@ -44,14 +102,14 @@ const Home = ()=>{
                 <FormLayout>
                   {ele.value?<p>{ele.value}</p>:""}
                   <ButtonGroup>
-                  {ele.link?<Link className='link' to={ele.link}><Button>{ele.content?ele.content:""}</Button></Link>:<Feedback value={ele.content}/>}
+                  {ele.link?<NavLink className='link' to={ele.link}><Button>{ele.content?ele.content:""}</Button></NavLink>:<Feedback value={ele.content}/>}
               </ButtonGroup>
                 </FormLayout>
-            
               </Card>
             </Layout.AnnotatedSection>
           ))
         }
+        {toastMarkup}
     </Layout>
   </Page>
   </>
