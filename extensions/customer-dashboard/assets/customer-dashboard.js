@@ -1,31 +1,19 @@
 
-// var hostname = "https://customer-dashboard-pro.fly.dev";
-var hostname = "https://0157-2401-4900-1ca3-c4ee-597e-bd87-4b66-3c3d.in.ngrok.io";
+// var hostname = "https://customer-dashboard-letest.fly.dev";
+var hostname = "https://868b-2401-4900-1c09-2967-2d5a-f0ce-5a3b-d669.in.ngrok.io";
 Shop_name=window.location.hostname;
+
+document.addEventListener("DOMContentLoaded", function() {
+
+});
+
 Element.prototype.appendBefore = function (element) {
   element.parentNode.insertBefore(this, element);
 }, false;
 let maincontainer = document.getElementById("shopify-section-header").nextElementSibling;
 let beforecontainer = document.getElementById("shopify-section-footer").previousElementSibling;
-
-// var fragment = document.createDocumentFragment();
-// fragment.appendChild(document.getElementById('customer_dashboard'));
-// maincontainer.appendChild(fragment);
 maincontainer.classList.add('customerdb-parent');
  
-// setTimeout( () => { // for demo
-
-//   maincontainer.querySelectorAll( "body *:not( #customer_dashboard )" )
-//     .forEach( ( v ) => {
-//       if ( !v.querySelector( "#customer_dashboard" ) ) {
-//         v.classList.add( "hidden" );
-//       }
-//     } );
-
-// }, 1000 );
-
-//fragment.appendChild(document.getElementById('customer_dashboard'));
-//beforecontainer.appendChild(fragment);
 beforecontainer.classList.add('customerdb-parent');
 /*  Add NewElement BEFORE -OR- AFTER Using the Aforementioned Prototypes */
 var NewElement = document.getElementById('customer_dashboard');
@@ -33,201 +21,6 @@ NewElement.appendBefore(document.getElementById('shopify-section-footer'));
 document.getElementById('shopify-section-footer').style.display = 'initial';
 document.getElementById('customer_dashboard').style.display = 'initial';
 document.getElementById('customer_dashboard').removeAttribute("style");
-
-document.addEventListener("DOMContentLoaded", function() {
-  getSetting();
-  getMenus();
-  getAdditionalData();
-  editProfileFields();
- });
-
-
- function getTranslation() {
-  fetch(`${hostname}/api/get-json?shop=${Shop_name}&theme_id=${themeId}&locale=${defaultLanguage}`, {
-    method: "GET",
-    headers: { 'Content-Type': 'application/json' },
-  }).then((response) => response.json())
-  .then(async (data) => {
-    data.map((ele)=>{
-      document.body.innerHTML = document.body.innerHTML.replaceAll(ele.heading,ele.value);
-    })
-  });
- }
- 
- function getMenus() {
-  var cd_active_ul =  document.querySelector('.cd_active_ul');
-  const cd_logout = cd_active_ul.innerHTML;
-   fetch(`${hostname}/api/get-menu_builder?shop=${Shop_name}`, {
-     method: "GET",
-     headers: { 'Content-Type': 'application/json' },
-   }).then((response) => response.json())
-   .then(async (data) => {
-     let li_menu = "";
-     var result = JSON.parse(data[0].fields);
-     for (let i = 0; i < result.length; i++) {
-      var link = `<a id="cd_sidebarlink">${result[i].label.charAt(0).toUpperCase() + result[i].label.slice(1)}</a>`;
-      var newClass = "";
-      var dataType = result[i].type;
-      if(dataType==="link"){
-        newClass="cd_link";
-        link = `<a class="cd_sidebarlink" href=${result[i].value} target="_blank">${result[i].label.charAt(0).toUpperCase() + result[i].label.slice(1)}</a>`;
-       }  
-       if(dataType==="page"){
-        newClass="cd_page";
-        link = `<a class="cd_sidebarlink" href=${'https://'+Shop_name+"/pages/"+result[i].value} target="_blank">${result[i].label.charAt(0).toUpperCase() + result[i].label.slice(1)}</a>`;
-       }  
-       li_menu += `<li class="cd_menu-child ${newClass}" id=${dataType}>
-       ${
-         await fetch(`${hostname}/api/get-svg`)
-           .then((response_svg) => response_svg.json())
-           .then((res_svg)=>{
-             for (let index = 0; index < res_svg.length; index++) {
-               if(res_svg[index].id===parseInt(result[i].svg)&&dataType!=="link"){
-                return res_svg[index].svg;
-               }
-               if(dataType==="link"){
-                return res_svg[2].svg;
-               }  
-             }
-           })
-       }
-       ${link}
-     </li>`;
-     }
-     cd_active_ul.innerHTML= li_menu;
-     cd_active_ul.innerHTML+= cd_logout;
-     getTranslation();
-   }
-   );
- }
-
-
- function removeLineBreak(str){
-  return str.replaceAll(/""/g,'"');
-}
-
- 
- function getSetting(){
-  fetch(`${hostname}/api/get-setting?shop=${Shop_name}`, {
-    method: "GET",
-    headers: { 'Content-Type': 'application/json' },
-  }).then((response) => response.json())
-  .then(async (data) => {
-    var res = data[0].setting;
-      if(res){
-        res = JSON.parse(removeLineBreak(res));
-        if(res.custom_css){
-          var head = document.getElementsByTagName('HEAD')[0];
-          var sheet = document.createElement('style')
-          sheet.innerHTML=res.custom_css;
-          head.appendChild(sheet);
-        }
-        var r = document.querySelector(':root');
-        var rs = getComputedStyle(r);
-        for (const prop in res) {
-        rs.getPropertyValue('--'+prop)
-        if(prop==='sidebar_heading_size'||prop==='sidebar_menu_size'||prop==='main_content_text_size'||prop==='main_content_heading_size'){
-          r.style.setProperty('--'+prop,res[prop]+'px');
-        }else{
-          r.style.setProperty('--'+prop,res[prop]);
-        }
-        }
-      }
-    
-  });
-}
-
- async function getAdditionalData(){
-  const urls = [`${hostname}/api/get-profile-fields?shop=${Shop_name}`,
-  `${hostname}/api/get-profile-additional-metafields?id=${customerVarOnLoad}&shop=${Shop_name}`
-];
-  try{
-    let res = await Promise.all(urls.map(e => fetch(e)))
-    let resJson = await Promise.all(res.map(e => e.text()))
-    var metafield_data = resJson[1]!==""?JSON.parse(JSON.parse(resJson[1]).value):[];
-    var cd_all_fields = document.getElementsByClassName("cd_all_fields")[0];
-      var all_fields = JSON.parse(JSON.parse(resJson[0])[0].fields)
-    for (var i = 0; i < all_fields.length; i++) {
-      const label_name = all_fields[i].name;
-      var profile_value="";
-      if(label_name==='email')profile_value=customerEmailOnload;
-      else if(label_name==='first_name')profile_value=customerFirstNameOnload;
-      else if(label_name==='last_name')profile_value=customerLastNameOnload;
-      else if(label_name==='phone')profile_value=customerPhoneOnload;
-        Object.entries(metafield_data).forEach((entry) => {
-          const [key, value] = entry;
-          if(key===label_name&&label_name!=='email'&&label_name!=='first_name'&&label_name!=='last_name'&&label_name!=='phone'){
-            profile_value=value;
-          }
-        });
-      cd_all_fields.innerHTML += `<div class="cd_row"><div class="cd_col-05"><label for="fname">${all_fields[i].label}:</label></div><div class="cd_col-26"><p>${profile_value}</p></div></div>`;
-    }
-  }catch(err) {
-    console.log(err)
-  }
-}
-
-
-async function editProfileFields() {
-  const urls = [`${hostname}/api/get-profile-fields?shop=${Shop_name}`,
-  `${hostname}/api/get-profile-additional-metafields?id=${customerVarOnLoad}&shop=${Shop_name}`
-];
-  try {
-    let res = await Promise.all(urls.map(e => fetch(e)))
-    let resJson = await Promise.all(res.map(e => e.text()))
-  var all_edit_fields = document.getElementsByClassName("all_edit_fields")[0];
-  var metafield_data = resJson[1]!==""?JSON.parse(JSON.parse(resJson[1]).value):[];
-    var all_fields = JSON.parse(JSON.parse(resJson[0])[0].fields)
-    for (var i = 0; i < all_fields.length; i++) {
-      const label_name = all_fields[i].name;
-      var profile_value="";
-      if(label_name==='email')profile_value=customerEmailOnload;
-      else if(label_name==='first_name')profile_value=customerFirstNameOnload;
-      else if(label_name==='last_name')profile_value=customerLastNameOnload;
-      else if(label_name==='phone')profile_value=customerPhoneOnload;
-      Object.entries(metafield_data).forEach((entry) => {
-        const [key, value] = entry;
-        if(key===label_name&&label_name!=='email'&&label_name!=='first_name'&&label_name!=='last_name'&&label_name!=='phone'){
-          profile_value=value;
-        }
-      });
-      if(all_fields[i].value==="radio"||all_fields[i].value==="checkbox"){
-        var multipleFields = all_fields[i].multipleValue;
-        var readiocheckbox="";
-          for (let index = 0; index < multipleFields.length; index++) {
-            const element = multipleFields[index];
-            var checked_value = "";
-            Object.entries(metafield_data).forEach((entry) => {
-              const [key, value] = entry;
-              var str_array = value.split(',');
-              for(var ckeck_index = 0; ckeck_index < str_array.length; ckeck_index++) {
-              str_array[ckeck_index] = str_array[ckeck_index].replace(/^\s*/, "").replace(/\s*$/, "");
-              if(str_array[ckeck_index]===element.value&&key===all_fields[i].name){
-                checked_value='checked';
-              }
-              }
-            });
-            readiocheckbox+=`
-            <div class="form-check form-check-inline">
-            <input class="form-check-input" ${checked_value}  type=${all_fields[i].value} id=${'cd_'+all_fields[i].id+'_'+index} name=${label_name}  value=${element.value}>
-            <label class="form-check-label" for=${'cd_'+all_fields[i].id+'_'+index}>${element.value}</label>
-            </div>`;
-          }
-          all_edit_fields.innerHTML +=`<div class="cd_row"><div><label>${all_fields[i].label}</label></div><div style="width:fit-content;">${readiocheckbox}</div></div>`;
-      }
-      else if(all_fields[i].value==="email"||all_fields[i].value==="text"||all_fields[i].value==="date"){
-        all_edit_fields.innerHTML +=`<div class="cd_row"><div class="cd_col-25"><label for=${'cd_'+all_fields[i].id}>${all_fields[i].label}</label></div><div class="cd_col-75"><input type=${all_fields[i].value} id=${'cd_'+all_fields[i].id} name=${label_name} value=${profile_value}></div></div>`;
-      }
-     else if(all_fields[i].value==="textarea"&&all_fields[i].value==="textarea"){
-        all_edit_fields.innerHTML +=`<div class="cd_row"><div class="cd_col-25"><label for=${'cd_'+all_fields[i].id}>${all_fields[i].label}</label></div><textarea class="form-control" id=${'cd_'+all_fields[i].id} rows="2" name=${label_name}>${profile_value}</textarea></div>`;
-     }
-    } 
-  } catch (error) {
-    console.log(err)
-  }
-}
-
-
 
 
 window.onload = function () {
@@ -333,9 +126,10 @@ function myFunction(a) {
   }
   if(a){
     window.history.replaceState(null, null, '?a=' + a);
-  }else{
-    window.history.replaceState(null, null, '?a=cd_my-profile');
   }
+  // else{
+  //   window.history.replaceState(null, null, '?a=cd_my-profile');
+  // }
 
   value_return.style.display = "block";
   // document.getElementById(a).classList.add('cd_active');
@@ -380,6 +174,12 @@ function cd_logout(){
   fetch(logoutBtn.href).then(() => window.location.href = REDIRECT_PATH);
 }
 
+document.querySelector(".cd_redirect_address").addEventListener("click", function () {
+  window.location.href = "/account/addresses";
+  var REDIRECT_PATH = "/account?a=cd_addresses";
+  var addresses = document.querySelector('a[href^="/account/addresses"]');
+  fetch(addresses.href).then(() => window.location.href = REDIRECT_PATH);
+});
 
 
 document.querySelector(".cd_backFunction").addEventListener("click", function (e) {
@@ -412,10 +212,9 @@ function backFunction() {
 
 document.querySelector("#cd_change_password_form").addEventListener("submit", function (e) {
   e.preventDefault();
-  var div = document.getElementById("cd_return_message");
-  var loader = document.getElementById('cd_submit_loader');
+  var cd_length_char = document.querySelector(".cd_length_char");
+  var cd_not_same = document.querySelector(".cd_not_same");
   var success_message = document.getElementById('cd_success_message_password');
-  loader.innerHTML = "<div class='cd_loader'></div>";
   var formData = new FormData(this);
   var array = {};
   for (var pair of formData.entries()) {
@@ -429,19 +228,18 @@ document.querySelector("#cd_change_password_form").addEventListener("submit", fu
         body: JSON.stringify(array)
       }).then(res => {
         if (res.status == 200) {
-          // div.style.color = 'green';
-          // div.innerHTML = 'Your password has been changed.';
           success_message.classList.add('cd_show');
           window.location.href="/account/login";
         }
       });
     }else{
-      div.style.color = 'red';
-      div.innerHTML = 'Your password must be at least 8 characters';
+      cd_length_char.style.color = 'red';
+      cd_length_char.classList.remove('cd_length_char');
     }
   } else {
-    div.style.color = 'red';
-    div.innerHTML = 'password does not match !!';
+    cd_not_same.style.color="red";
+    cd_not_same.classList.remove('cd_not_same');
+
   }
 });
 

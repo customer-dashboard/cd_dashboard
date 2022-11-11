@@ -1,4 +1,6 @@
-     <section id="cd_edit_address_page" class="cd_main-section cd_main-section-2">
+   {% assign lang = request.locale.iso_code %}
+{% assign translation = "translations_" | append:lang %}
+  <section id="cd_edit_address_page" class="cd_main-section cd_main-section-2">
       <div class="cd_header">
         <div><p id="cd_heading">Edit Address</p></div>
       </div>
@@ -101,7 +103,7 @@
           </div>
 
           <div class="cd_row" style="margin-top:15px;">
-            <input type="submit" value="Save">
+            <input type="submit" value="{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}">
           </div>
         </form>
       </div>

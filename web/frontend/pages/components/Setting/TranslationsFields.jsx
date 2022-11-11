@@ -1,29 +1,43 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Page,Card,Layout,TextField, Toast, Form} from '@shopify/polaris'
+import { Page,Card,Layout,TextField, Toast, Form, Button, ContextualSaveBar, Spinner} from '@shopify/polaris'
+import translation from "../../../metafields/translation"
 import axios from 'axios';
 export const TranslationsFields = (props) => {
 const [active, setActive] = useState(false);
-const [state, setState] = useState([]);
+const [loading, setLoading] = useState(false);
+const [state, setState] = useState(translation['en']);
+const [save, setSave] = useState(false);  
 const {value,back} = props;
 useEffect(() => {
   getJson();
   }, [])
   const toggleActive = useCallback(() => setActive((active2) => !active2), []);
-console.log(value);
   const getJson = () => {
-    axios.get(`/api/get-json?shop=${Shop_name}&theme_id=${parseInt(value.theme_id)}&locale=${value.language}`).then((response) => {
-      var arr = response.data;
-     axios.get(`/api/get-menu_builder?shop=${Shop_name}`).then((res) => {
-      const res_1 = JSON.parse(res.data[0].fields);
-     res_1.map((ele)=>{
-      arr =[...arr,{heading: ele.label,value: ele.label,name: "Navigation"}] 
-     });
-     setState(arr);
-    });
+    axios.get(`/api/get-json?shop=${Shop_name}&locale=${value.language}`).then((response) => {
+      if(response.data){
+        var arr = JSON.parse(response.data.value)[value.language];
+        setState(arr);
+      }
     })
 }
 
+const handleChange = ()=>{
+  setLoading(true);
+  const array = state;
+  const data = {
+    value:{[value.language]:array},
+    locale:value.language
+  }
+  axios.post(`/api/create-translations?shop=${Shop_name}`,data).then((response) => {
+  setActive(true);
+  setLoading(false);
+  setSave(false);
+    })
+  }
+
   const hendleChangeUpdate = (value,name,index) =>{
+    if(value)setSave(true);
+    else setSave(false);
     setState((preValue)=>{
       let newFormValues = [...preValue];
       newFormValues[index][name] = value;
@@ -31,33 +45,21 @@ console.log(value);
     })
    }
    const toastMarkup = active ? (
-    <Toast content='save' onDismiss={toggleActive} />
+    <Toast content='Data Saved' onDismiss={toggleActive} />
   ) : null;
 
-
-const handleChange = ()=>{
-const array = state;
-const id = parseInt(value.theme_id)
-var rv = {};
-for (var i = 0; i < array.length; ++i)
-if (array[i] !== undefined) rv[i] = array[i];
-const data = {
-  value:rv,
-  locale:value.language
-}
-  axios.post(`/api/create-jsonfile?id=${id}&shop=${Shop_name}`,data).then((response) => {
-    getJson();
-  })
-}
+  const contextualSaveBarMarkup = save ? (
+    <ContextualSaveBar
+      message={loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null}
+      saveAction={{onAction:()=>handleChange()}}
+      discardAction={{onAction:()=>setSave(false)}}
+    />
+  ) : null;
 
   return (
    <Page title={value.language} 
-    breadcrumbs={[{content: 'Products',onAction:()=>back(false)}]}
-    primaryAction={{
-      content:"Save",
-      onAction:handleChange
-    }}
-    >
+    breadcrumbs={[{content: 'Products',onAction:()=>back(false)}]}>
+  {contextualSaveBarMarkup}
  <Form>
 <Card title="Navigation">
 <Card.Section>
@@ -195,6 +197,31 @@ const data = {
   {
       state.map((local,index)=>{
         if(local.name==='Shared'){
+          return(
+            <Layout.AnnotatedSection
+            title={local.heading} key={index}>
+            <Card sectioned>
+            <TextField
+            name="value"
+            type="text"                          
+            value={local.value}
+            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+            />  
+            </Card>
+            </Layout.AnnotatedSection>
+          )
+        }
+      })
+  }
+    </Layout>
+</Card.Section>
+</Card>
+<Card title="Button">
+<Card.Section>
+<Layout>
+  {
+      state.map((local,index)=>{
+        if(local.name==='Button'){
           return(
             <Layout.AnnotatedSection
             title={local.heading} key={index}>

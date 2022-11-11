@@ -1,9 +1,10 @@
 import { Routes as ReactRouterRoutes, Route } from "react-router-dom";
 
-export default function Routes({ pages,count }) {
+export default function Routes(props) {
+  const { pages,count,billing} = props;
   const routes = useRoutes(pages);
   const routeComponents = routes.map(({ path, component: Component }) => (
-    <Route key={path} path={path} element={<Component count={count}/>} />
+    <Route key={path} path={path} element={<Component count={count} billing = {billing}/>} />
   ));
   const NotFound = routes.find(({ path }) => path === "/notFound").component;
 

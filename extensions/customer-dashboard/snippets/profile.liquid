@@ -1,3 +1,5 @@
+{% assign lang = request.locale.iso_code %}
+{% assign translation = "translations_" | append:lang %}
 <div id="cd_profile_page" class="cd_main-section">
     <section class="cd_main-section-1">
         <div class="cd_box">
@@ -11,7 +13,7 @@
                     </svg>
                 </div>
                 <div class="cd_box-content">
-                    <p>Total Spent</p>
+                    <p>{{ shop.metafields.customer_dashboard[translation].value[lang][1].value }}</p>
                     <p>{{ customer.total_spent | money }}</p>
                 </div>
             </div>
@@ -25,7 +27,7 @@
                         fill="#202020" />
                 </svg>
                 <div class="cd_box-content">
-                    <p>All Orders</p>
+                    <p>{{ shop.metafields.customer_dashboard[translation].value[lang][3].value }}</p>
                     <p>{{ customer.orders.size }}</p>
                 </div>
             </div>
@@ -39,7 +41,7 @@
                     <circle cx="16" cy="16" r="15.75" stroke="#202020" stroke-width="0.5" />
                 </svg>
                 <div class="cd_box-content">
-                    <p>Addresses</p>
+                    <p>{{ shop.metafields.customer_dashboard[translation].value[lang][2].value }}</p>
                     <p>{{ customer.addresses.size }}</p>
                 </div>
             </div>
@@ -49,7 +51,7 @@
         <div class="cd_form-container">
             <div class="cd_form-header">
                 <div>
-                    <p id="cd_heading">{{ 'general.testing' | t }}</p>
+                    <p id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][0].value }}</p>
                 </div>
                 <div onclick="myFunction('cd_edit-profile')">
                     <svg id="cd_edit-svg" width="35" height="35" viewBox="0 0 35 35" fill="none"
@@ -67,6 +69,29 @@
                 </div>
             </div>
             <div class="cd_all_fields">
+         {% for profile in shop.metafields.customer_dashboard.profile_fields.value %}
+         {% for nav  in shop.metafields.customer_dashboard[translation].value[lang] %}
+             {% if nav.name == "Shared" and nav.heading == profile.label %}
+         <div class="cd_row">
+                    <div class="cd_col-05">
+                        <label for="fname">{{ nav.value }}:</label>
+                    </div>
+                    {% if profile.name == "email" %}<div class="cd_col-25"><p>{{ customer.email }}</p></div>
+                    {% elsif profile.name == "first_name"  %}<div class="cd_col-25"><p>{{ customer.first_name }}</p></div>
+                    {% elsif profile.name == "last_name"  %}<div class="cd_col-25"><p>{{ customer.last_name }}</p></div>
+                    {% elsif profile.name == "phone"  %}<div class="cd_col-25"><p>{{ customer.phone }}</p></div>
+                    {% endif %}
+                    {% for metafields_data in customer.metafields.customer_dashboard.additional_data.value %}
+                    {% if profile.name == metafields_data[0] and profile.name != "first_name" and profile.name != "last_name" and profile.name != "email" and profile.name != "phone" %}
+                    <div class="cd_col-25"><p>{{ metafields_data[1] }}</p></div> 
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                 {% endif %}
+           {% endfor %}
+         {% endfor %}
+
+ 
                 <!-- <div class="cd_row">
                     <div class="cd_col-05">
                         <label for="fname">First Name:</label>
@@ -103,7 +128,7 @@
                 <div>
                     <div class="cd_check-marketing">
                         <!-- <input type="checkbox" name="check" id="cd_checkbox"> -->
-                        <span>Accepts Marketing </br><p style="color:black">{% if customer.accepts_marketing==true %}Yes{% else %}No{% endif%}</p></span>
+                        <span>{{ shop.metafields.customer_dashboard[translation].value[lang][5].value }} </br><p style="color:black">{% if customer.accepts_marketing==true %}Yes{% else %}No{% endif%}</p></span>
                     </div>
                 </div>
     </section>

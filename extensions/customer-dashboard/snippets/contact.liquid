@@ -1,3 +1,5 @@
+{% assign lang = request.locale.iso_code %}
+{% assign translation = "translations_" | append:lang %}
 <section id="cd_contact_page" class="cd_main-section cd_main-section-2">
     <div class="cd_container">
         <div>
@@ -56,7 +58,7 @@
                     <textarea name="contact[body]" id="message" value="{{ form.body }}" ></textarea>
                   </div>
                 <div class="cd_row" style="margin-top:15px;">
-                    <button type="submit">Save</button>
+                    <button type="submit">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
                     <input class="cd_backContact" type="button" id="cd_submit_loader" value="Cancel"/>
                 </div>                
             </div>

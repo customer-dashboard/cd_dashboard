@@ -1,9 +1,10 @@
+{% assign lang = request.locale.iso_code %}
+{% assign translation = "translations_" | append:lang %}
 <section id="cd_addresses_page" class="cd_main-section cd_main-section-2">
-    
     <section class="cd_address-section-main ">
     <div class="cd_header" id="cd_address_heading_1">
           <div>
-            <p id="cd_heading" class="cd_toggle_address">Addresses</p>
+            <p id="cd_heading" class="cd_toggle_address">{{ shop.metafields.customer_dashboard[translation].value[lang][7].value }}</p>
           </div>
       </div>
          <div class="cd_address-main-section">
@@ -16,7 +17,7 @@
                               fill="#202020" />
                       </svg>
                       <div>
-                          <p>Addresses</p>
+                          <p>{{ shop.metafields.customer_dashboard[translation].value[lang][8].value }}</p>
                       </div>
                       <div id="cd_add-address">
                           <svg id="cd_add-icon-svg" width="52" height="52" viewBox="0 0 52 52" fill="none"
@@ -69,11 +70,11 @@
                   </form>
                      </div>
                      {% if address.id == customer.default_address.id  %} 
-                     <input class="cd_default-btn" style="font-size:10px" type="button" value="default"> {% else %} 
+                     <input class="cd_default-btn" style="font-size:10px" type="button" value={{ shop.metafields.customer_dashboard[translation].value[lang][10].value }}> {% else %} 
                        <div>
                         {% form 'customer_address', address %}
                          <input type="hidden"  name="address[default]" value="on">
-                        <input class="cd_default-btn-2" type="submit" value="make default">
+                        <input class="cd_default-btn-2" type="submit" value={{ shop.metafields.customer_dashboard[translation].value[lang][11].value }}>
                         {% endform %}
                        </div>
                      {% endif %}                   
@@ -195,11 +196,11 @@
               <div>
               <input type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" {% if address.id == customer.default_address.id %}checked="checked"{% endif %}>
               <label for="address_default_address_{{ form.id }}">
-              Set as default address
+              {{ shop.metafields.customer_dashboard[translation].value[lang][12].value }}
               </label>
               </div>
               <div class="cd_row" style="margin-top:15px;">
-                  <button type="submit">Save</button>
+                  <button type="submit">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
                   <input onclick="backFunction()" type="button" id="cd_submit_loader" value="Cancel"/>
               </div>
           </div>

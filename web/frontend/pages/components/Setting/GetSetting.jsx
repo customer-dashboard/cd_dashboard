@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
-import jsonsetting from './json/setting.json';
 const GetSetting = () => {
-    const [getData, setGetdata] = useState(jsonsetting);  
+    const [getData, setGetdata] = useState([]);  
     useEffect(() => {
         getsettingData();
     }, [])

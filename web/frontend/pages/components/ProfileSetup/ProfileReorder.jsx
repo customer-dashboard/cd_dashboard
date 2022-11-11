@@ -23,12 +23,16 @@ export const ProfileReorder = (props) => {
     <Toast content="Reorder Saved" onDismiss={toggleActive} />
   ) : null;
 
-  useEffect(() => {
-    axios.get(`/api/get-svg`).then((response) => {
-      setdefaultsvg(response.data);
-    });
-  }, [])
 
+  useEffect(() => {
+    getSvgIcon();
+  }, [])
+  
+const getSvgIcon = () =>{
+  axios.get(`/api/get-svg?shop=${Shop_name}`).then((response) => {
+    if (response.data!=="")setdefaultsvg(response.data);
+  })
+}
 
   const dragProps = {
     onDragEnd(fromIndex, toIndex) {
@@ -47,7 +51,6 @@ export const ProfileReorder = (props) => {
     handleSelector: 'span'
   };
 
-
   return (
     <div className="simple simple1">
       <div className="simple-inner">
@@ -64,12 +67,12 @@ export const ProfileReorder = (props) => {
                   })}
                 </p> : null}
                 <div style={{width: "90px",position: "absolute",right: "20px"}}>
-                  <p>{item.type === 'additional' ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} /> : ""}</p>
+                  <p>{item.type === 'additional' ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} type="Shared" /> : ""}</p>
                   <p>{item.type === 'additional' ? <EditFields value={value} id={index} getProfileData={result} table={table} /> : ""}</p>
                   <p>{item.type && item.type === 'link' ? <span style={{ width: "20px", float: "right", marginLeft: "10px", cursor: "pointer" }}><Tooltip content="Link"><Icon source={LinkMinor} /></Tooltip></span> : ""}</p>
                   <p>{item.type && item.type === 'page' ? <span style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}><Tooltip content="Page"><Icon source={PageMajor} /></Tooltip></span> : ""} </p>
                   <p>{item.type && item.type === 'additional' ? <span style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}><Tooltip content="Additional field"><Icon source={PageMajor} /></Tooltip></span> : ""} </p>
-                  <p>{item.type === 'link' || item.type === 'page' && item.type ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} /> : ""}</p>
+                  <p>{item.type === 'link' || item.type === 'page' && item.type ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} type="Navigation" /> : ""}</p>
                   <p>{item.type === 'link' || item.type === 'page' && item.type ? <EditMenu value={value} id={index} getProfileData={result} table={table} />:""}</p>
                 </div>
               </li>

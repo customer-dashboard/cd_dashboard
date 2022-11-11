@@ -1,6 +1,5 @@
 import Routes from "./Routes";
 import {
-    ContextualSaveBar,
     TopBar,
     Navigation,
     Loading,
@@ -15,24 +14,32 @@ import {
   import { useCallback, useEffect, useRef, useState } from "react";
   import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Alert } from "./pages/components/Alert";
   export default function FrameHome(){
   const [customers, setCustomers] = useState({});
-    const navigate = useNavigate();
+  const [billing, setBilling] = useState({});
+  const navigate = useNavigate();
     useEffect(() => {
       getCustomers();
+      getPaymentList();
       }, [])
       const getCustomers = ()=>{
       axios.get(`/api/get-length?shop=${Shop_name}`).then((res)=>{
         setCustomers(res.data);
       });
       }
+      
+   const getPaymentList = () =>{
+    axios.get(`/api/get-billing?shop=${Shop_name}`).then((response) => {
+      setBilling(response.data);
+    });
+  }
   const pages = import.meta.globEager("./pages/**/!(*.test.[jt]sx)*.([jt]sx)");
     const defaultState = useRef({
       emailFieldValue: 'mandasadeveloper@gmail.com',
       nameFieldValue: 'Mandasa Technologies',
     });
     const skipToContentRef = useRef(null);
-  
     const [toastActive, setToastActive] = useState(false);
     const isLoading = false;
     const [userMenuActive, setUserMenuActive] = useState(false);
@@ -62,6 +69,7 @@ import axios from "axios";
       setEmailFieldValue(defaultState.current.emailFieldValue);
       setNameFieldValue(defaultState.current.nameFieldValue);
     }, []);
+    
     const handleSave = useCallback(() => {
       defaultState.current.nameFieldValue = nameFieldValue;
       defaultState.current.emailFieldValue = emailFieldValue;
@@ -260,8 +268,8 @@ import axios from "axios";
             skipToContentTarget={skipToContentRef.current}
           >
             {loadingMarkup}
-            {/* <Alert value={customers.length} /> */}
-            <Routes pages={pages} count={customers} />
+            <Alert value={customers.length} />
+            <Routes pages={pages} count={customers} billing = {billing} />
             {toastMarkup}
             {modalMarkup}
           </Frame>

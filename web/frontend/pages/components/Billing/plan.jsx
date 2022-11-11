@@ -1,53 +1,53 @@
 import { Button, ButtonGroup, Card, FormLayout, Grid, Layout, Page, TextStyle } from '@shopify/polaris'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { useEffect, useState } from 'react';
-const Billing = () => {
+const Billing = (props) => {
+  const { billing } = props;
   const navigate = useNavigate();
   const cardData = [
-    { title: "Basic", content: "Free", value: ["Free", "1500 customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
-    { title: "Standard", content: "Upgrade", value: ["4$/month", "1500+ customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
-    // {title:"Standard",content:"",value:"4$/month, 1500+ customers, New Account page, Multi language support, Reorder, Order history, Add custom pages and links"},
+    { title: "Basic", price: "", content: "Free", value: ["Free", "1500 customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
+    { title: "Standard", price: "4.00", content: "Upgrade", value: ["4$/month", "1500+ customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
+    // { title: "Standard", price:"7.00", content: "Upgrade", value: ["7$/month", "100k customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
   ]
   const needHelp = [
     { heading: "Need Help", value: "", content: "Go To Support", link: "" },
   ]
 
-  const postPayment = () => {
-    const data = `query appSubscription {    currentAppInstallation {      activeSubscriptions {        name        test      }    }  }`;
-    //    const data={"query": `mutation AppSubscriptionCreate($name: String!, $lineItems: [AppSubscriptionLineItemInput!]!, $returnUrl: URL!, $test: Boolean) {
-    //     appSubscriptionCreate(name: $name, returnUrl: $returnUrl, lineItems: $lineItems, test: $test) {
-    //       userErrors {
-    //         field
-    //         message
-    //       }
-    //       appSubscription {
-    //         id
-    //       }
-    //       confirmationUrl
-    //     }
-    //   }`,
-    //   "variables": {
-    //     "test":true,
-    //     "name": "Customer_dashboard",      
-    //     "returnUrl": "https://"+Shop_name+"/admin/apps/dashboard-app-4",
-    //     "lineItems": [
-    //       {
-    //         "plan": {
-    //           "appRecurringPricingDetails": {
-    //             "price": {
-    //               "amount": 11.00,
-    //               "currencyCode": "USD"
-    //             },
-    //             "interval": "EVERY_30_DAYS"
-    //           }
-    //         }
-    //       }
-    //     ]
-    //   }
-    // }
-    axios.post(`/api/graphql-billing?shop=${Shop_name}`, JSON.stringify(data)).then((response) => {
-      // window.top.location=`${response.data.body.data.appSubscriptionCreate.confirmationUrl}`;
+  const postPayment = (price, name) => {
+    const data = {
+      "query": `mutation AppSubscriptionCreate($name: String!, $lineItems: [AppSubscriptionLineItemInput!]!, $returnUrl: URL!, $test: Boolean) {
+        appSubscriptionCreate(name: $name, returnUrl: $returnUrl, lineItems: $lineItems, test: $test) {
+          userErrors {
+            field
+            message
+          }
+          appSubscription {
+            id
+          }
+          confirmationUrl
+        }
+      }`,
+      "variables": {
+        "test": true,
+        "name": name,
+        "returnUrl": "https://" + Shop_name + "/admin/apps/dashboard-app-4",
+        "lineItems": [
+          {
+            "plan": {
+              "appRecurringPricingDetails": {
+                "price": {
+                  "amount": price,
+                  "currencyCode": "USD"
+                },
+                "interval": "EVERY_30_DAYS"
+              }
+            }
+          }
+        ]
+      }
+    }
+    axios.post(`/api/graphql-billing?shop=${Shop_name}`, data).then((response) => {
+      window.top.location = `${response.data.body.data.appSubscriptionCreate.confirmationUrl}`;
     });
   }
 
@@ -65,7 +65,15 @@ const Billing = () => {
                     <TextStyle key={index} variation="subdued" >{index === 0 ? <p className='paidCard'><b>{val}</b></p> : <p className='paidCard'>{val}</p>}</TextStyle>)
                   )
                 }
-                {ele.content !== "Free" ? <Button primary onClick={postPayment} fullWidth>{ele.content}</Button> : <Button primary disabled fullWidth>{ele.content}</Button>}
+                {billing && billing.status === 'active'&& billing.name === ele.title || ele.content==="Free" ?
+                ele.content==="Free"? <Button disabled fullWidth>
+                 Free Forever
+                </Button>:
+                <span style={{ color: '#008000 ' }}>
+                <Button  outline monochrome fullWidth>
+                 Active
+                </Button></span> 
+                : <Button primary onClick={() => postPayment(ele.price, ele.title)} fullWidth>{ele.content}</Button>}
               </Card>
             </Grid.Cell>
           ))}

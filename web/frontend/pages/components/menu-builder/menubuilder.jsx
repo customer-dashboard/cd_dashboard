@@ -8,36 +8,7 @@ import { CustomePageModel } from './CustomePageModel'
 
 const MenuBuilder = () => {
   const navigate = useNavigate();
-  const [defaultProfile, setDefaultProfile] = useState([
-    {
-      id: 0,
-      label: "Change Password",
-      value: "",
-      svg: 4,
-      type: ""
-    },
-    {
-      id: 1,
-      label: "Addresses",
-      value: "",
-      svg: 3,
-      type: ""
-    },
-    {
-      id: 2,
-      label: "Orders",
-      value: "",
-      svg: 2,
-      type: ""
-    },
-    {
-      id: 3,
-      label: "My Profile",
-      value: "",
-      svg: 1,
-      type: ""
-    }
-  ]);
+  const [defaultProfile, setDefaultProfile] = useState([]);
 
   useEffect(() => {
     getProfileData();
@@ -46,9 +17,10 @@ const MenuBuilder = () => {
 
   const getProfileData = () => {
     axios.get(`/api/get-menu_builder?shop=${Shop_name}`).then((response) => {
-      const res = JSON.parse(response.data[0].fields);
+      if (response.data!=="") {
+        const res = JSON.parse(response.data.value);
       setDefaultProfile(res);
-      console.log(res);
+      }
     });
   }
 

@@ -1,3 +1,4 @@
+     {% assign lang = request.locale.iso_code %}
     <div class="cd_sidebar_menu">
       <div class="cd_logo">
       {% assign name = customer.first_name | split:"" %}
@@ -14,6 +15,34 @@
       </div> 
           <div class="cd_menu">
             <ul class="cd_active_ul">
+           
+            {% assign translation = "translations_" | append:lang %}
+              {% for values in shop.metafields.customer_dashboard.menu_builder_fields.value %}
+               {% for nav  in shop.metafields.customer_dashboard[translation].value[lang] %}
+             {% if nav.name == "Navigation" and nav.heading == values.label %}
+                 <li id="{{ values.type }}" class="cd_menu-child {% if values.type == "link" %}cd_link{% endif %} {% if values.type == "page" %}cd_page{% endif %}">
+                 {% for svg_icon in shop.metafields.customer_dashboard.svg_icon.value %}
+                {% if values.svg == svg_icon.id %}
+                 {{ svg_icon.svg }}
+                 {% endif %}
+                  {% if values.type == "link" %}
+                  {% if forloop.index == 6 %}
+                   {{ svg_icon.svg }}
+                   {% endif %}
+                   {% endif %}
+                   {% endfor %}
+                   {% if values.type == "link" %}
+                  <a class="cd_sidebarlink" href="{{ values.value }}" target="_blank">{{ nav.value | capitalize }}</a>
+                   {% elsif values.type == "page"  %}
+                   <a class="cd_sidebarlink" href="{{ shop.url | append:"/pages/" | append:values.value}}" target="_blank">{{ nav.value | capitalize }}</a>
+                   {% else %}
+                    <a id="cd_sidebarlink">{{ nav.value }}</a>
+                  {% endif %}
+              </li>
+              {% endif %}
+           {% endfor %}
+              {% endfor %}
+
               <li class="cd_menu-child cd_logout" onclick="cd_logout()">
                 <svg class="cd_menu-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="16" cy="16" r="15.75" stroke="#202020" stroke-width="0.5"/>
@@ -21,7 +50,6 @@
                   <path d="M20.9093 7.63712C22.5353 8.69541 23.7759 10.2508 24.446 12.0715C25.1162 13.8922 25.18 15.8808 24.6281 17.7407C24.0761 19.6007 22.9379 21.2325 21.3831 22.3929C19.8283 23.5533 17.9401 24.1802 16 24.1802C14.0599 24.1802 12.1717 23.5533 10.6169 22.3929C9.06204 21.2324 7.92384 19.6006 7.37189 17.7407C6.81994 15.8807 6.88381 13.8922 7.55396 12.0715C8.22411 10.2508 9.46467 8.69538 11.0907 7.6371" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                   <a id="cd_sidebarlink">Logout</a>
-                  <a>{{ shop.metafields.Flits.WSL_BEFORE_BTN_TEXT }}</a>
               </li>
             </ul>
           </div>

@@ -1,4 +1,4 @@
-{
+const setting_json = {
   "app_access_toggle": true,
   "updatebycustomer_toggle": true,
   "reorder_toggle": true,
@@ -19,5 +19,7 @@
   "main_content_heading": "#000",
   "main_content_order_item_back": "#fff",
   "main_content_text": "#000",
-  "main_content_foreground_text": "#000"
+  "main_content_foreground_text": "#000",
+  "custom_css": ""
 }
+export default setting_json

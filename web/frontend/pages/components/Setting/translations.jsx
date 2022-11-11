@@ -1,28 +1,17 @@
-import { Page, Card, Form, Select, TextContainer } from '@shopify/polaris'
+import { Page, Card, Form, Select, TextContainer, RadioButton } from '@shopify/polaris'
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { TranslationsFields } from './TranslationsFields';
 const Translations = () => {
   const navigate = useNavigate();
-  const [state, setState] = useState([])
   const [local, setLocal] = useState([]);
-  const [themes, setThemes] = useState([]);
   const [toggle, setToggle] = useState(false);
   const [selected, setSelected] = useState({});
 
   useEffect(() => {
-    getTheme();
     GetTranslations();
   }, [])
-
-  const getTheme = () => {
-    axios.get(`/api/get-main-theme?shop=${Shop_name}`).then((response) => {
-      setThemes(response.data);
-    })
-  }
-
-
 
   const GetTranslations = () => {
     const query = `query MyQuery{
@@ -49,9 +38,9 @@ const Translations = () => {
       }
     });
   };
-  const options = [{label:"Select Theme", value:""}];
-  themes.map((ele, index) => (options.push({ key: index, label: ele.name, value: ele.id.toString() })))
-  const options2 = [{label:"Select Language", value:""}];
+
+  console.log(selected);
+  const options2 = [{ label: "Select Language", value: "" }];
   local.map((ele, index) => (options2.push({ key: index, label: ele.name, value: ele.locale })));
   return (
     <>
@@ -62,27 +51,10 @@ const Translations = () => {
           >
             <TextContainer >
               <Card>
-                <Card.Section>
-                  <Select
-                    label="Select Theme"
-                    options={options}
-                    name="theme_id"
-                    onChange={(e) => handleSelectChange('theme_id', e)}
-                    value={selected.theme_id}
-                  />
-
-                {
-                  selected.theme_id?
-                  <Select
-                    label="Select Language"
-                    options={options2}
-                    name="language"
-                    onChange={(e) => handleSelectChange('language', e)}
-                    value={selected.language}
-                  />
-                  :null
-                }
-                </Card.Section>
+                {local.map((ele, index) => (
+                  <div key={index}>
+                    <Card.Section title={ele.name} actions={[{ content: "Manage Translations", onAction:()=>handleSelectChange("language",ele.locale)}]}></Card.Section>
+                  </div>))}
               </Card>
             </TextContainer>
           </Page>

@@ -3,13 +3,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Toggle } from '../Toggle'
 import axios from 'axios';
-import setting_json from "./json/setting.json";
-
 import { PopoverSetting } from './Popover'
 const Setting = () => {
   const navigate = useNavigate();
   const [_setting, set_Setting] = useState({});  
-  const [setting, setSetting] = useState(setting_json);  
+  const [setting, setSetting] = useState([]);  
   const [save, setSave] = useState(false);  
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
@@ -59,17 +57,13 @@ const Setting = () => {
             onAction:()=>setSave(false),
           }}
         />
-      ) : null;
+      ) : null;  
 
-      function removeLineBreak(str){
-        return str.replaceAll(/""/g,'"');
-    }
-  
       const getSetting = () => {
         axios.get(`/api/get-setting?shop=${Shop_name}`).then((response) => {
-          var res = response.data[0].setting
-              res = JSON.parse(removeLineBreak(res))
-            setSetting(res);
+          if (response.data!=="") {
+            setSetting(response.data);
+          }
         })
       }
       
@@ -81,7 +75,6 @@ const Setting = () => {
       }
 
       const submit =()=>{
-        setting.custom_css=JSON.stringify(setting.custom_css);
         axios.post(`/api/set-setting?shop=${Shop_name}`,setting).then((response) => {
         if(response.status===200){
           setActive(true);

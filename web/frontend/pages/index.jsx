@@ -4,19 +4,17 @@ import axios from 'axios'
 import {NavLink } from 'react-router-dom'
 import { Feedback } from './components/FeedbackModel/Feedback'
 import { Toggle } from './components/Toggle'
-import setting_json from "./components/Setting/json/setting.json";
-
   
 const Home = (props)=>{
-  const {count}=props;
-  const [setting, setSetting] = useState(setting_json);  
+  const {count,billing }=props;
+  const [setting, setSetting] = useState([]);  
 const [save, setSave] = useState(false);  
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
     const cardData = [
         {title:"Customers", content:<NavLink to="/components/customers/customers">View Customers</NavLink>,value:count.customer_count},
         {title:"Order", content:<Link url={`https://${Shop_name}/admin/orders`} external>All Orders</Link> ,value:count.order_count},
-        {title:"Current Plan",content:"", value:"Basic-Free"},
+        {title:"Current Plan",content:"", value:billing&&billing.status === 'active'?billing.name:"Basic-Free"},
     ]
     const dataCard = [
         {heading:"Translations",value:"Add translations to use Customer Dashboard in any language.",content:"Manage Translations",link:"/components/setting/translations"},
@@ -28,6 +26,7 @@ const [save, setSave] = useState(false);
 
 useEffect(() => {
   getSetting();
+  console.log(billing);
 }, [])
 
 const toastMarkup = active ? (
@@ -51,21 +50,17 @@ const toastMarkup = active ? (
     setSave(true);
     }
 
-    function removeLineBreak(str){
-      return str.replaceAll(/""/gm,'"');
-  }
+
 
     const getSetting = () => {
       axios.get(`/api/get-setting?shop=${Shop_name}`).then((response) => {
-        var res = response.data[0].setting
-        res = JSON.parse(removeLineBreak(res))
-      setSetting(res);
-      console.log(res);
+        if (response.data!=="") {
+          setSetting(response.data);
+        }
   })
     }
     
     const submit =()=>{
-      setting.custom_css=JSON.stringify(setting.custom_css);
       axios.post(`/api/set-setting?shop=${Shop_name}`,setting).then((response) => {
       if(response.status===200){
         setActive(true);

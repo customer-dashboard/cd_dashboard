@@ -1,17 +1,18 @@
-import { ContextualSaveBar, Card, Layout, Page, Toast } from '@shopify/polaris'
+import { ContextualSaveBar, Card, Layout, Page, Toast, Spinner } from '@shopify/polaris'
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Toggle } from '../Toggle';
 import { AddFieldsModel } from './AddFieldsModel';
 import { ProfileReorder } from './ProfileReorder';
-import setting_json from "../Setting/json/setting.json";
 
 
 const ProfileSetup = () => {
   const navigate = useNavigate();
-  const [setting, setSetting] = useState(setting_json);
+  const [setting, setSetting] = useState([]);
   const [save, setSave] = useState(false);
+const [loading, setLoading] = useState(false);
+const [local, setLocal] = useState([]);
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
   const [defaultProfile, setDefaultProfile] = useState([]);
@@ -19,8 +20,24 @@ const ProfileSetup = () => {
   useEffect(() => {
     getProfileData();
     getSetting();
+    GetLocal();
   }, [])
 
+  const GetLocal = () => {
+    const query = `query MyQuery{
+      shopLocales {
+        locale
+        name
+        primary
+        published
+      }
+    }`;
+  
+    const data = { query: query }
+    axios.post(`/api/graphql-data-access?shop=${Shop_name}`, data).then((response) => {
+      setLocal(response.data.body.data.shopLocales);
+    });
+  }
 
   const toastMarkup = active ? (
     <Toast content="Data Saved" onDismiss={toggleActive} />
@@ -28,7 +45,7 @@ const ProfileSetup = () => {
 
   const contextualSaveBarMarkup = save ? (
     <ContextualSaveBar
-      message="Unsaved changes"
+      message={loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null}
       saveAction={{
         onAction: () => submit(),
       }}
@@ -43,21 +60,16 @@ const ProfileSetup = () => {
     setSave(true);
   }
 
-  function removeLineBreak(str){
-    return str.replaceAll(/""/gm,'"');
-}
 
   const getSetting = () => {
     axios.get(`/api/get-setting?shop=${Shop_name}`).then((response) => {
-      var res = response.data[0].setting
-      res = JSON.parse(removeLineBreak(res))
-    setSetting(res);
-    console.log(res);
+      if (response.data!=="") {
+        setSetting(response.data);
+      }
 })
   }
 
   const submit = () => {
-    setting.custom_css=JSON.stringify(setting.custom_css);
     axios.post(`/api/set-setting?shop=${Shop_name}`, setting).then((response) => {
       if (response.status === 200) {
         setActive(true);
@@ -69,20 +81,46 @@ const ProfileSetup = () => {
 
   const getProfileData = () => {
     axios.get(`/api/get-profile-fields?shop=${Shop_name}`).then((response) => {
-      const res = JSON.parse(response.data[0].fields);
-      setDefaultProfile(res);
-      
+      if (response.data!=="") {
+        const res = JSON.parse(response.data.value);
+        setDefaultProfile(res);
+      }
     });
+  }
+
+  function add(arr, name) {
+    const found = arr.some(el => el.heading === name);
+    if (!found) arr.push({heading: name,value: name,name: "Shared"});
+    return arr;
   }
 
   const AdditionalFields = (e) => {
     var id = defaultProfile.length;
     e.id=id.toString();
-   e.name=e.label.toLowerCase().replaceAll(' ', '_')+'_'+e.id;
+    e.name=e.label.toLowerCase().replaceAll(' ', '_')+'_'+e.id;
     defaultProfile.push(e);
-    axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=profile_fields`, defaultProfile).then(() => {
-      getProfileData();
-    });
+  setLoading(true);
+    local.forEach(element_2 => {
+      axios.get(`/api/get-json?shop=${Shop_name}&locale=${element_2.locale}`).then((response) => {
+          if(response.data){
+            var arr = JSON.parse(response.data.value)[element_2.locale];
+            var array = [];
+            defaultProfile.forEach(element => {
+              array=add(arr, element.label);
+            });
+            const data = {
+              value:{[element_2.locale]:array},
+              locale:element_2.locale
+            }
+          axios.post(`/api/create-translations?shop=${Shop_name}`,data).then(() => {
+            axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=profile_fields`, defaultProfile).then(() => {
+              getProfileData();
+               setLoading(false);
+            });
+          })
+          }
+        });
+      });
   }
   return (
     <>

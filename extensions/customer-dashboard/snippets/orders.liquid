@@ -1,9 +1,12 @@
-     <section id="cd_orders_page" class="cd_main-section cd_main-section-2">
+  {% assign lang = request.locale.iso_code %}
+  {% assign setting = shop.metafields.customer_dashboard.setting.value %}
+{% assign translation = "translations_" | append:lang %}
+    <section id="cd_orders_page" class="cd_main-section cd_main-section-2">
           <div class="cd_main-header">
-            <p id="cd_heading">Orders</p>
+            <p id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][25].value }}</p>
           </div>
         {% for orders in customer.orders %}
-        <div class="cd_container cd_order-container">
+        <div class="cd_container cd_order-container"> 
         <div id="cd_success_message_contact">Message Sent Successfully</div>       
             <div class="cd_order-content">
               <p><span>Order :</span><span>{{ orders.name }}</span></p>
@@ -23,16 +26,16 @@
             <div id="cd_panel_{{ orders.id }}" class="cd_panel" >
               <table class="cd_table-1">
                 <tr>
-                  <td>Order status page:-</td>
+                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][28].value }}:-</td>
                 </tr>
                 <tr>
                   <td><a href="{{ orders.order_status_url }}" target="_blank" >Order status page</a></td>
                 </tr>
                 <tr>
-                  <td>Addresses:-</td>
+                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][29].value }}:-</td>
                 </tr>
                 <tr>
-                  <th>Shipping address</th>
+                  <th>{{ shop.metafields.customer_dashboard[translation].value[lang][30].value }}</th>
                   <td style="width: 60rem;">
                   <span>{{ orders.shipping_address.first_name }} </span>
                   <span>{{ orders.shipping_address.last_name }} </span>
@@ -51,7 +54,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th>Billing address</th>
+                  <th>{{ shop.metafields.customer_dashboard[translation].value[lang][26].value }}</th>
                  <td style="width: 63rem;">
                   <span>{{ orders.billing_address.first_name }} </span>
                   <span>{{ orders.billing_address.last_name }} </span>
@@ -70,24 +73,24 @@
                   </td>
                 </tr>               
                 <tr>
-                  <td>Total summary:-</td>
+                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][27].value }}:-</td>
                 </tr>
               </table>
               <table class="cd_table-2">
                 <tr>
-                  <td>Sub-total</td>
+                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][31].value }}</td>
                   <td>${{ orders.subtotal_price | money_without_currency }}</td>
                 </tr>
                 <tr>
-                  <td>Total discount</td>
+                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][32].value }}</td>
                    <td>${{ orders.total_discounts | money_without_currency }}</td>
                 </tr>
                 <tr>
-                  <td>Tax price</td>
+                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][33].value }}</td>
                    <td>${{ orders.tax_price | money_without_currency }}</td>
                 </tr>
                 <tr>
-                  <td>Shipping price</td>
+                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][34].value }}</td>
                    <td>${{ orders.shipping_price | money_without_currency }}</td>
                 </tr>
               </table>
@@ -95,15 +98,17 @@
   
             <div class="cd_order-contact">
               <div class="cd_order-contact-clild">
-                <div><span>Total items: </span><span>{{ orders.line_items.size }}</span></div>
+                <div><span>{{ shop.metafields.customer_dashboard[translation].value[lang][35].value }}: </span><span>{{ orders.line_items.size }}</span></div>
                 <div class="cd_row">
-                  <input type="button" onclick="myFunction('cd_contact')" value="Contact Us">
+                  <input type="button" onclick="myFunction('cd_contact')" value="{{shop.metafields.customer_dashboard[translation].value[lang][39].value}}">
                 </div>
               </div>
               <div style="text-align: right;" class="cd_order-contact-clild">
               <div><span>Grand Total: </span><span>${{ orders.total_price | money_without_currency }}</span></div>
                      <div class="cd_row">
-                  <a class="cd_reorder" reorder_id="{{ orders.id }}"  href="#cd_reorder_popup1">Reorder</a>
+                      {% if setting.reorder_toggle == true %}
+                      <a class="cd_reorder" reorder_id="{{ orders.id }}"  href="#cd_reorder_popup1">{{ shop.metafields.customer_dashboard[translation].value[lang][36].value }}</a>
+                      {% endif %}
                 </div>
               </div>
             </div>
@@ -123,8 +128,8 @@
         <p>All available items in this order have been added to your cart</p>
         <div class="cd_content">
             <ul class="cd_buttons">
-                <li><a class="cd_reorder_button" reorder_id="" href="/cart">Go To Cart</a></li>
-                <li><a class="cd_reorder_button" reorder_id="" href="#">Stay On this Page</a></li>
+                <li><a class="cd_reorder_button" reorder_id="" href="/cart">{{ shop.metafields.customer_dashboard[translation].value[lang][37].value }}</a></li>
+                <li><a class="cd_reorder_button" reorder_id="" href="#">{{ shop.metafields.customer_dashboard[translation].value[lang][38].value }}</a></li>
             </ul>
         </div>
     </div>

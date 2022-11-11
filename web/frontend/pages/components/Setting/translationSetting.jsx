@@ -61,7 +61,6 @@ export const TranslationSetting = (props) => {
   }
 
   const uplaodData = ()=>{
-    console.log(selected);
   }
 
   return (

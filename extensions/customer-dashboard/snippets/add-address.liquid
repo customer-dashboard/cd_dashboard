@@ -1,4 +1,5 @@
-     
+     {% assign lang = request.locale.iso_code %}
+{% assign translation = "translations_" | append:lang %}
      
      <section id="cd_add_address_page" class="cd_main-section cd_main-section-2">
       <div class="cd_header">
@@ -7,11 +8,6 @@
               </div>
       </div>
       {% form 'customer_address', customer.new_address , class:'cd_add_address'  %}
-      {%- if form.posted_successfully? -%}
-                <script>
-                window.location = "/account?a=address";
-                </script>
-                {%-endif -%}
      <div class="cd_container">
             <div class="cd_flex-row">
                 <div class="cd_row">
@@ -111,7 +107,7 @@
                 </div>
             </div>
             <div class="cd_row" style="margin-top:15px;">
-                <button type="submit">Save</button>
+                <button class="cd_redirect_address" type="submit">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
                 <input class="cd_backAddress" type="button" id="cd_submit_loader" value="Cancel"/>
             </div>      
     </div>

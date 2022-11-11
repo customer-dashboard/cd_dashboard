@@ -23,9 +23,7 @@ export const Feedback = (props) => {
   }
 
   const Submit = ()=>{
-    console.log(state);
     //   axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=menu_builder_fields`,Result).then((response) => {
-    //   console.log(response);
     //   getProfileData();
     //   handleChange();
     //   });

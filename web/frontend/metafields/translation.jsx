@@ -1,30 +1,5 @@
-{
+const localjson = {
     "en": [
-          {
-            "heading": "My Profile",
-            "value": "My Profile",
-            "name": "Navigation"
-          },
-          {
-            "heading": "Orders",
-            "value": "Orders",
-             "name": "Navigation"
-          },
-          {
-            "heading": "Address",
-            "value": "Address",
-             "name": "Navigation"
-          },
-          {
-            "heading": "Privacy Policy",
-            "value": "Privacy Policy",
-             "name": "Navigation"
-          },
-          {
-            "heading": "Return Policy",
-            "value": "Return Policy",
-             "name": "Navigation"
-          },
           {
             "heading": "My Profile",
             "value": "My Profile",
@@ -49,6 +24,16 @@
             "heading": "Profile Updated",
             "value": "Profile Updated",
              "name": "My Profile"
+          },
+          {
+            "heading": "Accepts Marketing",
+            "value": "Accepts Marketing",
+            "name": "My Profile"
+          },
+          {
+            "heading": "Edit Profile",
+            "value": "Edit Profile",
+            "name": "My Profile"
           },
           {
             "heading": "Addresses",
@@ -145,21 +130,7 @@
             "value": "Orders",
              "name": "Orders"
           },
-          {
-            "heading": "Unfulfilled",
-            "value": "Unfulfilled",
-             "name": "Orders"
-          },
-          {
-            "heading": "Confirm New Password",
-            "value": "Confirm New Password",
-             "name": "Orders"
-          },
-          {
-            "heading": "Paid",
-            "value": "Paid",
-             "name": "Orders"
-          },
+         
           {
             "heading": "Billing Address",
             "value": "Billing Address",
@@ -171,29 +142,83 @@
             "name": "Orders"
           },
           {
-            "heading": "Fulfilled",
-            "value": "Fulfilled",
-            "name": "Orders Fullfillment Status"
+            "heading": "Order status page",
+            "value": "Order status page",
+            "name": "Orders"
           },
           {
-            "heading": "Unfulfilled",
-            "value": "Unfulfilled",
-            "name": "Orders Fullfillment Status"
+            "heading": "Addresses",
+            "value": "Addresses",
+            "name": "Orders"
           },
           {
-            "heading": "Partial",
-            "value": "Partial",
-            "name": "Orders Fullfillment Status"
+            "heading": "Shipping address",
+            "value": "Shipping address",
+            "name": "Orders"
           },
           {
-            "heading": "Complete",
-            "value": "Complete",
-            "name": "Orders Fullfillment Status"
+            "heading": "Sub-total",
+            "value": "Sub-total",
+            "name": "Orders"
           },
           {
-            "heading": "Restocked",
-            "value": "Restocked",
-            "name": "Orders Fullfillment Status"
+            "heading": "Total discount",
+            "value": "Total discount",
+            "name": "Orders"
+          },
+          {
+            "heading": "Tax price",
+            "value": "Tax price",
+            "name": "Orders"
+          },{
+            "heading": "Shipping price",
+            "value": "Shipping price",
+            "name": "Orders"
+          },{
+            "heading": "Total items",
+            "value": "Total items",
+            "name": "Orders"
+          },{
+            "heading": "Reorder",
+            "value": "Reorder",
+            "name": "Orders"
+          },{
+            "heading": "Go To Cart",
+            "value": "Go To Cart",
+            "name": "Orders"
+          },{
+            "heading": "Stay On this Page",
+            "value": "Stay On this Page",
+            "name": "Orders"
+          },{
+            "heading": "Contact Us",
+            "value": "Contact Us",
+            "name": "Orders"
+          },
+          {
+            "heading": "Submit",
+            "value": "Submit",
+             "name": "Button"
+          },
+          {
+            "heading": "My Profile",
+            "value": "My Profile",
+            "name": "Navigation"
+          },
+          {
+            "heading": "Orders",
+            "value": "Orders",
+             "name": "Navigation"
+          },
+          {
+            "heading": "Addresses",
+            "value": "Address",
+             "name": "Navigation"
+          },
+          {
+            "heading": "Change Password",
+            "value": "Change Password",
+            "name": "Navigation"
           },
           {
             "heading": "First Name",
@@ -214,11 +239,8 @@
             "heading": "Phone",
             "value": "Phone",
              "name": "Shared"
-          },
-          {
-            "heading": "Submit",
-            "value": "Submit",
-             "name": "Shared"
           }
     ]
-  }
+  };
+
+  export default localjson

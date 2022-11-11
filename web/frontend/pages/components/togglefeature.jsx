@@ -1,20 +1,15 @@
 import { Page,ContextualSaveBar,Toast,Layout,SettingToggle,TextStyle} from '@shopify/polaris'
 import { useNavigate } from 'react-router-dom';
-import setting_json from "./Setting/json/setting.json";
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const ToggleFeature = () => {
 const navigate = useNavigate();
-const [setting, setSetting] = useState(setting_json);  
+const [setting, setSetting] = useState([]);  
 const [active, setActive] = useState(false);
 const toggleActive = useCallback(() => setActive((active) => !active), []);
 const [save, setSave] = useState(false);  
-const [activeToggle, setActiveToggle] = useState([
-  {content:"Customers Dashboard Is", name:"app_access_toggle", value:setting_json.app_access_toggle},
-  {content:"Allows your customers to update their marketing preference from within their customer account profiles", name:"updatebycustomer_toggle", value:setting_json.updatebycustomer_toggle},
-  {content:"Reorder Is", name:"reorder_toggle", value:setting_json.reorder_toggle}
-]);
+const [activeToggle, setActiveToggle] = useState([]);
 const changeHendle = (name,value,i) =>{
   let newFormValues = [...activeToggle];
   newFormValues[i]['value']=!value;
@@ -43,20 +38,18 @@ const contextualSaveBarMarkup = save ? (
   />
 ) : null;
 
-function removeLineBreak(str){
-  return str.replaceAll(/""/gm,'"');
-}
-
 const getSetting = () => {
   axios.get(`/api/get-setting?shop=${Shop_name}`).then((response) => {
-    var setresult = response.data[0].setting
-       setresult = JSON.parse(removeLineBreak(setresult))
+     
+    if (response.data!=="") {
+      var setresult = response.data;
       setSetting(setresult);
       setActiveToggle([
         {content:"Customers Dashboard Is", name:"app_access_toggle", value:setresult.app_access_toggle},
         {content:"Allows your customers to update their marketing preference from within their customer account profiles", name:"updatebycustomer_toggle", value:setresult.updatebycustomer_toggle},
         {content:"Reorder Is", name:"reorder_toggle", value:setresult.reorder_toggle}
       ])
+    }
   })
 }
 

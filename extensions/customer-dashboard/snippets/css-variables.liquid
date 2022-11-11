@@ -1,24 +1,25 @@
+ {% assign setting = shop.metafields.customer_dashboard.setting.value %}
 <style>
 :root {
---app_access_toggle: false;
-    --updatebycustomer_toggle: true;
-    --reorder_toggle: false;
-    --sidebar_menu_size: 15px;
-    --sidebar_heading_size: 33px;
-    --sidebar_background: #fffff;
-    --sidebar_customer_name: #000;
-    --sidebar_menu_background: #fffff;
-    --sidebar_menu_text: #000;
-    --sidebar_menu_active: #000;
-    --sidebar_menu_text_hover: #000;
-    --main_content_text_size: 20px;
-    --main_content_heading_size: 30px;
-    --main_content_background: #fff;
-    --main_content_foreground: #fff;
-    --main_content_primary: #000;
-    --main_content_heading: #000;
-    --main_content_text: #000;
-    --main_content_foreground_text: #000;
-    --main_content_order_item_back: #fff;
+--app_access_toggle: {{ setting.app_access_toggle }};
+    --updatebycustomer_toggle: {{ setting.updatebycustomer_toggle }};
+    --reorder_toggle: {{ setting.reorder_toggle }};
+    --sidebar_menu_size: {{ setting.sidebar_menu_size | append: "px" }};
+    --sidebar_heading_size: {{ setting.sidebar_heading_size | append: "px" }};
+    --sidebar_background:{{ setting.sidebar_background }};
+    --sidebar_customer_name:{{ setting.sidebar_customer_name }};
+    --sidebar_menu_background:{{ setting.sidebar_menu_background }};
+    --sidebar_menu_text:{{ setting.sidebar_menu_text }};
+    --sidebar_menu_active:{{ setting.sidebar_menu_active }};
+    --sidebar_menu_text_hover: {{ setting.sidebar_menu_text_hover }};
+    --main_content_text_size: {{ setting.main_content_text_size | append: "px" }};
+    --main_content_heading_size: {{ setting.main_content_heading_size | append: "px" }};
+    --main_content_background: {{ setting.main_content_background }};
+    --main_content_foreground: {{ setting.main_content_foreground }};
+    --main_content_primary: {{ setting.main_content_primary }};
+    --main_content_heading: {{ setting.main_content_heading }};
+    --main_content_text: {{ setting.main_content_text }};
+    --main_content_foreground_text: {{ setting.main_content_foreground_text }};
+    --main_content_order_item_back: {{ setting.main_content_order_item_back }};
 }
 </style> 

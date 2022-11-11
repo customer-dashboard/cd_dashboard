@@ -20,7 +20,6 @@ useEffect(() => {
   const getOrders = ()=>{
     axios.get(`/api/get-orders/${id}/?shop=${Shop_name}`).then((response) => {
       // setOrders(response.data.orders[0]);
-      console.log(response.data.orders);
     });
   }
 

@@ -1,15 +1,11 @@
-# fly.toml file generated for customer-dashboard-pro on 2022-09-26T16:02:15+05:30
+# fly.toml file generated for customer-dashbaord-letest on 2022-11-04T16:15:03+05:30
 
-app = "customer-dashboard-pro"
+app = "customer-dashbaord-letest"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
-	PORT = "8080"
-  HOST = "customer-dashboard-pro.fly.dev"
-  SHOPIFY_API_KEY = "4739402e245941dc78b7d370ad8fcf8f"
-  SCOPES = "read_products,read_customers,read_orders,read_locales,read_content,read_script_tags,read_themes,write_themes,write_script_tags,write_products,write_customers,write_orders"
 
 [experimental]
   allowed_public_ports = []
