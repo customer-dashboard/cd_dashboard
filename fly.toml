@@ -1,6 +1,6 @@
-# fly.toml file generated for customer-dashbaord-letest on 2022-11-04T16:15:03+05:30
+# fly.toml file generated for customer-dashboard-pro on 2022-11-12T11:50:42+05:30
 
-app = "customer-dashbaord-letest"
+app = "customer-dashboard-pro"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []

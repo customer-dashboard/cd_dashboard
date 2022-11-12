@@ -1,7 +1,7 @@
   {% assign lang = request.locale.iso_code %}
   {% assign setting = shop.metafields.customer_dashboard.setting.value %}
 {% assign translation = "translations_" | append:lang %}
-    <section id="cd_orders_page" class="cd_main-section cd_main-section-2">
+    <section id="cd_orders" class="cd_main-section cd_main-section-2">
           <div class="cd_main-header">
             <p id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][25].value }}</p>
           </div>

@@ -1,0 +1,15 @@
+{% for values in shop.metafields.customer_dashboard.menu_builder_fields.value %}
+  {% if values.type == "page" %}
+
+    <section id="cd_{{ values.value }}" class="cd_main-section">
+      <div class="cd_container">
+        <div class="cd_header">
+          <div>
+            <p id="cd_heading">{{ pages[values.value].title }}</p>
+          </div>
+        </div>
+        {{ pages[values.value].content }}
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}

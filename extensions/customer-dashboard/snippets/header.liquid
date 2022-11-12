@@ -1,56 +1,54 @@
-     {% assign lang = request.locale.iso_code %}
-    <div class="cd_sidebar_menu">
-      <div class="cd_logo">
-      {% assign name = customer.first_name | split:"" %}
-      <div class="cd_first_text">
-      {% if customer.first_name != null and customer.first_name != ""%}     
-      <p>{{ name[0] }}</p>      
+{% assign lang = request.locale.iso_code %}
+<div class="cd_sidebar_menu">
+  <div class="cd_logo">
+    {% assign name = customer.first_name | split:"" %}
+    <div class="cd_first_text">
+      {% if customer.first_name != null and customer.first_name != ""%}
+        <p>{{ name[0] }}</p>
       {% else %}
-      <svg class="cd_menu-icon" xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 32 32" fill="none">
-      <path d="M16.5 15.6579C15.534 15.6581 14.5897 15.375 13.7864 14.8444C12.9832 14.3139 12.3571 13.5598 11.9873 12.6774C11.6176 11.795 11.5208 10.8241 11.7091 9.88729C11.8975 8.95052 12.3626 8.09002 13.0456 7.41461C13.7286 6.7392 14.5989 6.27922 15.5463 6.09284C16.4937 5.90646 17.4757 6.00205 18.3682 6.36752C19.2607 6.733 20.0235 7.35194 20.5602 8.14607C21.0968 8.94021 21.3833 9.87387 21.3833 10.829C21.3821 12.1092 20.8672 13.3367 19.9517 14.242C19.0362 15.1473 17.7948 15.6565 16.5 15.6579ZM16.5 7.39259C15.8124 7.39246 15.1402 7.59395 14.5685 7.97157C13.9967 8.34918 13.5511 8.88597 13.2879 9.51403C13.0247 10.1421 12.9558 10.8332 13.0899 11.5C13.224 12.1668 13.5551 12.7793 14.0413 13.26C14.5275 13.7407 15.147 14.0681 15.8213 14.2007C16.4957 14.3333 17.1947 14.2651 17.8299 14.0049C18.4651 13.7447 19.008 13.3041 19.39 12.7387C19.7719 12.1734 19.9756 11.5088 19.9755 10.829C19.9745 9.91791 19.6079 9.04446 18.9564 8.40024C18.3048 7.75602 17.4214 7.39364 16.5 7.39259V7.39259ZM24.2961 26H8.70389L8 25.304C8 24.2004 8.21986 23.1075 8.64702 22.0879C9.07419 21.0682 9.70029 20.1417 10.4896 19.3613C11.2789 18.5809 12.2159 17.9618 13.2472 17.5395C14.2785 17.1171 15.3838 16.8998 16.5 16.8998C17.6162 16.8998 18.7215 17.1171 19.7528 17.5395C20.7841 17.9618 21.7211 18.5809 22.5104 19.3613C23.2997 20.1417 23.9258 21.0682 24.353 22.0879C24.7801 23.1075 25 24.2004 25 25.304L24.2961 26ZM9.44108 24.6081H23.5589C23.3868 22.8751 22.5688 21.2674 21.264 20.0979C19.9593 18.9283 18.2611 18.2805 16.5 18.2805C14.7389 18.2805 13.0407 18.9283 11.736 20.0979C10.4312 21.2674 9.61322 22.8751 9.44108 24.6081V24.6081Z" fill="#231F20"/>
-      </svg> 
-       {% endif %}
-      </div>
-      <a href="/account?a=my-profile">{{ customer.first_name }}</a>
-      </div> 
-          <div class="cd_menu">
-            <ul class="cd_active_ul">
-           
-            {% assign translation = "translations_" | append:lang %}
-              {% for values in shop.metafields.customer_dashboard.menu_builder_fields.value %}
-               {% for nav  in shop.metafields.customer_dashboard[translation].value[lang] %}
-             {% if nav.name == "Navigation" and nav.heading == values.label %}
-                 <li id="{{ values.type }}" class="cd_menu-child {% if values.type == "link" %}cd_link{% endif %} {% if values.type == "page" %}cd_page{% endif %}">
-                 {% for svg_icon in shop.metafields.customer_dashboard.svg_icon.value %}
-                {% if values.svg == svg_icon.id %}
-                 {{ svg_icon.svg }}
-                 {% endif %}
-                  {% if values.type == "link" %}
-                  {% if forloop.index == 8 %}
-                   {{ svg_icon.svg }}
-                   {% endif %}
-                   {% endif %}
-                   {% endfor %}
-                   {% if values.type == "link" %}
-                  <a class="cd_sidebarlink" href="{{ values.value }}" target="_blank">{{ nav.value | capitalize }}</a>
-                   {% elsif values.type == "page"  %}
-                   <a class="cd_sidebarlink" href="{{ shop.url | append:"/pages/" | append:values.value}}" target="_blank">{{ nav.value | capitalize }}</a>
-                   {% else %}
-                    <a id="cd_sidebarlink">{{ nav.value }}</a>
-                  {% endif %}
-              </li>
-              {% endif %}
-           {% endfor %}
-              {% endfor %}
-
-              <li class="cd_menu-child cd_logout" onclick="cd_logout()">
-                <svg class="cd_menu-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="16" cy="16" r="15.75" stroke="#202020" stroke-width="0.5"/>
-                  <path d="M15.999 7V14.7727" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M20.9093 7.63712C22.5353 8.69541 23.7759 10.2508 24.446 12.0715C25.1162 13.8922 25.18 15.8808 24.6281 17.7407C24.0761 19.6007 22.9379 21.2325 21.3831 22.3929C19.8283 23.5533 17.9401 24.1802 16 24.1802C14.0599 24.1802 12.1717 23.5533 10.6169 22.3929C9.06204 21.2324 7.92384 19.6006 7.37189 17.7407C6.81994 15.8807 6.88381 13.8922 7.55396 12.0715C8.22411 10.2508 9.46467 8.69538 11.0907 7.6371" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <a id="cd_sidebarlink">Logout</a>
-              </li>
-            </ul>
-          </div>
+        <svg class="cd_menu-icon" xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 32 32" fill="none">
+          <path d="M16.5 15.6579C15.534 15.6581 14.5897 15.375 13.7864 14.8444C12.9832 14.3139 12.3571 13.5598 11.9873 12.6774C11.6176 11.795 11.5208 10.8241 11.7091 9.88729C11.8975 8.95052 12.3626 8.09002 13.0456 7.41461C13.7286 6.7392 14.5989 6.27922 15.5463 6.09284C16.4937 5.90646 17.4757 6.00205 18.3682 6.36752C19.2607 6.733 20.0235 7.35194 20.5602 8.14607C21.0968 8.94021 21.3833 9.87387 21.3833 10.829C21.3821 12.1092 20.8672 13.3367 19.9517 14.242C19.0362 15.1473 17.7948 15.6565 16.5 15.6579ZM16.5 7.39259C15.8124 7.39246 15.1402 7.59395 14.5685 7.97157C13.9967 8.34918 13.5511 8.88597 13.2879 9.51403C13.0247 10.1421 12.9558 10.8332 13.0899 11.5C13.224 12.1668 13.5551 12.7793 14.0413 13.26C14.5275 13.7407 15.147 14.0681 15.8213 14.2007C16.4957 14.3333 17.1947 14.2651 17.8299 14.0049C18.4651 13.7447 19.008 13.3041 19.39 12.7387C19.7719 12.1734 19.9756 11.5088 19.9755 10.829C19.9745 9.91791 19.6079 9.04446 18.9564 8.40024C18.3048 7.75602 17.4214 7.39364 16.5 7.39259V7.39259ZM24.2961 26H8.70389L8 25.304C8 24.2004 8.21986 23.1075 8.64702 22.0879C9.07419 21.0682 9.70029 20.1417 10.4896 19.3613C11.2789 18.5809 12.2159 17.9618 13.2472 17.5395C14.2785 17.1171 15.3838 16.8998 16.5 16.8998C17.6162 16.8998 18.7215 17.1171 19.7528 17.5395C20.7841 17.9618 21.7211 18.5809 22.5104 19.3613C23.2997 20.1417 23.9258 21.0682 24.353 22.0879C24.7801 23.1075 25 24.2004 25 25.304L24.2961 26ZM9.44108 24.6081H23.5589C23.3868 22.8751 22.5688 21.2674 21.264 20.0979C19.9593 18.9283 18.2611 18.2805 16.5 18.2805C14.7389 18.2805 13.0407 18.9283 11.736 20.0979C10.4312 21.2674 9.61322 22.8751 9.44108 24.6081V24.6081Z" fill="#231F20"/>
+        </svg>
+      {% endif %}
     </div>
+    <a href="/account?a=my-profile">{{ customer.first_name }}</a>
+  </div>
+  <div class="cd_menu">
+    <ul class="cd_active_ul">
+
+      {% assign translation = "translations_" | append:lang %}
+      {% for values in shop.metafields.customer_dashboard.menu_builder_fields.value %}
+        {% for nav  in shop.metafields.customer_dashboard[translation].value[lang] %}
+          {% if nav.name == "Navigation" and nav.heading == values.label %}
+            <li id="{% if values.type == "page" %}cd_{{ values.value }}{% else %}{{ values.type }}{% endif %}" class="cd_menu-child {% if values.type == "link" %}cd_link{% endif %}">
+              {% for svg_icon in shop.metafields.customer_dashboard.svg_icon.value %}
+                {% if values.svg == svg_icon.id %}
+                  {{ svg_icon.svg }}
+                {% endif %}
+                {% if values.type == "link" %}
+                  {% if forloop.index == 8 %}
+                    {{ svg_icon.svg }}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if values.type == "link" %}
+                <a class="cd_sidebarlink" href="{{ values.value }}" target="_blank">{{ nav.value | capitalize }}</a>
+              {% else %}
+                <a id="cd_sidebarlink">{{ nav.value }}</a>
+              {% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+
+      <li class="cd_menu-child cd_logout" onclick="cd_logout()">
+        <svg class="cd_menu-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="15.75" stroke="#202020" stroke-width="0.5"/>
+          <path d="M15.999 7V14.7727" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20.9093 7.63712C22.5353 8.69541 23.7759 10.2508 24.446 12.0715C25.1162 13.8922 25.18 15.8808 24.6281 17.7407C24.0761 19.6007 22.9379 21.2325 21.3831 22.3929C19.8283 23.5533 17.9401 24.1802 16 24.1802C14.0599 24.1802 12.1717 23.5533 10.6169 22.3929C9.06204 21.2324 7.92384 19.6006 7.37189 17.7407C6.81994 15.8807 6.88381 13.8922 7.55396 12.0715C8.22411 10.2508 9.46467 8.69538 11.0907 7.6371" stroke="#202020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <a id="cd_sidebarlink">Logout</a>
+      </li>
+    </ul>
+  </div>
+</div>

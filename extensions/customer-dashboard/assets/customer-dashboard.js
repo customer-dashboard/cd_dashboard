@@ -69,65 +69,30 @@ function accordion(id, btnId) {
 }
 
 
-var elements = document.getElementsByClassName("cd_active_ul");
-var toactive = function (e) {
-  if (e.target.classList.contains('cd_menu-child')) {
+var elements = document.getElementsByClassName("cd_menu-child");
+var toactive = function () {
+  if (this.classList.contains('cd_menu-child')) {
   var elems = document.querySelectorAll(".cd_active");
   [].forEach.call(elems, function (el) {
     el.classList.remove("cd_active");
   });
-  myFunction(e.target.getAttribute('id'));e.target.classList.add("cd_active");if(e.target.classList.contains('cd_link')||e.target.classList.contains('cd_page'))window.open(e.target.querySelector('.cd_sidebarlink').href, '_blank');
+  myFunction(this.getAttribute('id'));
+  this.classList.add("cd_active");if(this.classList.contains('cd_link'))window.open(this.querySelector('.cd_sidebarlink').href, '_blank');
  }
 };
 
 for (var i = 0; i < elements.length; i++) {
   elements[i].addEventListener('click', toactive, false);
 }
-
-
 function myFunction(a) {
-  let value_return;
-  var profile_page = document.getElementById("cd_profile_page");
-  var edit_profile_page = document.getElementById("cd_edit_profile_page");
-  var contact = document.getElementById("cd_contact_page");
-  var orders_page = document.getElementById("cd_orders_page");
-  var addresses_page = document.getElementById("cd_addresses_page");
-  var add_address_page = document.getElementById("cd_add_address_page");
-  var change_password_page = document.getElementById("cd_change_password_page");
-
-  switch (a) {
-    case "cd_edit-profile":
-      value_return = edit_profile_page;
-      break;
-    case "cd_my-profile":
-      value_return = profile_page;
-      break;
-    case "cd_orders":
-      value_return = orders_page;
-      break;
-    case "cd_addresses":
-      value_return = addresses_page;
-      break;
-    case "cd_change-password":
-      value_return = change_password_page;
-      break;
-    case "cd_add-address":
-      value_return = add_address_page;
-      break;
-    case "cd_contact":
-      value_return = contact;
-      break;
-    default:
-      value_return = profile_page;
-  }
-  var divsToHide = document.getElementsByClassName("cd_main-section"); //divsToHide is an array
+  var divsToHide = document.getElementsByClassName("cd_main-section");
+  var page = a;
+  if(page)window.history.replaceState(null, null, '?a=' + page);
+  else if(!page)page="cd_my-profile"
   for (var i = 0; i < divsToHide.length; i++) {
-    divsToHide[i].style.display = "none";
+    if(divsToHide[i].getAttribute('id')===page)divsToHide[i].style.display = "block";
+    else divsToHide[i].style.display = "none";
   }
-  if(a){
-    window.history.replaceState(null, null, '?a=' + a);
-  }
-  value_return.style.display = "block";
 }
 
 const queryString = window.location.search;

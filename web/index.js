@@ -81,6 +81,7 @@ export async function createServer(
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
   Database(app);
+    // @ts-ignore
   applyAuthMiddleware(app,{billing: billingSettings});  
   app.post("/api/webhooks", async (req, res) => {
     try {
@@ -97,6 +98,7 @@ export async function createServer(
   // All endpoints after this point will require an active session
   app.use(
     "/api/*",
+    // @ts-ignore
     verifyRequest(app, {billing: billingSettings})
   );
 
