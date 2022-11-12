@@ -70,11 +70,11 @@
                   </form>
                      </div>
                      {% if address.id == customer.default_address.id  %} 
-                     <input class="cd_default-btn" style="font-size:10px" type="button" value={{ shop.metafields.customer_dashboard[translation].value[lang][10].value }}> {% else %} 
+                     <input class="cd_default-btn" style="font-size:10px" type="button" value="{{shop.metafields.customer_dashboard[translation].value[lang][10].value}}"> {% else %} 
                        <div>
                         {% form 'customer_address', address %}
                          <input type="hidden"  name="address[default]" value="on">
-                        <input class="cd_default-btn-2" type="submit" value={{ shop.metafields.customer_dashboard[translation].value[lang][11].value }}>
+                        <input class="cd_default-btn-2" type="submit" value="{{shop.metafields.customer_dashboard[translation].value[lang][11].value}}">
                         {% endform %}
                        </div>
                      {% endif %}                   

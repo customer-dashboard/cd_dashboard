@@ -1,3 +1,4 @@
+{% assign setting = shop.metafields.customer_dashboard.setting.value %}
 {% if customer %}
 <script> 
 customerVarOnLoad = {{ customer.id }};
@@ -10,7 +11,6 @@ themeId = Shopify.theme.id;
  </script>
 {% endif %}
 
-<script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
 {% render "css-variables" %}
 <style>
 .customerdb-parent > *{
@@ -20,6 +20,9 @@ themeId = Shopify.theme.id;
   display:flex!important;
 }
 </style>
+
+{% if setting.app_access_toggle == true %}
+<script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
 <div id="customer_dashboard" style="display:none!important;">
 <div class="cd_main_box">
 {% render "header" %}
@@ -36,7 +39,7 @@ themeId = Shopify.theme.id;
 </div>
 </div>
 </div>
-
+{% endif %}
 
 {% schema %}
 {
@@ -45,12 +48,6 @@ themeId = Shopify.theme.id;
   "templates": ["customers/account", "customers/addresses"],
   "stylesheet": "customer-dashboard.css",
   "settings": [
-    {
-        "type": "text",
-        "id": "cd_heading",
-        "label": "Heading",
-        "default": "Heading 1"
-    }
   ]
 }
 {% endschema %}

@@ -7,7 +7,7 @@ import { PopoverSetting } from './Popover'
 const Setting = () => {
   const navigate = useNavigate();
   const [_setting, set_Setting] = useState({});  
-  const [setting, setSetting] = useState([]);  
+  const [setting, setSetting] = useState({});  
   const [save, setSave] = useState(false);  
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);

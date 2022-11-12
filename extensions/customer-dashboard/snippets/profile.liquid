@@ -1,3 +1,4 @@
+{% assign setting = shop.metafields.customer_dashboard.setting.value %}
 {% assign lang = request.locale.iso_code %}
 {% assign translation = "translations_" | append:lang %}
 <div id="cd_profile_page" class="cd_main-section">
@@ -17,7 +18,6 @@
                     <p>{{ customer.total_spent | money }}</p>
                 </div>
             </div>
-
         </div>
         <div class="cd_box">
             <div class="cd_box-logo">
@@ -126,10 +126,11 @@
                 </div> -->
             </div>
                 <div>
-                    <div class="cd_check-marketing">
-                        <!-- <input type="checkbox" name="check" id="cd_checkbox"> -->
+                   {% if setting.updatebycustomer_toggle == true %}
+                      <div class="cd_check-marketing">
                         <span>{{ shop.metafields.customer_dashboard[translation].value[lang][5].value }} </br><p style="color:black">{% if customer.accepts_marketing==true %}Yes{% else %}No{% endif%}</p></span>
                     </div>
+                      {% endif %}
                 </div>
     </section>
 </div>

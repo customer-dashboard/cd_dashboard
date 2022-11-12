@@ -72,12 +72,17 @@ const [pages, setPages] = useState([]);
           var arr = JSON.parse(response.data.value)[element_2.locale];
           const temp = arr.filter(obj1 => data.some(obj2 => obj2.label === obj1.heading&&obj1.name==="Navigation"))
           temp.push({heading: state.label,value: state.label,name: "Navigation"});
+          const result = temp.filter((thing, index, self) =>
+          index === self.findIndex((t) => (
+            t.heading === thing.heading
+          ))
+        )
           for (var i = arr.length - 1; i >= 0; i--) {
           if (arr[i].name === "Navigation") { 
           arr.splice(i, 1);
           }
           }
-          temp.forEach(element => {
+          result.forEach(element => {
           arr.push(element);
           });
           const data_local = {

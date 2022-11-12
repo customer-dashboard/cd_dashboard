@@ -7,7 +7,7 @@ import { Toggle } from './components/Toggle'
   
 const Home = (props)=>{
   const {count,billing }=props;
-  const [setting, setSetting] = useState([]);  
+  const [setting, setSetting] = useState({});  
 const [save, setSave] = useState(false);  
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);

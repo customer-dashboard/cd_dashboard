@@ -59,7 +59,7 @@ const [local, setLocal] = useState([]);
               value:{[element_2.locale]:array},
               locale:element_2.locale
             }
-            
+          
           axios.post(`/api/create-translations?shop=${Shop_name}`,data).then(() => {
             axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=menu_builder_fields`,Result).then(() => {
               getProfileData();

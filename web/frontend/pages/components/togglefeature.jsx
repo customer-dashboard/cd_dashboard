@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const ToggleFeature = () => {
 const navigate = useNavigate();
-const [setting, setSetting] = useState([]);  
+const [setting, setSetting] = useState({});  
 const [active, setActive] = useState(false);
 const toggleActive = useCallback(() => setActive((active) => !active), []);
 const [save, setSave] = useState(false);  
@@ -60,7 +60,6 @@ const toastMarkup = active ? (
 
 
 const submit =()=>{
-  setting.custom_css=JSON.stringify(setting.custom_css);
   axios.post(`/api/set-setting?shop=${Shop_name}`,setting).then((response) => {
     if(response.status===200){
     setActive(true);

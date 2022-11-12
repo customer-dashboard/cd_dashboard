@@ -9,7 +9,7 @@ import { ProfileReorder } from './ProfileReorder';
 
 const ProfileSetup = () => {
   const navigate = useNavigate();
-  const [setting, setSetting] = useState([]);
+  const [setting, setSetting] = useState({});
   const [save, setSave] = useState(false);
 const [loading, setLoading] = useState(false);
 const [local, setLocal] = useState([]);

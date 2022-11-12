@@ -3,9 +3,9 @@
 var hostname = "https://868b-2401-4900-1c09-2967-2d5a-f0ce-5a3b-d669.in.ngrok.io";
 Shop_name=window.location.hostname;
 
-document.addEventListener("DOMContentLoaded", function() {
+// document.addEventListener("DOMContentLoaded", function() {
 
-});
+// });
 
 Element.prototype.appendBefore = function (element) {
   element.parentNode.insertBefore(this, element);
@@ -127,12 +127,7 @@ function myFunction(a) {
   if(a){
     window.history.replaceState(null, null, '?a=' + a);
   }
-  // else{
-  //   window.history.replaceState(null, null, '?a=cd_my-profile');
-  // }
-
   value_return.style.display = "block";
-  // document.getElementById(a).classList.add('cd_active');
 }
 
 const queryString = window.location.search;
