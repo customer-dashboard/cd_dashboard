@@ -4,7 +4,7 @@ import {
 } from '@shopify/polaris-icons'; 
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react'
-export const EditFields = (props) => {
+export default function EditFields(props){
   const {value,id,getProfileData,table} = props;
 const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(false);

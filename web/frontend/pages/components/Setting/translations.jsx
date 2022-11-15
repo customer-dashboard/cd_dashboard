@@ -2,8 +2,8 @@ import { Page, Card, Form, Select, TextContainer, RadioButton } from '@shopify/p
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { TranslationsFields } from './TranslationsFields';
-const Translations = () => {
+import TranslationsFields from './TranslationsFields';
+export default function Translations(){
   const navigate = useNavigate();
   const [local, setLocal] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -64,5 +64,3 @@ const Translations = () => {
     </>
   )
 }
-
-export default Translations

@@ -1,9 +1,8 @@
 
 import { DataType, Shopify } from "@shopify/shopify-api";
-import { Customer, Asset, Page, Theme, RecurringApplicationCharge, Order, Metafield } from '@shopify/shopify-api/dist/rest-resources/2022-10/index.js';
+import { Customer, Page, Theme, RecurringApplicationCharge, Order, Metafield } from '@shopify/shopify-api/dist/rest-resources/2022-10/index.js';
 
 export const Database = (app) => {
-
   app.get("/api/get-menu_builder", async (req, res) => {
     const shop = req.query.shop;
     const test_session = await Shopify.Utils.loadOfflineSession(shop);
@@ -17,7 +16,6 @@ export const Database = (app) => {
       res.status(200).send("");
     }
   });
-
 
   app.get("/api/get-profile-fields", async (req, res) => {
     const shop = req.query.shop;
@@ -35,14 +33,11 @@ export const Database = (app) => {
 
 
 
-
-
   app.get("/api/get-customers", async (req, res) => {
     const shop = req.query.shop;
     const test_session = await Shopify.Utils.loadOfflineSession(shop);
     const customers = await Customer.all({
       session: test_session,
-      limit: 250
     });
     const { q } = req.query;
     const keys = ["first_name", "last_name", "email"];

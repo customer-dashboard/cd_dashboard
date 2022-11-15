@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 
 
-export const DeleteMenu = (props) => {
+export default function DeleteMenu(props){
   const {value,getProfileData,id,table,type} = props;
 const [loading, setLoading] = useState(false);
 const [active, setActive] = useState(false);   

@@ -1,7 +1,7 @@
 import { Button, FormLayout, Modal, Page, Select, Spinner, TextContainer, TextField } from '@shopify/polaris'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios';
-export const CustomeLinkPage = (props) => {
+export default function CustomeLinkPage(props){
   const Result = props.value;
   const id = Result.length;
 const [loading, setLoading] = useState(false);

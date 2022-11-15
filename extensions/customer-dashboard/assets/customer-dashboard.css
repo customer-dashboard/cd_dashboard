@@ -1014,7 +1014,7 @@ input[type=text], input[type=email], select, textarea:not(.cd_password) {
   .cd_sidebar_menu .cd_menu a {
     font-size: 15px;
     margin-left: 5px;
-    vertical-align: bottom;
+    vertical-align:middle;
   }
 
   .cd_sidebar_menu .cd_menu li {
@@ -1057,5 +1057,7 @@ input[type=text], input[type=email], select, textarea:not(.cd_password) {
   .cd_sidebar_menu .cd_menu li {
     border-right: 1px solid black;
     border-top: none !important;
+    display: flex;
+    align-items: center;
   }
 }

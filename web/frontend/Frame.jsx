@@ -14,7 +14,7 @@ import {
   import { useCallback, useEffect, useRef, useState } from "react";
   import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Alert } from "./pages/components/Alert";
+import Alert from "./pages/components/Alert";
   export default function FrameHome(){
   const [customers, setCustomers] = useState({});
   const [billing, setBilling] = useState({});

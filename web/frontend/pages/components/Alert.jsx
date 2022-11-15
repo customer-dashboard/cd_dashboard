@@ -1,7 +1,7 @@
 import { Banner, Page } from '@shopify/polaris'
 import { Link } from 'react-router-dom'
 
-export const Alert = (props) => {
+export default function Alert(props){
     const { value } = props;
     const alert1= (
     <Banner

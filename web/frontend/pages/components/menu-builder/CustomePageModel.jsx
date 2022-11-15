@@ -2,7 +2,7 @@ import { Button, FormLayout, Modal, Select, TextContainer, TextField, RadioButto
 import { useCallback, useEffect, useState } from 'react';
 import Parser  from 'html-react-parser';
 import axios from 'axios';
-export const CustomePageModel = (props) => {
+export default function CustomePageModel(props){
   const Result = props.value;
   const id = Result.length;
   const getProfileData = props.getProfileData;

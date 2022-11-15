@@ -3,7 +3,7 @@ import {
   MinusMinor,PlusMinor
 } from '@shopify/polaris-icons'; 
 import { useCallback, useState } from 'react'
-export const AddFieldsModel = (props) => {
+export default function AddFieldsModel(props){
   const {getAdditionalData}=props;
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(true);

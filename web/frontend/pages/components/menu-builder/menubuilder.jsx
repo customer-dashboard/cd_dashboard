@@ -2,11 +2,11 @@ import { Page, Layout, Card } from '@shopify/polaris'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ProfileReorder } from '../ProfileSetup/ProfileReorder'
-import { CustomeLinkPage } from './customeLinkModel'
-import { CustomePageModel } from './CustomePageModel'
+import ProfileReorder from '../ProfileSetup/ProfileReorder'
+import CustomeLinkPage from './customeLinkModel'
+import CustomePageModel from './CustomePageModel'
 
-const MenuBuilder = () => {
+export default function MenuBuilder(){
   const navigate = useNavigate();
   const [defaultProfile, setDefaultProfile] = useState([]);
 
@@ -46,5 +46,3 @@ const MenuBuilder = () => {
     </>
   )
 }
-
-export default MenuBuilder

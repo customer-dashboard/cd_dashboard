@@ -1,10 +1,10 @@
 import { Button, ButtonGroup, Card, FormLayout, Layout, Page, ContextualSaveBar,Toast, ResourceList, TextField, TextStyle, RangeSlider } from '@shopify/polaris'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Toggle } from '../Toggle'
+import Toggle from '../Toggle'
 import axios from 'axios';
-import { PopoverSetting } from './Popover'
-const Setting = () => {
+import PopoverSetting from './Popover'
+export default function Setting(){
   const navigate = useNavigate();
   const [_setting, set_Setting] = useState({});  
   const [setting, setSetting] = useState({});  
@@ -386,5 +386,3 @@ const Setting = () => {
     </>
   )
 }
-
-export default Setting

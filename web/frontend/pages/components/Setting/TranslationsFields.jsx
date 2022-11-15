@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Page,Card,Layout,TextField, Toast, Form, Button, ContextualSaveBar, Spinner} from '@shopify/polaris'
 import translation from "../../../metafields/translation"
 import axios from 'axios';
-export const TranslationsFields = (props) => {
+export default function TranslationsFields(props){
 const [active, setActive] = useState(false);
 const [loading, setLoading] = useState(false);
 const [state, setState] = useState(translation['en']);

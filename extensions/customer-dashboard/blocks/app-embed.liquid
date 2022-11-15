@@ -1,52 +1,53 @@
 {% assign setting = shop.metafields.customer_dashboard.setting.value %}
 {% if customer %}
-<script> 
-customerVarOnLoad = {{ customer.id }};
-customerFirstNameOnload = "{{ customer.first_name }}";
-customerLastNameOnload = "{{ customer.last_name }}";
-customerEmailOnload = "{{ customer.email }}";
-customerPhoneOnload = "{{ customer.phone }}";
-defaultLanguage = Shopify.locale;
-themeId = Shopify.theme.id;
- </script>
+  <script>
+    customerVarOnLoad = {{ customer.id }};
+    customerFirstNameOnload = "{{ customer.first_name }}";
+    customerLastNameOnload = "{{ customer.last_name }}";
+    customerEmailOnload = "{{ customer.email }}";
+    customerPhoneOnload = "{{ customer.phone }}";
+    defaultLanguage = Shopify.locale;
+    themeId = Shopify.theme.id;
+  </script>
 {% endif %}
 
 {% render "css-variables" %}
 <style>
-.customerdb-parent > *{
-  display:none;
-}
-#customer_dashboard{
-  display:flex!important;
-}
+  .customerdb-parent > * {
+    display: none;
+  }
+  #customer_dashboard {
+    display: flex !important;
+  }
 </style>
 
 {% if setting.app_access_toggle == true %}
-<script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
-<div id="customer_dashboard" style="display:none!important;">
-<div class="cd_main_box">
-{% render "header" %}
-<div class="cd_main-content">
-{% render "profile" %}
-{% render "edit-profile" %}
-{% render "orders" %}
-{% render "addresses" %}
-{% render "add-address" %}
-{% render "contact" %}
-{% render "page" %}
-{% render "change-password" %}
-</div>
-</div>
-</div>
+  <script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
+  <div id="customer_dashboard" style="display:none!important;">
+    <div class="cd_main_box">
+      {% render "header" %}
+      <div class="cd_main-content">
+        {% render "profile" %}
+        {% render "edit-profile" %}
+        {% render "orders" %}
+        {% render "addresses" %}
+        {% render "add-address" %}
+        {% render "contact" %}
+        {% render "page" %}
+        {% render "change-password" %}
+      </div>
+    </div>
+  </div>
 {% endif %}
 
 {% schema %}
-{
-  "name": "Customer Dashboard",
-  "target": "head",
-  "templates": ["customers/account", "customers/addresses"],
-  "stylesheet": "customer-dashboard.css",
-  "settings": [
-  ]
-}
+  {
+    "name": "Customer Dashboard Pro",
+    "target": "head",
+    "templates": [
+      "customers/account", "customers/addresses"
+    ],
+    "stylesheet": "customer-dashboard.css",
+    "settings": []
+  }
 {% endschema %}

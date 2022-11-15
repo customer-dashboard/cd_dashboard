@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios';
 import Parser  from 'html-react-parser';
 import { ThemeEditMajor } from '@shopify/polaris-icons';
-export const EditMenu = (props) => {
+export default function EditMenu(props){
   const {value,id,getProfileData,table} = props;
   const [state, setState] = useState(value[id])
   const [local, setLocal] = useState([]);

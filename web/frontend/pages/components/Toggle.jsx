@@ -1,7 +1,7 @@
 import { Layout, Page, SettingToggle, TextStyle } from '@shopify/polaris';
 import { useState } from 'react'
 
-export const Toggle = ({ content, name, value, hendleChange }) => {
+export default function Toggle({ content, name, value, hendleChange }){
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
   const handleToggle = () => {

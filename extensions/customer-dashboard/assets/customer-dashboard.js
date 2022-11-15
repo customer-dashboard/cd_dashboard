@@ -1,6 +1,6 @@
 
 // var hostname = "https://customer-dashboard-letest.fly.dev";
-var hostname = "https://868b-2401-4900-1c09-2967-2d5a-f0ce-5a3b-d669.in.ngrok.io";
+var hostname = "https://de4b-2401-4900-1ca3-53b1-14ca-6bd2-797b-36b1.in.ngrok.io";
 Shop_name=window.location.hostname;
 
 // document.addEventListener("DOMContentLoaded", function() {

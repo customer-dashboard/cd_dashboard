@@ -1,16 +1,16 @@
 import ReactDragListView from 'react-drag-listview/lib/index.js';
 import parse from 'html-react-parser';
 import { DragHandleMinor } from "@shopify/polaris-icons";
-import { EditFields } from "./EditFields";
-import { DeleteMenu } from "../menu-builder/DeleteMenu";
-import { EditMenu } from "../menu-builder/EditMenu";
+import EditFields from "./EditFields";
+import  DeleteMenu from "../menu-builder/DeleteMenu";
+import  EditMenu from "../menu-builder/EditMenu";
 import { LinkMinor, PageMajor } from "@shopify/polaris-icons";
 import { Icon, Tooltip, Toast } from "@shopify/polaris";
 import './index.css';
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
-export const ProfileReorder = (props) => {
+export default function ProfileReorder(props){
   const { value, result, table, status } = props;
   const [defaultsvg, setdefaultsvg] = useState([]);
   const [state, setState] = useState(value)

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ToggleFeature = () => {
+export default function ToggleFeature(){
 const navigate = useNavigate();
 const [setting, setSetting] = useState({});  
 const [active, setActive] = useState(false);
@@ -93,4 +93,3 @@ const submit =()=>{
   )
 }
  
-export default ToggleFeature

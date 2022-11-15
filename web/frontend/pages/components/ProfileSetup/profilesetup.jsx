@@ -2,12 +2,12 @@ import { ContextualSaveBar, Card, Layout, Page, Toast, Spinner } from '@shopify/
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Toggle } from '../Toggle';
-import { AddFieldsModel } from './AddFieldsModel';
-import { ProfileReorder } from './ProfileReorder';
+import Toggle from '../Toggle';
+import AddFieldsModel from './AddFieldsModel';
+import ProfileReorder from './ProfileReorder';
 
 
-const ProfileSetup = () => {
+export default function ProfileSetup(){
   const navigate = useNavigate();
   const [setting, setSetting] = useState({});
   const [save, setSave] = useState(false);
@@ -146,5 +146,3 @@ const [local, setLocal] = useState([]);
     </>
   )
 }
-
-export default ProfileSetup

@@ -1,10 +1,12 @@
 import { Button, FormLayout, Modal, TextContainer, TextField } from '@shopify/polaris'
+import axios from 'axios';
 import { useCallback, useState } from 'react'
 
-export const Feedback = (props) => {
+export default function Feedback(props){
   const Result = props.value;
+  const [error, setError] = useState('');
   const [state, setState] = useState({
-    type:"link"
+    type:"link",
   })
     const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(true);
@@ -23,10 +25,16 @@ export const Feedback = (props) => {
   }
 
   const Submit = ()=>{
-    //   axios.post(`/api/post-reorder-fields?shop=${Shop_name}&query=menu_builder_fields`,Result).then((response) => {
-    //   getProfileData();
-    //   handleChange();
-    //   });
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(state.email))
+  {
+    setError('');
+    axios.post(`https://www.customerdashboard.pro/index.php`,state).then((response) => {
+      console.log(response);
+      });
+  }else {
+    setError("You have entered an invalid email address!")
+    return (false)
+  }
   }
 
   const Clear = () =>{
@@ -50,33 +58,39 @@ export const Feedback = (props) => {
           >
             <Modal.Section>
               <TextContainer>
-               
-              {
-                Result==="Request A Feature"? <FormLayout>
-                <TextField label="Title"
-                name='title' 
-                value={state.title}
-                onChange={(val) => ChangeHendle(val,'title')} 
-                autoComplete="off" />
-                 <TextField label="Description" 
-                 name='value' 
-                 value={state.value}
-                 onChange={(val) => ChangeHendle(val,'value')} 
-                 autoComplete="off" 
-                 multiline={4}
-                 placeholder='Message:-' />
-                </FormLayout>:
-                <FormLayout>
+                <FormLayout.Group condensed>
                 <TextField 
-                 name='value' 
-                 value={state.value}
-                 onChange={(val) => ChangeHendle(val,'value')} 
-                 autoComplete="off" 
+                 name='name' 
+                 value={state.name}
+                 onChange={(val) => ChangeHendle(val,'name')} 
+                 label="Name"
+                 autoComplete="off" />
+                  <TextField 
+                 name='email' 
+                 value={state.email}
+                 onChange={(val) => ChangeHendle(val,'email')} 
+                 type="email"
+                 error={error}
+                 label="Email"
+                 />
+                 <TextField 
+                 name='shopname' 
+                 value={state.shopname=Shop_name}
+                 onChange={(val) => ChangeHendle(val,'shopname')} 
+                 label="Domain"
+                 readOnly
+                 autoComplete="off"
+                 />
+                 </FormLayout.Group>
+                 <FormLayout.Group>
+                 <TextField 
+                 name='message' 
+                 value={state.message}
+                 onChange={(val) => ChangeHendle(val,'message')} 
+                 label="Message"
                  multiline={4}
-                 placeholder='Message:-' />
-                 </FormLayout>
-              }
-                
+                 autoComplete="off" />
+                 </FormLayout.Group>
               </TextContainer>
             </Modal.Section>
           </Modal>

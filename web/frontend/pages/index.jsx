@@ -2,10 +2,10 @@ import { Button, ButtonGroup, Card, FormLayout, Layout, Page, TextStyle, Context
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import {NavLink } from 'react-router-dom'
-import { Feedback } from './components/FeedbackModel/Feedback'
-import { Toggle } from './components/Toggle'
+import Feedback from './components/FeedbackModel/Feedback'
+import Toggle from './components/Toggle'
   
-const Home = (props)=>{
+export default function Home(props){
   const {count,billing }=props;
   const [setting, setSetting] = useState({});  
 const [save, setSave] = useState(false);  
@@ -20,7 +20,7 @@ const [save, setSave] = useState(false);
         {heading:"Translations",value:"Add translations to use Customer Dashboard in any language.",content:"Manage Translations",link:"/components/setting/translations"},
         {heading:"Plan",value:"Basic-Free",content:"Upgrade Plan",link:"/components/billing/plan"},
         {heading:"Need Help",value:"",content:"Go To Support",link:""},
-        {heading:"What Do You Think About This App",value:"",content:"Give Us Feedback",link:""},
+        {heading:"What Do You Think About This App",value:"",content:"Give Us Feedback",link:"/"},
         {heading:"Don't Have What You Need",value:"",content:"Request A Feature",link:""},
     ]
 
@@ -110,5 +110,3 @@ const toastMarkup = active ? (
   </>
   )
 }
-
-export default Home

@@ -1,5 +1,5 @@
 {
-  "name": "sunil-app",
+  "name": "customer-dashboard-pro",
   "version": "1.0.0",
   "main": "web/index.js",
   "license": "UNLICENSED",
@@ -31,8 +31,7 @@
     "react-drag-listview-handleissue": "^0.1.5",
     "react-movable": "^3.0.4",
     "react-router-dom": "^6.3.0",
-    "ruby": "^0.6.1",
-    "sunil": "^0.0.0"
+    "ruby": "^0.6.1"
   },
   "author": "Mandasa",
   "devDependencies": {
