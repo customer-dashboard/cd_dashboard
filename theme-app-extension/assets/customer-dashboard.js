@@ -1,26 +1,33 @@
 
-// var hostname = "https://customer-dashboard-letest.fly.dev";
-var hostname = "https://de4b-2401-4900-1ca3-53b1-14ca-6bd2-797b-36b1.in.ngrok.io";
+var hostname = "https://customer-dashboard-pro.fly.dev/";
 Shop_name=window.location.hostname;
+  var mainContentClass = document.getElementsByClassName("main-content")[0]
+  var mainClass = document.getElementsByClassName("main")[0]
+  var mainTag = document.getElementsByTagName("main")[0]
+  var mainId = document.querySelector("#main")
+  var MainContent = document.querySelector("#MainContent")
+  var nt_content = document.querySelector("#nt_content");
 
-// document.addEventListener("DOMContentLoaded", function() {
-
-// });
-
-Element.prototype.appendBefore = function (element) {
-  element.parentNode.insertBefore(this, element);
-}, false;
-let maincontainer = document.getElementById("shopify-section-header").nextElementSibling;
-let beforecontainer = document.getElementById("shopify-section-footer").previousElementSibling;
-maincontainer.classList.add('customerdb-parent');
+if(mainContentClass||mainClass||mainTag||mainId||nt_content||MainContent){
+  var maincontainer = mainContentClass||mainClass||mainTag||mainId||nt_content||MainContent;
+  maincontainer.classList.add('customerdb-parent');
+  var NewElement = document.getElementById('customer_dashboard');
+  maincontainer.appendChild(NewElement);
+}
+// Element.prototype.appendBefore = function (element) {
+//   element.parentNode.insertBefore(this, element);
+// }, false;
+// let maincontainer = document.getElementById("shopify-section-header").nextElementSibling;
+// let beforecontainer = document.getElementById("shopify-section-footer").previousElementSibling;
+// maincontainer.classList.add('customerdb-parent');
  
-beforecontainer.classList.add('customerdb-parent');
-/*  Add NewElement BEFORE -OR- AFTER Using the Aforementioned Prototypes */
-var NewElement = document.getElementById('customer_dashboard');
-NewElement.appendBefore(document.getElementById('shopify-section-footer'));
-document.getElementById('shopify-section-footer').style.display = 'initial';
-document.getElementById('customer_dashboard').style.display = 'initial';
-document.getElementById('customer_dashboard').removeAttribute("style");
+// beforecontainer.classList.add('customerdb-parent');
+// /*  Add NewElement BEFORE -OR- AFTER Using the Aforementioned Prototypes */
+// var NewElement = document.getElementById('customer_dashboard');
+// NewElement.appendBefore(document.getElementById('shopify-section-footer'));
+// document.getElementById('shopify-section-footer').style.display = 'initial';
+// document.getElementById('customer_dashboard').style.display = 'initial';
+// document.getElementById('customer_dashboard').removeAttribute("style");
 
 
 window.onload = function () {
@@ -87,7 +94,7 @@ for (var i = 0; i < elements.length; i++) {
 function myFunction(a) {
   var divsToHide = document.getElementsByClassName("cd_main-section");
   var page = a;
-  if(page)window.history.replaceState(null, null, '?a=' + page);
+  if(page&&page!="link")window.history.replaceState(null, null, '?a=' + page);
   else if(!page)page="cd_my-profile"
   for (var i = 0; i < divsToHide.length; i++) {
     if(divsToHide[i].getAttribute('id')===page)divsToHide[i].style.display = "block";
@@ -121,7 +128,7 @@ document.querySelector("#cd_form_customer").addEventListener("submit", function 
   }).then(res => {
     if (res.status == 200) {
       success_message.classList.add('cd_show');
-      location.replace("/account?a=my-profile");
+      location.replace("/account?a=cd_my-profile");
     }
   });
 });

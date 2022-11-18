@@ -12,7 +12,7 @@ import { useQuery } from "react-query";
  * 2. fetchInit: The init options for fetch.  See: https://developer.mozilla.org/en-US/docs/Web/API/fetch#parameters
  * 3. reactQueryOptions: The options for `useQuery`. See: https://react-query.tanstack.com/reference/useQuery
  *
- * @returns Return value of useQuery.  See: https://react-query.tanstack.com/reference/useQuery.
+ * @returns
  */
 export const useAppQuery = ({ url, fetchInit = {}, reactQueryOptions }) => {
   const authenticatedFetch = useAuthenticatedFetch();

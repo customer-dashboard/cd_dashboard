@@ -111,7 +111,7 @@ const [pages, setPages] = useState([]);
             title="Add Custom Link"
             primaryAction={{
               loading:loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null,
-              content: 'Add',
+              content: 'Update',
               onAction: Submit,
             }}
           >

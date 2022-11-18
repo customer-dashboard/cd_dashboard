@@ -1,8 +1,10 @@
-import { Button, ButtonGroup, Card, FormLayout, Grid, Layout, Page, TextStyle } from '@shopify/polaris'
+import { Button, ButtonGroup, Card, FormLayout, Grid, Toast, Layout, Page, TextStyle } from '@shopify/polaris'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { useState } from 'react';
 export default function Billing(props){
   const { billing } = props;
+  const [save, setSave] = useState("");
   const navigate = useNavigate();
   const cardData = [
     { title: "Basic", price: "", content: "Free", value: ["Free", "1500 customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
@@ -30,7 +32,7 @@ export default function Billing(props){
       "variables": {
         "test": true,
         "name": name,
-        "returnUrl": "https://" + Shop_name + "/admin/apps/dashboard-app-4",
+        "returnUrl": "https://" + Shop_name + "/admin/apps/customer-dashboard-pro-2",
         "lineItems": [
           {
             "plan": {
@@ -47,10 +49,13 @@ export default function Billing(props){
       }
     }
     axios.post(`/api/graphql-billing?shop=${Shop_name}`, data).then((response) => {
-      window.top.location = `${response.data.body.data.appSubscriptionCreate.confirmationUrl}`;
+      if(response.data.body.data.appSubscriptionCreate.confirmationUrl!==null){
+        window.top.location = `${response.data.body.data.appSubscriptionCreate.confirmationUrl}`;
+      }else if(response.data.body.data.appSubscriptionCreate.userErrors){
+         setSave(<Toast content={response.data.body.data.appSubscriptionCreate.userErrors[0].message} onDismiss={()=>setSave("")} />);
+      }
     });
   }
-
   return (
     <>
       <Page title='Plan'
@@ -98,6 +103,7 @@ export default function Billing(props){
             ))
           }
         </Layout>
+        {save}
       </Page>
     </>
   )

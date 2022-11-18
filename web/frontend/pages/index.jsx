@@ -26,7 +26,6 @@ const [save, setSave] = useState(false);
 
 useEffect(() => {
   getSetting();
-  console.log(billing);
 }, [])
 
 const toastMarkup = active ? (

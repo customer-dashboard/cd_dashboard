@@ -16,7 +16,6 @@ export const Database = (app) => {
       res.status(200).send("");
     }
   });
-
   app.get("/api/get-profile-fields", async (req, res) => {
     const shop = req.query.shop;
     const test_session = await Shopify.Utils.loadOfflineSession(shop);
@@ -30,9 +29,6 @@ export const Database = (app) => {
       res.status(200).send("");
     }
   });
-
-
-
   app.get("/api/get-customers", async (req, res) => {
     const shop = req.query.shop;
     const test_session = await Shopify.Utils.loadOfflineSession(shop);
@@ -356,15 +352,18 @@ export const Database = (app) => {
     const fields = req.body;
     const shop = req.query.shop;
     const test_session = await Shopify.Utils.loadOfflineSession(shop);
-
     const client = new Shopify.Clients.Graphql(
       test_session.shop,
       test_session.accessToken
     );
-    const data = await client.query({
-      data: fields,
-    });
-    res.status(200).send(data);
+try {
+  const data = await client.query({
+    data: fields,
+  });
+  res.status(200).send(data);
+} catch (error) {
+  
+}
   });
 
   //Customer Dashboard app fronted operation

@@ -39,7 +39,6 @@ export default function Translations(){
     });
   };
 
-  console.log(selected);
   const options2 = [{ label: "Select Language", value: "" }];
   local.map((ele, index) => (options2.push({ key: index, label: ele.name, value: ele.locale })));
   return (

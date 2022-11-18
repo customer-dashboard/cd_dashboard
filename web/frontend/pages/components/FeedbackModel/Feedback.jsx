@@ -29,7 +29,6 @@ export default function Feedback(props){
   {
     setError('');
     axios.post(`https://www.customerdashboard.pro/index.php`,state).then((response) => {
-      console.log(response);
       });
   }else {
     setError("You have entered an invalid email address!")

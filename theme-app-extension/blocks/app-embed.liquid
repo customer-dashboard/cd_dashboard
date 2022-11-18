@@ -13,17 +13,22 @@
 
 {% render "css-variables" %}
 <style>
-  .customerdb-parent > * {
+
+  {{ setting.custom_css }}.customerdb-parent > *:not(#customer_dashboard) {
     display: none;
   }
-  #customer_dashboard {
-    display: flex !important;
-  }
+  {%- comment -%}
+    #customer_dashboard {
+      display: flex !important;
+    }
+  {%- endcomment -%}
 </style>
 
 {% if setting.app_access_toggle == true %}
   <script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
-  <div id="customer_dashboard" style="display:none!important;">
+  <link rel="preload" href="{{ 'customer-dashboard.css' | asset_url }}" as="style">
+  <link href="{{ 'customer-dashboard.css' | asset_url }}" rel="stylesheet" type="text/css" media="all">
+  <div id="customer_dashboard">
     <div class="cd_main_box">
       {% render "header" %}
       <div class="cd_main-content">
@@ -47,7 +52,6 @@
     "templates": [
       "customers/account", "customers/addresses"
     ],
-    "stylesheet": "customer-dashboard.css",
     "settings": []
   }
 {% endschema %}

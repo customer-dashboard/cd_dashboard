@@ -1,4 +1,3 @@
-// @ts-check
 import { join } from "path";
 import express from "express";
 import cookieParser from "cookie-parser";
@@ -12,34 +11,26 @@ import { Database } from "./middleware/db.js";
 import cors from 'cors';
 const USE_ONLINE_TOKENS = false;
 const TOP_LEVEL_OAUTH_COOKIE = "shopify_top_level_oauth";
-
 const PORT = parseInt(process.env.BACKEND_PORT || process.env.PORT ||"", 10);
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
-
 // TODO: There should be provided by env vars
 const DEV_INDEX_PATH = `${process.cwd()}/frontend/`;
 const PROD_INDEX_PATH = `${process.cwd()}/frontend/dist/`;
-
 const DB_PATH = `${process.cwd()}/database.sqlite`;
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-Shopify.Context.initialize({
+ Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY||"",
   API_SECRET_KEY: process.env.SHOPIFY_API_SECRET||"",
-  // @ts-ignore
-  SCOPES: process.env.SCOPES.split(","),
-  // @ts-ignore
+  SCOPES:process.env.SCOPES.split(","),
   HOST_NAME: process.env.HOST.replace(/https?:\/\//, ""),
-  // @ts-ignore
   HOST_SCHEME: process.env.HOST.split("://")[0],
   API_VERSION: LATEST_API_VERSION,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
   SESSION_STORAGE: new Shopify.Session.SQLiteSessionStorage(DB_PATH),
 });
-
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
@@ -49,7 +40,6 @@ Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
     delete ACTIVE_SHOPIFY_SHOPS[shop]
   }
 });
- 
 // The transactions with Shopify will always be marked as test transactions, unless NODE_ENV is production.
 // See the ensureBilling helper to learn more about billing in this template.
 const BILLING_SETTINGS = {
@@ -68,7 +58,6 @@ const BILLING_SETTINGS = {
 // More details can be found on shopify.dev:
 // https://shopify.dev/apps/webhooks/configuration/mandatory-webhooks
 setupGDPRWebHooks("/api/webhooks");
-
 // export for test use only
 export async function createServer(
   root = process.cwd(),
@@ -81,7 +70,7 @@ export async function createServer(
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
   Database(app);
-    // @ts-ignore
+    
   applyAuthMiddleware(app,{billing: billingSettings});  
   app.post("/api/webhooks", async (req, res) => {
     try {
@@ -98,7 +87,7 @@ export async function createServer(
   // All endpoints after this point will require an active session
   app.use(
     "/api/*",
-    // @ts-ignore
+    
     verifyRequest(app, {billing: billingSettings})
   );
 
@@ -159,16 +148,12 @@ export async function createServer(
     app.use(serveStatic(PROD_INDEX_PATH, { index: false }));
   }
 
-  app.use("/*", async (req, res, next) => {
+  app.use("/*", async (req, res) => {
     const shop = req.query.shop;
-
-    // Detect whether we need to reinstall the app, any request from Shopify will
-    // include a shop in the query parameters.
-    // @ts-ignore
     if (app.get("active-shopify-shops")[shop] === undefined && shop) {
       res.redirect(`/api/auth?shop=${shop}`);
     } else {
-      // res.set('X-Shopify-App-Nothing-To-See-Here', '1');
+      res.set('X-Shopify-App-Nothing-To-See-Here', '1');
       const fs = await import("fs");
       const fallbackFile = join(
         isProd ? PROD_INDEX_PATH : DEV_INDEX_PATH,

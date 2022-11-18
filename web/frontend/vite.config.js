@@ -66,6 +66,8 @@ export default defineConfig({
       "^/(\\?.*)?$": proxyOptions,
       "^/api(/|(\\?.*)?$)": proxyOptions,
     },
+  },build: {
+    chunkSizeWarningLimit: 1600,
   },
   test: {
     globals: true,
