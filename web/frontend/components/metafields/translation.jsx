@@ -46,9 +46,9 @@ const localjson = {
              "name": "Addresses"
           },
           {
-            "heading": "All Orders",
-            "value": "All Orders",
-             "name": "Addresses"
+            "heading": "Cancel",
+            "value": "Cancel",
+            "name": "Button"
           },
           {
             "heading": "Default",
@@ -243,4 +243,4 @@ const localjson = {
     ]
   };
 
-  export default localjson
+  export default localjson 

@@ -26,13 +26,15 @@ const [loading, setLoading] = useState(false);
       const getSvgIcon = async() =>{
         const res = await fetch(`/api/get-svg`);
         const content = await res.json();
-        setdefaultsvg(content);
+        if(content.status===200)
+        setdefaultsvg(JSON.parse(content.data[0].value));
       }
 
   const GetTranslations=async ()=>{
     const res = await fetch(`/api/get-pages`);
     const content = await res.json();
-    setPages(content);
+    if(content.status===200)
+    setPages(content.data);
  }
 
  const GetLocal = async() => {
@@ -55,7 +57,8 @@ const [loading, setLoading] = useState(false);
     body: JSON.stringify(data)
   });
 const content = await response.json();
-setLocal(content.body.data.shopLocales);
+if(content.status===200)
+setLocal(content.data.body.data.shopLocales);
 }
 
 
@@ -75,8 +78,8 @@ setLocal(content.body.data.shopLocales);
     local.forEach(async(element_2) => {
       const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
       const content = await res.json();
-      if(content){
-        var arr = JSON.parse(content.value)[element_2.locale];
+      if(content.status===200){
+        var arr = JSON.parse(content.data[0].value)[element_2.locale];
         const temp = arr.filter(obj1 => data.some(obj2 => obj2.label === obj1.heading&&obj1.name==="Navigation"))
         temp.push({heading: state.label,value: state.label,name: "Navigation"});
         const result = temp.filter((thing, index, self) =>
@@ -106,8 +109,8 @@ setLocal(content.body.data.shopLocales);
           headers: {'Accept': 'application/json','Content-Type': 'application/json'},
           body: JSON.stringify(data)
         });
-        const content_return = data_retrun.json();
-        if(content_return){
+        const content_return = await data_retrun.json();
+        if(content_return.status===200){
           getProfileData();
           handleChange();
           setLoading(false);

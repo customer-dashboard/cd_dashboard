@@ -33,8 +33,9 @@ const [active, setActive] = useState(false);
       body: JSON.stringify(data)
     });
   const content = await response.json();
-  setLocal(content.body.data.shopLocales);
-  }
+  if(content.status===200)
+  setLocal(content.data.body.data.shopLocales);
+}
 
   
     const deleteField = ()=>{
@@ -43,8 +44,8 @@ const [active, setActive] = useState(false);
       local.forEach(async(element_2) => {
         const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
         const content = await res.json();
-        if(content){
-          var arr = JSON.parse(content.value)[element_2.locale];
+        if(content.status===200){
+          var arr = JSON.parse(content.data[0].value)[element_2.locale];
           const temp = arr.filter(obj1 => data.some(obj2 => obj2.label === obj1.heading&&obj1.name===type))
           for (var i = arr.length - 1; i >= 0; i--) {
           if (arr[i].name === type) { 
@@ -69,8 +70,8 @@ const [active, setActive] = useState(false);
             headers: {'Accept': 'application/json','Content-Type': 'application/json'},
             body: JSON.stringify(data)
           });
-          const content_return = data_retrun.json();
-          if(content_return){
+          const content_return = await data_retrun.json();
+          if(content_return.status===200){
             getProfileData();
             handleChange();
             setLoading(false);

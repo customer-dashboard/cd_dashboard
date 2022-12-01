@@ -46,8 +46,9 @@ export default function ProfileSetup() {
       body: JSON.stringify(data)
     });
   const content = await response.json();
-  setLocal(content.body.data.shopLocales);
-  }
+if(content.status===200)
+setLocal(content.data.body.data.shopLocales);
+}
 
   const toastMarkup = active ? (
     <Toast content="Data Saved" onDismiss={toggleActive} />
@@ -55,8 +56,8 @@ export default function ProfileSetup() {
 
   const contextualSaveBarMarkup = save ? (
     <ContextualSaveBar
-      message={loading ? <Spinner accessibilityLabel="Small spinner example" size="small" /> : null}
       saveAction={{
+        loading:loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null,
         onAction: () => submit(),
       }}
       discardAction={{
@@ -74,32 +75,38 @@ export default function ProfileSetup() {
   const getSetting = async () => {
     const getSetting = await fetch("/api/get-setting");
     const content = await getSetting.json();
-    setSetting(content);
+    if(content.status===200)
+    setSetting(JSON.parse(content.data[0].value));
   }
 
   const submit = async () => {
-    const response = await fetch('/api/set-setting', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(setting)
-    });
+  setLoading(true);
+  const response = await fetch('/api/set-setting', {
+  method: 'POST',
+  headers: {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(setting)
+  });
   const content = await response.json();
   if (content.status === 200) {
-    setActive(<Toast content={content.success} onDismiss={toggleActive} />);
-    setSave(false);
-    getSetting();
+    setActive(<Toast content={content.data} onDismiss={toggleActive} />);
   }
-    }
+  else if(content.status===500){
+    setActive(<Toast content={content.error} error onDismiss={toggleActive} />);
+  }
+  setLoading(false)
+  setSave(false);
+  getSetting();
+  }
   const getProfileData = async () => {
     const getprofile = await fetch("/api/get-profile-fields");
     const content = await getprofile.json();
-    if (content !== "") {
-      const res = JSON.parse(content.value);
-      setDefaultProfile(res);
-      setProgress(false);
+    if (content.status === 200) {
+    const res = JSON.parse(content.data[0].value);
+    setDefaultProfile(res);
+    setProgress(false);
     }
   }
 
@@ -115,12 +122,11 @@ export default function ProfileSetup() {
     e.id = id.toString();
     e.name = e.label.toLowerCase().replaceAll(' ', '_') + '_' + e.id;
     defaultProfile.push(e);
-    setLoading(true);
     local.forEach(async(element_2) => {
       const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
       const content = await res.json();
-      if (content) {
-        var arr = JSON.parse(content.value)[element_2.locale];
+      if (content.status === 200) {
+        var arr = JSON.parse(content.data[0].value)[element_2.locale];
         var array = [];
         defaultProfile.forEach(element => {
           array = add(arr, element.label);
@@ -135,16 +141,16 @@ export default function ProfileSetup() {
           headers: {'Accept': 'application/json','Content-Type': 'application/json'},
           body: JSON.stringify(data)
         });
-        if(createTranslations.json()){
+        const responce = await createTranslations.json();
+        if(responce.status===200){
           const data_retrun = await fetch(`/api/post-reorder-fields?query=profile_fields`, {
             method: 'POST',
             headers: {'Accept': 'application/json','Content-Type': 'application/json'},
             body: JSON.stringify(defaultProfile)
           });
-          const content_return = data_retrun.json();
+          const content_return = await data_retrun.json();
           if(content_return){
             getProfileData();
-            setLoading(false);
           }
         }
       }

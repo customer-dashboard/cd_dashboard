@@ -36,8 +36,8 @@ export default function Translations(){
       body: JSON.stringify(data)
     });
   const content = await response.json();
-  setLocal(content.body.data.shopLocales);
-  setProgress(false);
+  if(content.status === 200){setLocal(content.data.body.data.shopLocales);
+  setProgress(false);}
 }
   const handleSelectChange = (name, value) => {
     if (name === 'language') setToggle(true);

@@ -85,12 +85,7 @@ export async function createServer(
   });
 
   // All endpoints after this point will require an active session
-  app.use(
-    "/api/*",
-    
-    verifyRequest(app, {billing: billingSettings})
-  );
-
+  app.use("/api/*",verifyRequest(app, {billing: billingSettings}));
   app.get("/api/products/count", async (req, res) => {
     const session = await Shopify.Utils.loadCurrentSession(
       req,

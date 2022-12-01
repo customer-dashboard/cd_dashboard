@@ -15,26 +15,33 @@ import SkeletonExample from '../SkeletonExample';
 
 function Customers(props) {
   const {shop} = props;
-  const [CustomersLength, setCustomersLength] = useState(0);
   const [queryValue, setQueryValue] = useState("");
   const [customers, setCustomers] = useState([]);
   const fetch = useAuthenticatedFetch();
-  const [preValue, setPreValue] = useState(0);
-  const [nextValue, setNextValue] = useState(50);
+  const [PrePage, setPrePage] = useState(undefined);
+  const [NextPage, setNextPage] = useState(undefined);
   const [progress, setProgress] = useState(false)
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    if (queryValue.length === 0 || queryValue.length > 2) fetchData();
-  }, [queryValue, preValue, nextValue]);
+    if (queryValue.length === 0 || queryValue.length > 2) fetchData("");
+  }, [queryValue]);
 
-  const fetchData = async () => {
+  const fetchData = async (page) => {
     setProgress(true)
-    const res = await fetch(`/api/get-customers?q=${queryValue}`);
+    const res = await fetch(`/api/get-customers?page=${page}&search=${queryValue}`);
     const content = await res.json();
-    setProgress(false);
-    setCustomers(content.slice(preValue, nextValue));
-    setCustomersLength(content.length);
-    setLoading(false)
+    if(content.status===200){
+      if(content.data.pageInfo){
+        setNextPage(content.data.pageInfo.nextPage?.query.page_info)
+       setPrePage(content.data.pageInfo.prevPage?.query.page_info)
+      }else{
+       setNextPage(undefined)
+       setPrePage(undefined)
+      }
+       setCustomers(content.data.body.customers);
+       setProgress(false);
+       setLoading(false)
+    }
   };
   const navigate = useNavigate();
   const handleFiltersQueryChange = useCallback((value) => setQueryValue(value), [],);
@@ -84,15 +91,13 @@ function Customers(props) {
       <Card.Section>
         <div style={{ margin: "auto 50%" }}>
           <Pagination
-            hasPrevious={preValue > 0 ? true : false}
+            hasPrevious={PrePage===undefined? false:true}
             onPrevious={() => {
-              setPreValue(preValue - 50);
-              setNextValue(nextValue - 50);
+              fetchData(PrePage);
             }}
-            hasNext={CustomersLength > nextValue ? true : false}
+            hasNext={NextPage===undefined? false:true}
             onNext={() => {
-              setPreValue(preValue + 50);
-              setNextValue(nextValue + 50);
+              fetchData(NextPage);
             }}
           />
         </div>

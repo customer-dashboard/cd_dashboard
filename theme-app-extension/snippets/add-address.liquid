@@ -1,115 +1,119 @@
-     {% assign lang = request.locale.iso_code %}
+{% assign lang = request.locale.iso_code %}
 {% assign translation = "translations_" | append:lang %}
-     
-     <section id="cd_add-address" class="cd_main-section cd_main-section-2">
-      <div class="cd_header">
-         <div style="display:flex">
-              <p id="cd_heading">Add Address</p>
-              </div>
-      </div>
-      {% form 'customer_address', customer.new_address , class:'cd_add_address'  %}
-     <div class="cd_container">
-            <div class="cd_flex-row">
-                <div class="cd_row">
-                    <div class="cd_col-25">
-                        <label for="fname">First Name</label>
-                    </div>
-                    <div class="cd_col-75">
-                        <input type="text" id="fname" name="address[first_name]" required="required" >
-                    </div>
-                </div>
-                <div class="cd_row">
-                    <div class="cd_col-25">
-                        <label for="lname">Last Name</label>
-                    </div>
-                    <div class="cd_col-75">
-                        <input type="text" id="lname" name="address[last_name]" required="required">
-                    </div>
-                </div>
-            </div>
-            <div class="cd_row">
-                <div class="cd_col-25">
-                    <label for="company">Company</label>
-                </div>
-                <div class="cd_col-75">
-                    <input type="text" id="company" name="address[company]" required="required">
-                </div>
-            </div>
-            <div class="cd_row">
-                <div class="cd_col-25">
-                    <label for="address">Address</label>
-                </div>
-                <div class="cd_col-75">
-                    <input type="text" id="address" name="address[address1]" required="required">
-                </div>
-            </div>
-            <div class="cd_row">
-                <div class="cd_col-25">
-                    <label for="address2">Apartment, suite, etc. :-</label>
-                </div>
-                <div class="cd_col-75">
-                    <input type="text" id="address2" name="address[address2]" required="required" >
-                </div>
-            </div>
 
-            <div class="cd_flex-row">
-                <div class="cd_row">
-                    <div class="cd_col-25">
-                        <label for="city">City</label>
-                    </div>
-                    <div class="cd_col-75">
-                        <input type="text" id="city" name="address[city]" required="required">
-                    </div>
-                </div>
-                <div class="cd_row">
-                    <div class="cd_col-25">
-                        <label for="country">Country/Region:-</label >
-                    </div>
-                   <div class="cd_select">
-                  <select
-                    id="AddressCountry_{{ form.id }}"
-                    name="address[country]"
-                    data-address-country-select
-                    data-default="{{ form.country }}"
-                    data-form-id="{{ form.id }}"
-                    autocomplete="country"
-                  >
-                    {{ all_country_option_tags }}
-                  </select>                
-                </div>
-                </div>
-            </div>
-
-             <div class="cd_row">
-                <div class="cd_col-25">
-                    <label for="province">Province :-</label>
-                </div>
-                <div class="cd_col-75">
-                    <input type="text" id="province" name="address[province]" required="required">
-                </div>
-            </div>
-
-            <div class="cd_row">
-                <div class="cd_col-25">
-                    <label for="postal">Postal/Zip Code :-</label>
-                </div>
-                <div class="cd_col-75">
-                    <input type="text" id="postal" name="address[zip]" required="required" >
-                </div>
-            </div>
-
-            <div class="cd_row">
-                <div class="cd_col-25">
-                    <label for="phone">Phone :-</label>
-                </div>
-                <div class="cd_col-75">
-                    <input type="text" id="phone" name="address[phone]" required="required">
-                </div>
-            </div>
-            <div class="cd_row" style="margin-top:15px;">
-                <button class="cd_redirect_address" type="submit">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
-                <input class="cd_backAddress" type="button" id="cd_submit_loader" value="Cancel"/>
-            </div>      
+<section id="cd_add-address" class="cd_main-section cd_main-section-2">
+  <div class="cd_header">
+    <div style="display:flex">
+      <p id="cd_heading">Add Address</p>
     </div>
-{% endform %}
-     </section>
+  </div>
+  {% form 'customer_address', customer.new_address , class:'cd_add_address'  %}
+    <div class="cd_container">
+      <div class="cd_flex-row">
+        <div class="cd_row">
+          <div class="cd_col-25">
+            <label for="fname">First Name</label>
+          </div>
+          <div class="cd_col-75">
+            <input type="text" id="fname" name="address[first_name]" required="required">
+          </div>
+        </div>
+        <div class="cd_row">
+          <div class="cd_col-25">
+            <label for="lname">Last Name</label>
+          </div>
+          <div class="cd_col-75">
+            <input type="text" id="lname" name="address[last_name]" required="required">
+          </div>
+        </div>
+      </div>
+      <div class="cd_row">
+        <div class="cd_col-25">
+          <label for="company">Company</label>
+        </div>
+        <div class="cd_col-75">
+          <input type="text" id="company" name="address[company]" required="required">
+        </div>
+      </div>
+      <div class="cd_row">
+        <div class="cd_col-25">
+          <label for="address">Address</label>
+        </div>
+        <div class="cd_col-75">
+          <input type="text" id="address" name="address[address1]" required="required">
+        </div>
+      </div>
+      <div class="cd_row">
+        <div class="cd_col-25">
+          <label for="address2">Apartment, suite, etc. :-</label>
+        </div>
+        <div class="cd_col-75">
+          <input type="text" id="address2" name="address[address2]" required="required">
+        </div>
+      </div>
+
+      {%- comment -%}
+        <div class="cd_flex-row">
+      {%- endcomment -%}
+      <div class="cd_row">
+        <div class="cd_col-25">
+          <label for="city">City</label>
+        </div>
+        <div class="cd_col-75">
+          <input type="text" id="city" name="address[city]" required="required">
+        </div>
+      </div>
+      {%- comment -%}
+        <div class="cd_row">
+        <div class="cd_col-25">
+        <label for="country">Country/Region:-</label>
+        </div>
+        <div class="cd_select">
+        <select id="AddressCountry_{{ form.id }}" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">
+        {{ all_country_option_tags }}
+        </select>
+        </div>
+        </div>
+      {%- endcomment -%}
+      {%- comment -%}
+        </div>
+      {%- endcomment -%}
+
+      {%- comment -%}
+        <div class="cd_row">
+        <div class="cd_col-25">
+        <label for="province">Province :-</label>
+        </div>
+        <div class="cd_col-75">
+        <input type="text" id="province" name="address[province]" required="required">
+        </div>
+        </div>
+      {%- endcomment -%}
+
+      <div class="cd_row">
+        <div class="cd_col-25">
+          <label for="postal">Postal/Zip Code :-</label>
+        </div>
+        <div class="cd_col-75">
+          <input type="text" id="postal" name="address[zip]" required="required">
+        </div>
+      </div>
+
+      <div class="cd_row">
+        <div class="cd_col-25">
+          <label for="phone">Phone :-</label>
+        </div>
+        <div class="cd_col-75">
+          <input type="text" id="phone" name="address[phone]" required="required">
+        </div>
+      </div>
+      <div class="cd_row cd_create_address">
+        <button type="submit" class="cd_submit_data">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
+        <div class="cd_submit_loader cd_none">
+          <div class="cd_loader"></div>
+        </div>
+        <button class="cd_backAddress" type="button" id="cd_submit_loader">{{shop.metafields.customer_dashboard[translation].value[lang][9].value}}</button>
+      </div>
+    </div>
+  {% endform %}
+</section>

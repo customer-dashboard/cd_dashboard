@@ -42,7 +42,7 @@
               <p>{{address.country_name}}</p>
               <div id="cd_address-operation">
                 <div>
-                  <svg onclick="editToggle('address_form_'+'{{address.id}}')" width="30" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg onclick="myFunction('cd_edit-address_{{ address.id }}')" width="30" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="17.2881" cy="17.2881" r="17.2881" fill="white"/>
                     <path d="M20.2391 11.7951L11.0659 20.9682L14.0243 23.9266L23.1975 14.7535L20.2391 11.7951Z" fill="#202020"/>
                     <path d="M9.76465 25.2118L12.9606 24.3265L10.65 22.0159L9.76465 25.2118Z" fill="#202020"/>
@@ -50,21 +50,26 @@
                   </svg>
                 </div>
                 <div>
-                  <form class="cd_address-delete-form" method="post" action="/account/addresses/{{ address.id }}">
+                  <form class="cd_delete_address" method="post" action="/account/addresses/{{ address.id }}">
                     <input type="hidden" name="_method" value="delete">
                     <button type="submit" class="cd_delete-button">
-                      <svg width="30" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg class="cd_submit_data" width="30" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="17.712" cy="17.2881" r="17.2881" fill="white"/>
                         <path d="M23.2944 15.2824L23.0221 23.3591C22.9989 24.0509 22.7015 24.7065 22.193 25.1869C21.6846 25.6673 21.0051 25.9346 20.2988 25.9322H15.1246C14.4188 25.9347 13.7397 25.6677 13.2313 25.1879C12.7229 24.708 12.4253 24.0531 12.4014 23.3618L12.129 15.2824C12.1231 15.1055 12.1891 14.9335 12.3126 14.8042C12.436 14.675 12.6068 14.5991 12.7874 14.5933C12.968 14.5874 13.1435 14.6521 13.2754 14.7731C13.4073 14.8941 13.4847 15.0614 13.4907 15.2384L13.763 23.3171C13.7766 23.662 13.926 23.9883 14.1799 24.2275C14.4338 24.4667 14.7724 24.6002 15.1246 24.6H20.2988C20.6515 24.6002 20.9905 24.4663 21.2445 24.2266C21.4984 23.9868 21.6476 23.6598 21.6604 23.3144L21.9328 15.2384C21.9387 15.0614 22.0162 14.8941 22.1481 14.7731C22.2799 14.6521 22.4555 14.5874 22.636 14.5933C22.8166 14.5991 22.9874 14.675 23.1109 14.8042C23.2343 14.9335 23.3003 15.1055 23.2944 15.2824ZM24.1951 12.5946C24.1951 12.7715 24.1234 12.9412 23.9957 13.0663C23.868 13.1914 23.6949 13.2617 23.5143 13.2617H11.9098C11.7293 13.2617 11.5561 13.1914 11.4284 13.0663C11.3007 12.9412 11.229 12.7715 11.229 12.5946C11.229 12.4177 11.3007 12.248 11.4284 12.1229C11.5561 11.9978 11.7293 11.9275 11.9098 11.9275H14.0203C14.2361 11.928 14.4443 11.8499 14.6045 11.7084C14.7647 11.5668 14.8654 11.3719 14.887 11.1616C14.9373 10.6683 15.1731 10.2109 15.5487 9.8787C15.9243 9.54646 16.4126 9.36313 16.9186 9.36442H18.5049C19.0108 9.36313 19.4992 9.54646 19.8747 9.8787C20.2503 10.2109 20.4862 10.6683 20.5364 11.1616C20.5581 11.3719 20.6588 11.5668 20.819 11.7084C20.9792 11.8499 21.1874 11.928 21.4031 11.9275H23.5136C23.6942 11.9275 23.8673 11.9978 23.995 12.1229C24.1227 12.248 24.1944 12.4177 24.1944 12.5946H24.1951ZM16.0689 11.9275H19.3559C19.2664 11.7272 19.2079 11.5149 19.1823 11.2977C19.1654 11.1333 19.0868 10.9808 18.9618 10.8699C18.8368 10.759 18.6742 10.6975 18.5055 10.6973H16.9192C16.7506 10.6975 16.588 10.759 16.463 10.8699C16.3379 10.9808 16.2594 11.1333 16.2425 11.2977C16.2167 11.5149 16.1579 11.7272 16.0682 11.9275H16.0689ZM16.7545 22.0349V16.3544C16.7545 16.1775 16.6828 16.0078 16.5551 15.8827C16.4274 15.7576 16.2542 15.6873 16.0737 15.6873C15.8931 15.6873 15.7199 15.7576 15.5923 15.8827C15.4646 16.0078 15.3929 16.1775 15.3929 16.3544V22.0376C15.3929 22.2145 15.4646 22.3842 15.5923 22.5093C15.7199 22.6344 15.8931 22.7047 16.0737 22.7047C16.2542 22.7047 16.4274 22.6344 16.5551 22.5093C16.6828 22.3842 16.7545 22.2145 16.7545 22.0376V22.0349ZM20.0319 22.0349V16.3544C20.0319 16.1775 19.9602 16.0078 19.8325 15.8827C19.7048 15.7576 19.5317 15.6873 19.3511 15.6873C19.1706 15.6873 18.9974 15.7576 18.8697 15.8827C18.742 16.0078 18.6703 16.1775 18.6703 16.3544V22.0376C18.6703 22.2145 18.742 22.3842 18.8697 22.5093C18.9974 22.6344 19.1706 22.7047 19.3511 22.7047C19.5317 22.7047 19.7048 22.6344 19.8325 22.5093C19.9602 22.3842 20.0319 22.2145 20.0319 22.0376V22.0349Z" fill="#202020"/>
                       </svg>
+                      <div class="cd_delete_this_address cd_none" style="display: inline-block; vertical-align: text-top;">
+                        <div class="cd_loader"></div>
+                      </div>
                     </button>
                   </form>
                 </div>
                 {% if address.id == customer.default_address.id  %}
-                  <div><input class="cd_default-btn" style="font-size:10px" type="button" value="{{shop.metafields.customer_dashboard[translation].value[lang][10].value}}"></div>
+                  <div>
+                    <button class="cd_default-btn" style="font-size:10px" type="button">{{ shop.metafields.customer_dashboard[translation].value[lang][10].value }}</button>
+                  </div>
                 {% else %}
                   <div>
-                    {% form 'customer_address', address %}
+                    {% form 'customer_address', address, class:'cd_make_default_address' %}
                       <input type="hidden" name="address[default]" value="on">
                       <input class="cd_default-btn-2" type="submit" value="{{shop.metafields.customer_dashboard[translation].value[lang][11].value}}">
                     {% endform %}
@@ -76,120 +81,5 @@
         </div>
       {% endfor %}
     </div>
-  </section>
-  <section class="cd_address-section">
-
-    {% for address in customer.addresses %}
-      {% form 'customer_address', address, class:'cd_address_edit cd_hide' %}
-        <div class="cd_header cd_address_heading_2">
-          <div class="cd_header2">
-            <p id="cd_heading" class="cd_toggle_address">Edit Addresses</p>
-          </div>
-        </div>
-        <div class="cd_container form_{{ form.id }}">
-          <div class="cd_flex-row">
-            <div class="cd_row">
-              <div class="cd_col-25">
-                <label for="fname">First Name</label>
-              </div>
-              <div class="cd_col-75">
-                <input type="text" id="fname" name="address[first_name]" value="{{ form.first_name }}">
-              </div>
-            </div>
-            <div class="cd_row">
-              <div class="cd_col-25">
-                <label for="lname">Last Name</label>
-              </div>
-              <div class="cd_col-75">
-                <input type="text" id="lname" name="address[last_name]" value="{{ form.last_name }}">
-              </div>
-            </div>
-          </div>
-          <div class="cd_row">
-            <div class="cd_col-25">
-              <label for="company">Company</label>
-            </div>
-            <div class="cd_col-75">
-              <input type="text" id="company" name="address[company]" value="{{ form.company }}">
-            </div>
-          </div>
-          <div class="cd_row">
-            <div class="cd_col-25">
-              <label for="address">Address</label>
-            </div>
-            <div class="cd_col-75">
-              <input type="text" id="address" name="address[address1]" value="{{ form.address1 }}">
-            </div>
-          </div>
-          <div class="cd_row">
-            <div class="cd_col-25">
-              <label for="address2">Apartment, suite, etc. :-</label>
-            </div>
-            <div class="cd_col-75">
-              <input type="text" id="address2" name="address[address2]" value="{{ form.address2 }}">
-            </div>
-          </div>
-
-          <div class="cd_flex-row">
-            <div class="cd_row">
-              <div class="cd_col-25">
-                <label for="city">City</label>
-              </div>
-              <div class="cd_col-75">
-                <input type="text" id="city" name="address[city]" value="{{ form.city }}">
-              </div>
-            </div>
-            <div class="cd_row">
-              <div class="cd_col-25">
-                <label for="country">Country/Region:-</label>
-              </div>
-              <div class="cd_col-75">
-                <select id="AddressCountry_{{ form.id }}" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">
-                  {{ all_country_option_tags }}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="cd_row">
-            <div class="cd_col-25">
-              <label for="province">Province :-</label>
-            </div>
-            <div class="cd_col-75">
-              <input type="text" id="province" name="address[province]" value="{{ form.province }}">
-            </div>
-          </div>
-
-
-          <div class="cd_row">
-            <div class="cd_col-25">
-              <label for="postal">Postal/Zip Code :-</label>
-            </div>
-            <div class="cd_col-75">
-              <input type="text" id="postal" name="address[zip]" value="{{ form.zip }}">
-            </div>
-          </div>
-
-          <div class="cd_row">
-            <div class="cd_col-25">
-              <label for="phone">Phone :-</label>
-            </div>
-            <div class="cd_col-75">
-              <input type="text" id="phone" name="address[phone]" value="{{ form.phone }}">
-            </div>
-          </div>
-          <div>
-            <input type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" {% if address.id == customer.default_address.id %}checked="checked"{% endif %}>
-            <label for="address_default_address_{{ form.id }}">
-              {{ shop.metafields.customer_dashboard[translation].value[lang][12].value }}
-            </label>
-          </div>
-          <div class="cd_row" style="margin-top:15px;">
-            <button type="submit">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
-            <input onclick="backFunction()" type="button" id="cd_submit_loader" value="Cancel"/>
-          </div>
-        </div>
-      {% endform %}
-    {% endfor %}
   </section>
 </section>

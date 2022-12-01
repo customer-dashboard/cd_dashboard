@@ -1,4 +1,6 @@
 {% assign setting = shop.metafields.customer_dashboard.setting.value %}
+{% assign lang = request.locale.iso_code %}
+{% assign translation = "translations_" | append:lang %}
 {% if customer %}
   <script>
     customerVarOnLoad = {{ customer.id }};
@@ -14,7 +16,7 @@
 {% render "css-variables" %}
 <style>
 
-  {{ setting.custom_css }}.customerdb-parent > *:not(#customer_dashboard) {
+  {{ setting.custom_css }}.customerdb-parent > *:not(#customer_dashboard):not(#shopify-section-footer):not(#shopify-section-header) {
     display: none;
   }
   {%- comment -%}
@@ -23,12 +25,21 @@
     }
   {%- endcomment -%}
 </style>
-
 {% if setting.app_access_toggle == true %}
   <script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
   <link rel="preload" href="{{ 'customer-dashboard.css' | asset_url }}" as="style">
   <link href="{{ 'customer-dashboard.css' | asset_url }}" rel="stylesheet" type="text/css" media="all">
   <div id="customer_dashboard">
+    <div class="cd_message_contact">
+      <div id="cd_success_message_contact">Message Sent Successfully</div>
+      <div id="cd_success_message">{{ shop.metafields.customer_dashboard[translation].value[lang][4].value }}</div>
+      <div id="cd_success_message_password">{{ shop.metafields.customer_dashboard[translation].value[lang][24].value }}</div>
+      <div id="cd_success_message_address_create">{{ shop.metafields.customer_dashboard[translation].value[lang][13].value }}</div>
+      <div id="cd_success_message_address_update">{{ shop.metafields.customer_dashboard[translation].value[lang][14].value }}</div>
+      <div id="cd_success_message_delete_update">{{ shop.metafields.customer_dashboard[translation].value[lang][16].value }}</div>
+      <div id="cd_success_message_confirm_delete_address">{{ shop.metafields.customer_dashboard[translation].value[lang][15].value }}</div>
+      <div id="cd_success_message_make_default_address">{{ shop.metafields.customer_dashboard[translation].value[lang][17].value }}</div>
+    </div>
     <div class="cd_main_box">
       {% render "header" %}
       <div class="cd_main-content">
@@ -37,6 +48,7 @@
         {% render "orders" %}
         {% render "addresses" %}
         {% render "add-address" %}
+        {% render "edit-address" %}
         {% render "contact" %}
         {% render "page" %}
         {% render "change-password" %}

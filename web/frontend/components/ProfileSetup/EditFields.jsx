@@ -19,12 +19,12 @@ export default function EditFields(props) {
     multipleValue: []
   })
 
-  const getField = async() =>{
+  const getField = async () => {
     const response = await fetch("/api/get-profile-fields");
     const content = await response.json();
-    if (content !== "") {
-      const res = JSON.parse(content.value);
-       setState(res[id]);
+    if (content.status === 200) {
+      const res = JSON.parse(content.data[0].value);
+      setState(res[id]);
       if (res[id].multipleValue.length > 0) setGroup(res[id].multipleValue);
     }
   }
@@ -66,7 +66,7 @@ export default function EditFields(props) {
   }, [])
 
 
-  const GetLocal = async() => {
+  const GetLocal = async () => {
     const query = `query MyQuery{
       shopLocales {
         locale
@@ -75,7 +75,7 @@ export default function EditFields(props) {
         published
       }
     }`;
-  
+
     const data = { query: query }
     const response = await fetch('/api/graphql-data-access', {
       method: 'POST',
@@ -85,8 +85,10 @@ export default function EditFields(props) {
       },
       body: JSON.stringify(data)
     });
-  const content = await response.json();
-  setLocal(content.body.data.shopLocales);
+    const content = await response.json();
+    if (content.status === 200) {
+      setLocal(content.data.body.data.shopLocales);
+    }
   }
 
   const Submit = () => {
@@ -95,11 +97,11 @@ export default function EditFields(props) {
       return index !== id ? ele : state;
     })
     setLoading(true);
-    local.forEach( async(element_2) => {
+    local.forEach(async (element_2) => {
       const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
       const content = await res.json();
-      if (content) {
-        var arr = JSON.parse(content.value)[element_2.locale];
+      if (content.status === 200) {
+        var arr = JSON.parse(content.data[0].value)[element_2.locale];
         const temp = arr.filter(obj1 => data.some(obj2 => obj2.label === obj1.heading && obj1.name === "Shared"))
         temp.push({ heading: state.label, value: state.label, name: "Shared" });
         for (var i = arr.length - 1; i >= 0; i--) {
@@ -116,16 +118,16 @@ export default function EditFields(props) {
         }
         await fetch('/api/create-translations', {
           method: 'POST',
-          headers: {'Accept': 'application/json','Content-Type': 'application/json'},
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify(data_local)
         });
-       const data_retrun = await fetch(`/api/post-reorder-fields?query=${table}`, {
+        const data_retrun = await fetch(`/api/post-reorder-fields?query=${table}`, {
           method: 'POST',
-          headers: {'Accept': 'application/json','Content-Type': 'application/json'},
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-        const content_return = data_retrun.json();
-        if(content_return){
+        const content_return = await data_retrun.json();
+        if (content_return.status === 200) {
           getProfileData();
           handleChange();
           setLoading(false);

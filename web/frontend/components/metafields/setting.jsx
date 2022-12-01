@@ -11,7 +11,7 @@ const setting_json = {
   "sidebar_menu_active": "#000",
   "sidebar_icon": "#00ffba",
   "sidebar_menu_text_hover": "#000",
-  "main_content_text_size":20,
+  "main_content_text_size":16,
   "main_content_heading_size":30,
   "main_content_background": "#fff",
   "main_content_foreground": "#fff",

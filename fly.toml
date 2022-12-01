@@ -1,16 +1,15 @@
-# fly.toml file generated for dashboard-app on 2022-11-21T15:19:06+05:30
+# fly.toml file generated for customer-dashboard-pro on 2022-11-24T09:26:49+05:30
 
-app = "dashboard-app"
+app = "customer-dashboard-pro"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
-PORT = "8080"
-HOST = "https://dashboard-app.fly.dev"
-SHOPIFY_API_KEY = "ee5b2c78feec2e8755c58cc3056c58f6"
-SHOPIFY_API_SECRET="3eb78dafb8406d01e4fb312d5d14e13c"
-SCOPES = "read_customers,read_orders,read_locales,read_content,read_themes,write_themes,write_customers"
+  PORT = "8080"
+  HOST = "https://customer-dashboard-pro.fly.dev"
+  SHOPIFY_API_KEY = "ee5b2c78feec2e8755c58cc3056c58f6"
+  SCOPES = "read_customers,read_orders,read_locales,read_content,read_themes,write_themes,write_customers"
 
 [experimental]
   allowed_public_ports = []

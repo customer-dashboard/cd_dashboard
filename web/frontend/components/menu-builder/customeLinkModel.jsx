@@ -46,8 +46,10 @@ const [local, setLocal] = useState([]);
       body: JSON.stringify(data)
     });
   const content = await response.json();
-  setLocal(content.body.data.shopLocales);
+  if(content.status===200){
+    setLocal(content.data.body.data.shopLocales);
   }
+}
 
   const ChangeHendle = (value, name) => {
     setState((preValue) => {
@@ -73,8 +75,8 @@ const [local, setLocal] = useState([]);
     local.forEach(async(element_2) => {
     const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
     const content = await res.json();
-    if(content){
-          var arr = JSON.parse(content.value)[element_2.locale];
+    if(content.status===200){
+          var arr = JSON.parse(content.data[0].value)[element_2.locale];
           var array = [];
           Result.forEach(element => {
             array=add(arr, element.label);
@@ -89,14 +91,15 @@ const [local, setLocal] = useState([]);
             headers: {'Accept': 'application/json','Content-Type': 'application/json'},
             body: JSON.stringify(data)
           });
-          if(createTranslations.json()){
+          const response = await createTranslations.json();
+          if(response.status===200){
             const data_retrun = await fetch(`/api/post-reorder-fields?query=menu_builder_fields`, {
               method: 'POST',
               headers: {'Accept': 'application/json','Content-Type': 'application/json'},
               body: JSON.stringify(Result)
             });
-            const content_return = data_retrun.json();
-            if(content_return){
+            const content_return = await data_retrun.json();
+            if(content_return.status===200){
               getProfileData();
               handleChange();
               setLoading(false);

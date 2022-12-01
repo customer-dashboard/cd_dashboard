@@ -1,6 +1,6 @@
 import {useAuthenticatedFetch } from "../../hooks";
 import { useCallback, useEffect, useState } from 'react'
-import { Page,Card,Layout,TextField, Toast, Form, Button, ContextualSaveBar, Spinner} from '@shopify/polaris'
+import { Page,Card,Layout,TextField, Toast, Form, ContextualSaveBar, Spinner} from '@shopify/polaris'
 import translation from ".././metafields/translation"
 export default function TranslationsFields(props){
 const [active, setActive] = useState(false);
@@ -16,9 +16,9 @@ useEffect(() => {
   const getJson = async () => {
     const res = await fetch(`/api/get-json?locale=${value.language}`);
     const content = await res.json();
-    if(content){
-      var arr = JSON.parse(content.value)[value.language];
-      setState(arr);
+    if(content.status===200){
+    var arr = JSON.parse(content.data[0].value)[value.language];
+    setState(arr);
     }
 }
 
@@ -39,11 +39,11 @@ const handleChange = async()=>{
     body: JSON.stringify(data)
   });
 const content = await response.json();
-if (content.status === 200) {
-  setActive(<Toast content='Data Saved' onDismiss={toggleActive} />);
-  setLoading(false);
-  setSave(false);
-}
+if (content.status === 200)setActive(<Toast content={content.data} onDismiss={toggleActive} />);
+else if(content.status===500)
+setActive(<Toast content={content.error} error onDismiss={toggleActive} />);
+setLoading(false);
+setSave(false);
   }
 
   const hendleChangeUpdate = (value,name,index) =>{
@@ -57,8 +57,9 @@ if (content.status === 200) {
    }
   const contextualSaveBarMarkup = save ? (
     <ContextualSaveBar
-      message={loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null}
-      saveAction={{onAction:()=>handleChange()}}
+      saveAction={{
+        loading:loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null,
+        onAction:()=>handleChange()}}
       discardAction={{onAction:()=>setSave(false)}}
     />
   ) : null;

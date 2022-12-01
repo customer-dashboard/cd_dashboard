@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, FormLayout, Layout, Page, TextStyle, ContextualSaveBar, Toast, Link, Frame } from '@shopify/polaris'
+import { Button, ButtonGroup, Card, FormLayout, Layout, Page, TextStyle, ContextualSaveBar, Toast, Link, Frame, Spinner } from '@shopify/polaris'
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import Feedback from './FeedbackModel/Feedback'
@@ -7,16 +7,14 @@ import SkeletonExample from './SkeletonExample'
 import { useAuthenticatedFetch } from "../hooks";
 
 export default function HomePage(props) {
-  const {shop} = props;
+  const {shop,billing, count} = props;
   const [progress, setProgress] = useState(true)
   const [setting, setSetting] = useState({});
   const fetch = useAuthenticatedFetch();
-  const [count, setCount] = useState({});
-  const [billing, setBilling] = useState({});
-  const [save, setSave] = useState(false);
+const [loading, setLoading] = useState(false);
+const [save, setSave] = useState(false);
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
-  
   const cardData = [
     { title: "Customers", content: <NavLink to="/customers">View Customers</NavLink>, value: count?.customer_count },
     { title: "Order", content: <Link url={`https://${shop}/admin/orders`} external>All Orders</Link>, value: count?.order_count },
@@ -29,17 +27,15 @@ export default function HomePage(props) {
     { heading: "What Do You Think About This App", value: "", content: "Give Us Feedback", link: "/" },
     { heading: "Don't Have What You Need", value: "", content: "Request A Feature", link: "" },
   ]
-
   useEffect(() => {
-    getPaymentList();
     getSetting();
-    getLength();
   }, [])
 
   const contextualSaveBarMarkup = save ? (
     <ContextualSaveBar
       message="Unsaved changes"
       saveAction={{
+        loading:loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null,
         onAction: () => submit(),
       }}
       discardAction={{
@@ -53,26 +49,28 @@ export default function HomePage(props) {
     setSave(true);
   }
 
-  const getPaymentList = async() =>{
-    const response = await fetch("/api/get-billing");
-    const content = await response.json();
-    setBilling(content);
-  }
-
   const getSetting = async () => {
     const getSetting = await fetch("/api/get-setting");
     const content = await getSetting.json();
-    setSetting(content);
+    if(content.status===200){
+      setSetting(JSON.parse(content.data[0].value));
+      setProgress(false);
+    }
   }
 
-  const getLength = async () => {
-    const getSetting = await fetch("/api/get-length");
-    const content = await getSetting.json();
-    setCount(content);
-    setProgress(false);
+
+  const DeleteMetafields= async()=>{
+    if(confirm("are you sure delete all metafields of Customers Dashbaord Pro app")===true){
+      const response = await fetch('/api/delete-cd-metafields', {
+        method: 'POST',
+      });
+    const content = await response.json();
+    console.log(content);
+    }
   }
 
   const submit = async () => {
+  setLoading(true);
   const response = await fetch('/api/set-setting', {
     method: 'POST',
     headers: {
@@ -83,10 +81,14 @@ export default function HomePage(props) {
   });
 const content = await response.json();
 if (content.status === 200) {
-  setActive(<Toast content={content.success} onDismiss={toggleActive} />);
-  setSave(false);
-  getSetting();
+  setActive(<Toast content={content.data} onDismiss={toggleActive} />);
 }
+else if(content.status===500){
+  setActive(<Toast content={content.error} error onDismiss={toggleActive} />);
+}
+setLoading(false);
+setSave(false);
+getSetting();
   }
 
   return (
@@ -97,6 +99,7 @@ if (content.status === 200) {
           <>
             <Page title='Dashboard'>
               {contextualSaveBarMarkup}
+              <button style={{display:"none"}} onClick={DeleteMetafields}>Delete Metafields</button>
               <Layout>
                 {cardData.map((ele, index) => (
                   <Layout.Section key={index} oneThird>

@@ -6,7 +6,6 @@ import SkeletonExample from '../SkeletonExample';
 export default function Billing(){
   const [billing, setBilling] = useState({});
   const [progress, setProgress] = useState(true);
-  const [save, setSave] = useState("");
   const fetch = useAuthenticatedFetch();
   const navigate = useNavigate();
   const cardData = [
@@ -25,10 +24,11 @@ export default function Billing(){
   const getPaymentList = async() =>{
     const response = await fetch("/api/get-billing");
     const content = await response.json();
-    setBilling(content);
-    setProgress(false);
+    if(content.status==200){
+      setBilling(content.data);
+      setProgress(false);
+    }
   }
- 
   const postPayment = async (price, name) => {
     const data = {
       required: true,
@@ -96,7 +96,6 @@ export default function Billing(){
         ))
       }
     </Layout>
-    {save}
   </Page>
 </>
 }

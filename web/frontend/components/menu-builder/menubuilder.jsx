@@ -23,15 +23,18 @@ export default function MenuBuilder(){
   const getProfileData = async() => {
     const res = await fetch(`/api/get-menu_builder`);
     const content = await res.json();
-    const response = JSON.parse(content.value);
-    setDefaultProfile(response);
-    setProgress(false);
+    if(content.status===200){
+      const response = JSON.parse(content.data[0].value);
+      setDefaultProfile(response);
+      setProgress(false);
+    }
   }
   
   const getSvgIcon = async() =>{
     const res = await fetch(`/api/get-svg`);
     const content = await res.json();
-    setdefaultsvg(content);
+    if(content.status)
+    setdefaultsvg(JSON.parse(content.data[0].value));
   }
 
   return (

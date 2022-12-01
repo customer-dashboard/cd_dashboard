@@ -1,4 +1,4 @@
-import { Page,ContextualSaveBar,Toast,Layout,SettingToggle,TextStyle, Frame} from '@shopify/polaris'
+import { Page,ContextualSaveBar,Toast,Layout,SettingToggle,TextStyle, Frame, Spinner} from '@shopify/polaris'
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import { useAuthenticatedFetch } from "../hooks";
@@ -9,6 +9,7 @@ const navigate = useNavigate();
 const [setting, setSetting] = useState({});  
   const fetch = useAuthenticatedFetch();
   const [progress, setProgress] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(false);
 const toggleActive = useCallback(() => setActive((active) => !active), []);
 const [save, setSave] = useState(false);  
@@ -31,6 +32,7 @@ const contextualSaveBarMarkup = save ? (
   <ContextualSaveBar
     message="Unsaved changes"
     saveAction={{
+      loading:loading?<Spinner accessibilityLabel="Small spinner example" size="small" />:null,
       onAction:()=>submit(),
     }}
     discardAction={{
@@ -42,8 +44,8 @@ const contextualSaveBarMarkup = save ? (
 const getSetting = async () => {
   const getSetting = await fetch("/api/get-setting");
   const content = await getSetting.json();
-  if (content!=="") {
-    var setresult = content;
+  if (content.status===200) {
+    var setresult = JSON.parse(content.data[0].value);
     setSetting(setresult);
     setActiveToggle([
       {content:"Customers Dashboard Is", name:"app_access_toggle", value:setresult.app_access_toggle},
@@ -54,12 +56,8 @@ const getSetting = async () => {
   }
 }
 
-
-const toastMarkup = active ? (
-  <Toast content="Data Saved" onDismiss={toggleActive} />
-) : null;
-
  const submit = async () => {
+  setLoading(true);
   const response = await fetch('/api/set-setting', {
     method: 'POST',
     headers: {
@@ -70,11 +68,15 @@ const toastMarkup = active ? (
   });
 const content = await response.json();
 if (content.status === 200) {
-  setActive(<Toast content={content.success} onDismiss={toggleActive} />);
-  setSave(false);
-  getSetting();
+  setActive(<Toast content={content.data} onDismiss={toggleActive} />);
 }
-  }
+else if(content.status===500){
+  setActive(<Toast content={content.error} error onDismiss={toggleActive} />);
+}
+setLoading(false);
+setSave(false);
+getSetting();
+}
   return (
 <Frame>
   {
@@ -100,7 +102,7 @@ if (content.status === 200) {
       </Layout>
       </Page>
       ))}
-       {toastMarkup}
+       {active}
     </Page>
   }
 </Frame>

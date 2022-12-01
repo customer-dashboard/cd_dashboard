@@ -1,6 +1,6 @@
 {% assign lang = request.locale.iso_code %}
 {% assign translation = "translations_" | append:lang %}
-<section id="cd_contact" class="cd_main-section cd_main-section-2">
+<section id="cd_contact-2" class="cd_main-section cd_main-section-2">
   <div class="cd_container">
     <div>
       <div class="cd_form-header" style="padding: 10px;">
@@ -13,7 +13,7 @@
         {%- if form.posted_successfully? -%}
           <script>
             localStorage.setItem("contact_posted", "yes");
-            window.location = "/account?a=orders";
+            window.location = "/account?a=cd_orders";
           </script>
         {%-endif -%}
         <div class="cd_container">
@@ -59,7 +59,7 @@
           </div>
           <div class="cd_row" style="margin-top:15px;">
             <button type="submit">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
-            <input class="cd_backContact" type="button" id="cd_submit_loader" value="Cancel"/>
+            <button class="cd_backContact" type="button" id="cd_submit_loader">{{shop.metafields.customer_dashboard[translation].value[lang][9].value}}</button>
           </div>
         </div>
       {% endform %}

@@ -1,137 +1,186 @@
-  {% assign lang = request.locale.iso_code %}
-  {% assign setting = shop.metafields.customer_dashboard.setting.value %}
+{% assign lang = request.locale.iso_code %}
+{% assign setting = shop.metafields.customer_dashboard.setting.value %}
 {% assign translation = "translations_" | append:lang %}
-    <section id="cd_orders" class="cd_main-section cd_main-section-2">
-          <div class="cd_main-header">
-            <p id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][25].value }}</p>
+<section id="cd_orders" class="cd_main-section cd_main-section-2">
+  <div class="cd_header">
+    <p id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][25].value }}</p>
+  </div>
+  {% for orders in customer.orders %}
+    <div class="cd_container cd_order-container">
+      <div class="cd_order-content">
+        <p>
+          <span>Order :</span>
+          <span>{{ orders.name }}</span>
+        </p>
+        <p>
+          <span>{{ orders.created_at}}</span>
+        </p>
+      </div>
+      <div class="cd_order_status">
+        <span class="{{ orders.fulfillment_status }}">{{ orders.fulfillment_status }}
+        </span>
+        <span class="{{ orders.financial_status }}">{{ orders.financial_status }}</span>
+      </div>
+      <div class="cd_order-img">
+        {%- for line_item in orders.line_items -%}
+          <a class="cd_order_variant" id="{{ orders.id }}" variant_id="{{ line_item.variant.id }}" target="_blank" href="{{ line_item.variant.url }}">
+            <div class="cd_price-detail">
+              <img loading="lazy" width="100" height="100" src="{{ line_item.image | img_url: "300x" }}" alt="order-picture" defer>
+              <p>{{ line_item.title }}</p>
+              <p>${{ line_item.price | money_without_currency }}</p>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+      <div id="cd_panel_{{ orders.id }}" class="cd_panel">
+        <table class="cd_table-1">
+          <tr>
+            <td>{{ shop.metafields.customer_dashboard[translation].value[lang][28].value }}:-</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="{{ orders.order_status_url }}" target="_blank">Order status page</a>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ shop.metafields.customer_dashboard[translation].value[lang][29].value }}:-</td>
+          </tr>
+          <tr>
+            <th>{{ shop.metafields.customer_dashboard[translation].value[lang][30].value }}</th>
+            <td style="width: 60rem;">
+              <span>{{ orders.shipping_address.first_name }}
+              </span>
+              <span>{{ orders.shipping_address.last_name }}
+              </span>
+              <span>{{ orders.shipping_address.address1 }}
+              </span>
+              <span>{{ orders.shipping_address.phone }}
+              </span>
+              <span>{{ orders.shipping_address.city }}
+              </span>
+              <span>{{ orders.shipping_address.zip }}
+              </span>
+              <span>{{ orders.shipping_address.country }}
+              </span>
+              <span>{{ orders.shipping_address.company }}
+              </span>
+              <span>{{ orders.shipping_address.latitude }}
+              </span>
+              <span>{{ orders.shipping_address.longitude }}
+              </span>
+              <span>{{ orders.shipping_address.name }}
+              </span>
+              <span>{{ orders.shipping_address.country_code }}
+              </span>
+              <span>{{ orders.shipping_address.province_code }}
+              </span>
+
+            </td>
+          </tr>
+          <tr>
+            <th>{{ shop.metafields.customer_dashboard[translation].value[lang][26].value }}</th>
+            <td style="width: 63rem;">
+              <span>{{ orders.billing_address.first_name }}
+              </span>
+              <span>{{ orders.billing_address.last_name }}
+              </span>
+              <span>{{ orders.billing_address.address1 }}
+              </span>
+              <span>{{ orders.billing_address.phone }}
+              </span>
+              <span>{{ orders.billing_address.city }}
+              </span>
+              <span>{{ orders.billing_address.zip }}
+              </span>
+              <span>{{ orders.billing_address.country }}
+              </span>
+              <span>{{ orders.billing_address.company }}
+              </span>
+              <span>{{ orders.billing_address.latitude }}
+              </span>
+              <span>{{ orders.billing_address.longitude }}
+              </span>
+              <span>{{ orders.billing_address.name }}
+              </span>
+              <span>{{ orders.billing_address.country_code }}
+              </span>
+              <span>{{ orders.billing_address.province_code }}
+              </span>
+
+            </td>
+          </tr>
+          <tr>
+            <td>{{ shop.metafields.customer_dashboard[translation].value[lang][27].value }}:-</td>
+          </tr>
+        </table>
+        <table class="cd_table-2">
+          <tr>
+            <td>{{ shop.metafields.customer_dashboard[translation].value[lang][31].value }}</td>
+            <td>${{ orders.subtotal_price | money_without_currency }}</td>
+          </tr>
+          <tr>
+            <td>{{ shop.metafields.customer_dashboard[translation].value[lang][32].value }}</td>
+            <td>${{ orders.total_discounts | money_without_currency }}</td>
+          </tr>
+          <tr>
+            <td>{{ shop.metafields.customer_dashboard[translation].value[lang][33].value }}</td>
+            <td>${{ orders.tax_price | money_without_currency }}</td>
+          </tr>
+          <tr>
+            <td>{{ shop.metafields.customer_dashboard[translation].value[lang][34].value }}</td>
+            <td>${{ orders.shipping_price | money_without_currency }}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="cd_order-contact">
+        <div class="cd_order-contact-clild">
+          <div>
+            <span>{{ shop.metafields.customer_dashboard[translation].value[lang][35].value }}:
+            </span>
+            <span>{{ orders.line_items.size }}</span>
           </div>
-        {% for orders in customer.orders %}
-        <div class="cd_container cd_order-container"> 
-        <div id="cd_success_message_contact">Message Sent Successfully</div>       
-            <div class="cd_order-content">
-              <p><span>Order :</span><span>{{ orders.name }}</span></p>
-              <p><span>{{ orders.created_at}}</span></p>
-            </div>
-            <div class="cd_order_status"><span class="{{ orders.fulfillment_status }}">{{ orders.fulfillment_status }} </span><span class="{{ orders.financial_status }}">{{ orders.financial_status }}</span></div>
-            <div class="cd_order-img">
-            {%- for line_item in orders.line_items -%}
-           <a class="cd_order_variant" id="{{ orders.id }}" variant_id="{{ line_item.variant.id }}" target="_blank" href="{{ line_item.variant.url }}"><div class="cd_price-detail">
-            <img loading="lazy" width="100" height="100" src="{{ line_item.image | img_url: "300x" }}" alt="order-picture" defer >
-            <p>{{ line_item.title }}</p>
-            <p>${{ line_item.price | money_without_currency }}</p>
-           </div>
-           </a>
-           {%- endfor -%}
-            </div>
-            <div id="cd_panel_{{ orders.id }}" class="cd_panel" >
-              <table class="cd_table-1">
-                <tr>
-                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][28].value }}:-</td>
-                </tr>
-                <tr>
-                  <td><a href="{{ orders.order_status_url }}" target="_blank" >Order status page</a></td>
-                </tr>
-                <tr>
-                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][29].value }}:-</td>
-                </tr>
-                <tr>
-                  <th>{{ shop.metafields.customer_dashboard[translation].value[lang][30].value }}</th>
-                  <td style="width: 60rem;">
-                  <span>{{ orders.shipping_address.first_name }} </span>
-                  <span>{{ orders.shipping_address.last_name }} </span>
-                  <span>{{ orders.shipping_address.address1 }} </span>
-                  <span>{{ orders.shipping_address.phone }} </span>
-                  <span>{{ orders.shipping_address.city }} </span>
-                  <span>{{ orders.shipping_address.zip }} </span>
-                  <span>{{ orders.shipping_address.country }} </span>
-                  <span>{{ orders.shipping_address.company }} </span>
-                  <span>{{ orders.shipping_address.latitude }} </span>
-                  <span>{{ orders.shipping_address.longitude }} </span>
-                  <span>{{ orders.shipping_address.name }} </span>
-                  <span>{{ orders.shipping_address.country_code }} </span>
-                  <span>{{ orders.shipping_address.province_code }} </span>
-                  
-                  </td>
-                </tr>
-                <tr>
-                  <th>{{ shop.metafields.customer_dashboard[translation].value[lang][26].value }}</th>
-                 <td style="width: 63rem;">
-                  <span>{{ orders.billing_address.first_name }} </span>
-                  <span>{{ orders.billing_address.last_name }} </span>
-                  <span>{{ orders.billing_address.address1 }} </span>
-                  <span>{{ orders.billing_address.phone }} </span>
-                  <span>{{ orders.billing_address.city }} </span>
-                  <span>{{ orders.billing_address.zip }} </span>
-                  <span>{{ orders.billing_address.country }} </span>
-                  <span>{{ orders.billing_address.company }} </span>
-                  <span>{{ orders.billing_address.latitude }} </span>
-                  <span>{{ orders.billing_address.longitude }} </span>
-                  <span>{{ orders.billing_address.name }} </span>
-                  <span>{{ orders.billing_address.country_code }} </span>
-                  <span>{{ orders.billing_address.province_code }} </span>
-                  
-                  </td>
-                </tr>               
-                <tr>
-                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][27].value }}:-</td>
-                </tr>
-              </table>
-              <table class="cd_table-2">
-                <tr>
-                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][31].value }}</td>
-                  <td>${{ orders.subtotal_price | money_without_currency }}</td>
-                </tr>
-                <tr>
-                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][32].value }}</td>
-                   <td>${{ orders.total_discounts | money_without_currency }}</td>
-                </tr>
-                <tr>
-                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][33].value }}</td>
-                   <td>${{ orders.tax_price | money_without_currency }}</td>
-                </tr>
-                <tr>
-                  <td>{{ shop.metafields.customer_dashboard[translation].value[lang][34].value }}</td>
-                   <td>${{ orders.shipping_price | money_without_currency }}</td>
-                </tr>
-              </table>
-            </div>
-  
-            <div class="cd_order-contact">
-              <div class="cd_order-contact-clild">
-                <div><span>{{ shop.metafields.customer_dashboard[translation].value[lang][35].value }}: </span><span>{{ orders.line_items.size }}</span></div>
-                <div class="cd_row">
-                  <input type="button" onclick="myFunction('cd_contact')" value="{{shop.metafields.customer_dashboard[translation].value[lang][39].value}}">
-                </div>
-              </div>
-              <div style="text-align: right;" class="cd_order-contact-clild">
-              <div><span>Grand Total: </span><span>${{ orders.total_price | money_without_currency }}</span></div>
-                     <div class="cd_row">
-                      {% if setting.reorder_toggle == true %}
-                      <a class="cd_reorder" reorder_id="{{ orders.id }}"  href="#cd_reorder_popup1">{{ shop.metafields.customer_dashboard[translation].value[lang][36].value }}</a>
-                      {% endif %}
-                </div>
-              </div>
-            </div>
-            <div class="cd_view-detail">
-              <button type="button" onclick="accordion('cd_panel_'+'{{ orders.id }}','btn_'+'{{ orders.id }}')" id="btn_{{ orders.id }}" class="cd_accordion">
-              <span>View Details</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 20 12" fill="none">
-              <path d="M1 1.57916L9.80141 10.3806L18.5478 1.63417" stroke="#202020" stroke-width="2"/>
-              </svg>
-              </button>
-            </div>
-  
+          <div class="cd_row">
+            <button type="button" onclick="myFunction('cd_contact-2')">{{ shop.metafields.customer_dashboard[translation].value[lang][39].value }}</button>
           </div>
-       {% endfor %}
-       <div id="cd_reorder_popup1" class="cd_overlay">
-    <div class="cd_popup">
-        <p>All available items in this order have been added to your cart</p>
-        <div class="cd_content">
-            <ul class="cd_buttons">
-                <li><a class="cd_reorder_button" reorder_id="" href="/cart">{{ shop.metafields.customer_dashboard[translation].value[lang][37].value }}</a></li>
-                <li><a class="cd_reorder_button" reorder_id="" href="#">{{ shop.metafields.customer_dashboard[translation].value[lang][38].value }}</a></li>
-            </ul>
         </div>
+        <div style="text-align: right;" class="cd_order-contact-clild">
+          <div>
+            <span>Grand Total:
+            </span>
+            <span>${{ orders.total_price | money_without_currency }}</span>
+          </div>
+          <div class="cd_row">
+            {% if setting.reorder_toggle == true %}
+              <a class="cd_reorder" reorder_id="{{ orders.id }}" href="#cd_reorder_popup1">{{ shop.metafields.customer_dashboard[translation].value[lang][36].value }}</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="cd_view-detail">
+        <button type="button" onclick="accordion('cd_panel_'+'{{ orders.id }}','btn_'+'{{ orders.id }}')" id="btn_{{ orders.id }}" class="cd_accordion">
+          <span>View Details</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 20 12" fill="none">
+            <path d="M1 1.57916L9.80141 10.3806L18.5478 1.63417" stroke="#202020" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
     </div>
-</div>
+  {% endfor %}
+  <div id="cd_reorder_popup1" class="cd_overlay">
+    <div class="cd_popup">
+      <p>All available items in this order have been added to your cart</p>
+      <div class="cd_content">
+        <ul class="cd_buttons">
+          <li>
+            <a class="cd_reorder_button" reorder_id="" href="/cart">{{ shop.metafields.customer_dashboard[translation].value[lang][37].value }}</a>
+          </li>
+          <li>
+            <a class="cd_reorder_button" reorder_id="" href="/account?a=cd_orders">{{ shop.metafields.customer_dashboard[translation].value[lang][38].value }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
