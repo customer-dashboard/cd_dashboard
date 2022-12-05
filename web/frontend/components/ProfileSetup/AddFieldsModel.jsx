@@ -1,12 +1,27 @@
-import { Button,  ButtonGroup,  FormLayout,  Frame,  Icon,  Modal, Select, TextField, Toast } from '@shopify/polaris'
+import { 
+  Button,
+  ButtonGroup,
+  FormLayout,
+  Icon,
+  Modal,
+  Select,
+  Spinner,
+  TextField
+} from '@shopify/polaris'
 import {
-  MinusMinor,PlusMinor
+  MinusMinor,
+  PlusMinor
 } from '@shopify/polaris-icons'; 
-import { useCallback, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useState
+} from 'react'
 export default function AddFieldsModel(props){
-  const {getAdditionalData}=props;
+  const {getAdditionalData, activeConfirm}=props;
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [group, setGroup] = useState([{}])
   const [state, setState] = useState({
     label:"",
@@ -15,11 +30,7 @@ export default function AddFieldsModel(props){
     type:"additional",
     multipleValue:[]
   })
-  const [result, setResult] = useState('')
   
-  const [active2, setActive2] = useState(false);
-
-  const toggleActive = useCallback(() => setActive2((active2) => !active2), []);
   const handleChange = useCallback(() =>{Clear();setActive(!active), [active]});
   const activator = <Button primary onClick={handleChange}>Add Fields</Button>;
   const handleChange2=(name,value)=>{  
@@ -42,6 +53,13 @@ export default function AddFieldsModel(props){
     setGroup(newFormValues);
   }
   
+  useEffect(() => {
+    if(activeConfirm===false){
+      setActive(activeConfirm);
+      setLoading(false);
+    }
+    },[activeConfirm])
+
   let addGroupField = () => {
     setGroup([...group,{value:""}])
     }
@@ -55,6 +73,7 @@ export default function AddFieldsModel(props){
   }
 
   const Clear = ()=>{
+    setLoading(false)
     setGroup([{}]);
     setState({label:"", value:"",type:"additional",});
   }
@@ -62,13 +81,8 @@ export default function AddFieldsModel(props){
   const Submit = () =>{
    state.multipleValue=group;
    getAdditionalData(state);
-   setActive(false);
+   setLoading(true);
   }
-
-  const toastMarkup = active2 ? (
-    <Toast content={result} onDismiss={toggleActive} />
-  ) : null;
-
 
   return (
     <Modal
@@ -113,8 +127,7 @@ export default function AddFieldsModel(props){
             </div>
           ))} 
           <br/>
-        {!toggle?<ButtonGroup><Button primary onClick={Submit}>Create</Button><Button onClick={Clear}>Clear</Button></ButtonGroup>:<Button disabled >Create</Button>} 
-        {toastMarkup}
+        {!toggle?<ButtonGroup><Button primary loading={loading ? <Spinner accessibilityLabel="Small spinner example" size="small" /> : null} onClick={Submit}>Create</Button><Button onClick={Clear}>Clear</Button></ButtonGroup>:<Button disabled >Create</Button>} 
       </Modal.Section>
     </Modal>
   )

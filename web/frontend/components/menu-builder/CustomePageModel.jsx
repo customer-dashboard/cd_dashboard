@@ -3,9 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAuthenticatedFetch } from "../../hooks";
 import Parser from 'html-react-parser';
 export default function CustomePageModel(props) {
-  const Result = props.value;
-  const id = Result.length;
-  const getProfileData = props.getProfileData;
+  const {defaultProfile,getProfileData, activeConfirm} = props;
+  const id = defaultProfile.length;
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const fetch = useAuthenticatedFetch();
@@ -46,7 +45,7 @@ export default function CustomePageModel(props) {
   }
 
   const Submit = () => {
-    Result.push(state);
+    defaultProfile.push(state);
     setLoading(true);
     local.forEach(async (element_2) => {
       const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
@@ -54,7 +53,7 @@ export default function CustomePageModel(props) {
       if (content.status === 200) {
         var arr = JSON.parse(content.data[0].value)[element_2.locale];
         var array = [];
-        Result.forEach(element => {
+        defaultProfile.forEach(element => {
           array = add(arr, element.label);
         });
         const data = {
@@ -71,13 +70,14 @@ export default function CustomePageModel(props) {
           const data_retrun = await fetch(`/api/post-reorder-fields?query=menu_builder_fields`, {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify(Result)
+            body: JSON.stringify(defaultProfile)
           });
           const content_return = await data_retrun.json();
           if (content_return.status === 200) {
             getProfileData();
             handleChange();
             setLoading(false);
+            activeConfirm(false);
           }
         }
       }

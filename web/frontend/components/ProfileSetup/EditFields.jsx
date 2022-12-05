@@ -1,13 +1,14 @@
-import { Button, ButtonGroup, FormLayout, Frame, Icon, Modal, Select, Spinner, TextField, Toast } from '@shopify/polaris'
+import { Button, ButtonGroup, FormLayout,Icon, Modal, Select, Spinner, TextField,} from '@shopify/polaris'
 import {
   MinusMinor, PlusMinor, ThemeEditMajor
 } from '@shopify/polaris-icons';
 import { useAuthenticatedFetch } from "../../hooks";
 import { useCallback, useEffect, useState } from 'react'
 export default function EditFields(props) {
-  const { value, id, getProfileData, table } = props;
+  const { value, id, getProfileData, table, activeConfirm} = props;
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(false);
+  const [currentLabel, setCurrentLabel] = useState("");
   const [local, setLocal] = useState([]);
   const fetch = useAuthenticatedFetch();
   const [group, setGroup] = useState([{}])
@@ -25,6 +26,7 @@ export default function EditFields(props) {
     if (content.status === 200) {
       const res = JSON.parse(content.data[0].value);
       setState(res[id]);
+      setCurrentLabel(res[id]?.label);
       if (res[id].multipleValue.length > 0) setGroup(res[id].multipleValue);
     }
   }
@@ -100,10 +102,10 @@ export default function EditFields(props) {
     local.forEach(async (element_2) => {
       const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
       const content = await res.json();
-      if (content.status === 200) {
+      if (content.status === 200&&content.data[0]?.value) {
         var arr = JSON.parse(content.data[0].value)[element_2.locale];
         const temp = arr.filter(obj1 => data.some(obj2 => obj2.label === obj1.heading && obj1.name === "Shared"))
-        temp.push({ heading: state.label, value: state.label, name: "Shared" });
+        if(currentLabel!==state.label)temp.push({ heading: state.label, value: state.label, name: "Shared" });
         for (var i = arr.length - 1; i >= 0; i--) {
           if (arr[i].name === "Shared") {
             arr.splice(i, 1);
@@ -131,6 +133,7 @@ export default function EditFields(props) {
           getProfileData();
           handleChange();
           setLoading(false);
+          activeConfirm(false);
         }
       }
     });

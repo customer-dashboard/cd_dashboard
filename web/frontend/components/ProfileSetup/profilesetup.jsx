@@ -17,6 +17,7 @@ export default function ProfileSetup() {
   const [loading, setLoading] = useState(false);
   const [local, setLocal] = useState([]);
   const [active, setActive] = useState(false);
+  const [activeConfirm, setActiveConfirm] = useState(true);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
   const [defaultProfile, setDefaultProfile] = useState([]);
 
@@ -49,11 +50,6 @@ export default function ProfileSetup() {
 if(content.status===200)
 setLocal(content.data.body.data.shopLocales);
 }
-
-  const toastMarkup = active ? (
-    <Toast content="Data Saved" onDismiss={toggleActive} />
-  ) : null;
-
   const contextualSaveBarMarkup = save ? (
     <ContextualSaveBar
       saveAction={{
@@ -125,7 +121,7 @@ setLocal(content.data.body.data.shopLocales);
     local.forEach(async(element_2) => {
       const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
       const content = await res.json();
-      if (content.status === 200) {
+      if (content.status === 200&&content.data[0]?.value) {
         var arr = JSON.parse(content.data[0].value)[element_2.locale];
         var array = [];
         defaultProfile.forEach(element => {
@@ -151,6 +147,9 @@ setLocal(content.data.body.data.shopLocales);
           const content_return = await data_retrun.json();
           if(content_return){
             getProfileData();
+            setActiveConfirm(false)
+            setActive(<Toast content="New Field Created"onDismiss={toggleActive} />)
+            setActiveConfirm(true)
           }
         }
       }
@@ -164,7 +163,7 @@ setLocal(content.data.body.data.shopLocales);
           <>
             <Page title='Profile Setup'
               breadcrumbs={[{ content: 'Products', onAction: () => navigate(-1) }]}
-              secondaryActions={<AddFieldsModel getAdditionalData={AdditionalFields} />}>
+              secondaryActions={<AddFieldsModel getAdditionalData={AdditionalFields} activeConfirm={activeConfirm}/>}>
               {contextualSaveBarMarkup}
               <Layout>
                 <Layout.Section oneHalf>
@@ -179,7 +178,7 @@ setLocal(content.data.body.data.shopLocales);
             </Page>
             <Page>
               <Toggle content="Allows your customers to update their marketing preference from within their customer account profiles." name="updatebycustomer_toggle" value={setting.updatebycustomer_toggle} hendleChange={hendlChange} />
-              {toastMarkup}
+              {active}
             </Page>
           </>
       }

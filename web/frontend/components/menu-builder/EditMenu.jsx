@@ -4,7 +4,7 @@ import { useAuthenticatedFetch } from "../../hooks";
 import Parser  from 'html-react-parser';
 import { ThemeEditMajor } from '@shopify/polaris-icons';
 export default function EditMenu(props){
-  const {value,id,getProfileData,table} = props;
+  const {value,id,getProfileData,table, activeConfirm} = props;
   const [state, setState] = useState(value[id])
   const [local, setLocal] = useState([]);
 const [loading, setLoading] = useState(false);
@@ -78,7 +78,7 @@ setLocal(content.data.body.data.shopLocales);
     local.forEach(async(element_2) => {
       const res = await fetch(`/api/get-json?locale=${element_2.locale}`);
       const content = await res.json();
-      if(content.status===200){
+      if(content.status===200&&content.data[0]?.value){
         var arr = JSON.parse(content.data[0].value)[element_2.locale];
         const temp = arr.filter(obj1 => data.some(obj2 => obj2.label === obj1.heading&&obj1.name==="Navigation"))
         temp.push({heading: state.label,value: state.label,name: "Navigation"});
@@ -114,6 +114,7 @@ setLocal(content.data.body.data.shopLocales);
           getProfileData();
           handleChange();
           setLoading(false);
+          activeConfirm(false);
         }
       }
     });

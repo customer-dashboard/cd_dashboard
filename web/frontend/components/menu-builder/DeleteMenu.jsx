@@ -3,7 +3,7 @@ import { DeleteMinor } from '@shopify/polaris-icons';
 import { useAuthenticatedFetch } from "../../hooks";
 import { useEffect, useState } from 'react'
 export default function DeleteMenu(props){
-  const {value,getProfileData,id,table,type} = props;
+  const {value,getProfileData,id,table,type,activeConfirm} = props;
 const [loading, setLoading] = useState(false);
 const [active, setActive] = useState(false);   
   const fetch = useAuthenticatedFetch();
@@ -75,6 +75,7 @@ const [active, setActive] = useState(false);
             getProfileData();
             handleChange();
             setLoading(false);
+            activeConfirm(false);
           }
 
         }});

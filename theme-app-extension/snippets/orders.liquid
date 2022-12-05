@@ -13,7 +13,7 @@
           <span>{{ orders.name }}</span>
         </p>
         <p>
-          <span>{{ orders.created_at}}</span>
+          <span>{{ orders.created_at | time_tag: '%d %b %Y at %R' }}</span>
         </p>
       </div>
       <div class="cd_order_status">

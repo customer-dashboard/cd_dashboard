@@ -5,7 +5,6 @@ import Feedback from './FeedbackModel/Feedback'
 import Toggle from './Toggle'
 import SkeletonExample from './SkeletonExample'
 import { useAuthenticatedFetch } from "../hooks";
-
 export default function HomePage(props) {
   const {shop,billing, count} = props;
   const [progress, setProgress] = useState(true)
@@ -21,11 +20,11 @@ const [save, setSave] = useState(false);
     { title: "Current Plan", content: "", value: billing && billing.status === 'active' ? billing.name : "Basic-Free" },
   ]
   const dataCard = [
-    { heading: "Translations", value: "Add translations to use Customer Dashboard in any language.", content: "Manage Translations", link: "/translations" },
-    { heading: "Plan", value: "Basic-Free", content: "Upgrade Plan", link: "/plan" },
-    { heading: "Need Help", value: "", content: "Go To Support", link: "" },
-    { heading: "What Do You Think About This App", value: "", content: "Give Us Feedback", link: "/" },
-    { heading: "Don't Have What You Need", value: "", content: "Request A Feature", link: "" },
+    { heading: "Translations", content: <NavLink className="link" to="/translations"><Button >Manage Translations</Button></NavLink>, value: "Add translations to use Customer Dashboard in any language." },
+    { heading: "Plan", content: <NavLink className="link" to="/plan"><Button>Upgrade Plan</Button></NavLink>, value: "Basic-Free" },
+    { heading: "Need Help", content: <Link removeUnderline url="https://customerdashboard.pro/documentation" external><Button>Go To Support</Button></Link>, value:"" },
+    { heading: "What Do You Think About This App", content: <Link removeUnderline className="link" url="https://customerdashboard.pro/feedback" external><Button>Give Us Feedback</Button></Link>, value: ""},
+    { heading: "Don't Have What You Need", content:<Feedback value="Request A Feature" shop={shop} />, value:"" },
   ]
   useEffect(() => {
     getSetting();
@@ -96,7 +95,7 @@ getSetting();
       {
         progress ?
           <SkeletonExample /> :
-          <>
+          <div style={{paddingBottom:"100px"}}>
             <Page title='Dashboard'>
               {contextualSaveBarMarkup}
               <button style={{display:"none"}} onClick={DeleteMetafields}>Delete Metafields</button>
@@ -123,7 +122,7 @@ getSetting();
                         <FormLayout>
                           {ele.value ? <p>{ele.value}</p> : ""}
                           <ButtonGroup>
-                            {ele.link ? <NavLink className='link' to={ele.link}><Button>{ele.content ? ele.content : ""}</Button></NavLink> : <Feedback value={ele.content} shop={shop} />}
+                            {ele.content}
                           </ButtonGroup>
                         </FormLayout>
                       </Card>
@@ -133,7 +132,7 @@ getSetting();
                 {active}
               </Layout>
             </Page>
-          </>
+          </div>
       }
     </Frame>
   )

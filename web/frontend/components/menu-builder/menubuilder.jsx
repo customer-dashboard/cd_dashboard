@@ -1,5 +1,5 @@
-import { Page, Layout, Card, Frame } from '@shopify/polaris'
-import { useEffect, useState } from 'react'
+import { Page, Layout, Card, Frame, Toast } from '@shopify/polaris'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProfileReorder from '../ProfileSetup/ProfileReorder'
 import SkeletonExample from '../SkeletonExample'
@@ -12,12 +12,19 @@ export default function MenuBuilder(){
   const [defaultProfile, setDefaultProfile] = useState([]);
   const [defaultsvg, setdefaultsvg] = useState([]);
   const fetch = useAuthenticatedFetch();
+  const [active, setActive] = useState(false);
+  const [activeConfirm, setActiveConfirm] = useState(true);
+  const toggleActive = useCallback(() => setActive((active) => !active), []);
   const [progress, setProgress] = useState(true)
 
   useEffect(() => {
+    if(activeConfirm===false){
+      setActive(<Toast content="New Field Created" onDismiss={toggleActive} />);
+      setActiveConfirm(true);
+    }
     getProfileData();
     getSvgIcon();
-  }, [])
+  }, [activeConfirm])
 
 
   const getProfileData = async() => {
@@ -56,9 +63,10 @@ export default function MenuBuilder(){
     </Page>
     <Page>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <CustomePageModel value={defaultProfile} getProfileData={getProfileData} />
-        <CustomeLinkPage value={defaultProfile} getProfileData={getProfileData} />
+        <CustomePageModel defaultProfile={defaultProfile} getProfileData={getProfileData} activeConfirm={setActiveConfirm}/>
+        <CustomeLinkPage defaultProfile={defaultProfile} getProfileData={getProfileData} activeConfirm={setActiveConfirm}/>
       </div>
+      {active}
     </Page>
   </>
   }

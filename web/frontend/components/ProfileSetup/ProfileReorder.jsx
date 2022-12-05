@@ -13,15 +13,21 @@ import { useAuthenticatedFetch } from "../../hooks";
 export default function ProfileReorder(props){
   const { value, result, table, status, defaultsvg} = props;
   const fetch = useAuthenticatedFetch();
+  const [activeConfirm, setActiveConfirm] = useState(true);
+  const [editConfirm, setEditConfirm] = useState(true);
   const [state, setState] = useState(value&&value)
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
-  const toastMarkup = active ? (
-    <Toast content="Reorder Saved" onDismiss={toggleActive} />
-  ) : null;
-
   useEffect(() => {
     setState(value)
+    if(activeConfirm===false){
+      setActive(<Toast content="Field Deleted" onDismiss={toggleActive} />);
+      setActiveConfirm(true);
+    }
+    if(editConfirm===false){
+    setActive(<Toast content="Field Updated" onDismiss={toggleActive} />);
+    setEditConfirm(true);
+    }
     }, [value])
 
 
@@ -37,7 +43,7 @@ export default function ProfileReorder(props){
         headers: {'Accept': 'application/json','Content-Type': 'application/json'},
         body: JSON.stringify(data)
       });
-      setActive(true);
+    setActive(<Toast content="Reorder Saved" onDismiss={toggleActive} />)
     }
     },
     nodeSelector: 'li',
@@ -60,20 +66,20 @@ export default function ProfileReorder(props){
                   })}
                 </p> : null}
                 <div style={{width: "90px",position: "absolute",right: "20px"}}>
-                  <p>{item.type === 'additional' ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} type="Shared" /> : ""}</p>
-                  <p>{item.type === 'additional' ? <EditFields value={value} id={index} getProfileData={result} table={table} /> : ""}</p>
+                  <p>{item.type === 'additional' ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} type="Shared" activeConfirm={setActiveConfirm}/> : ""}</p>
+                  <p>{item.type === 'additional' ? <EditFields value={value} id={index} getProfileData={result} table={table} activeConfirm={setEditConfirm}/> : ""}</p>
                   <p>{item.type && item.type === 'link' ? <span style={{ width: "20px", float: "right", marginLeft: "10px", cursor: "pointer" }}><Tooltip content="Link"><Icon source={LinkMinor} /></Tooltip></span> : ""}</p>
                   <p>{item.type && item.type === 'page' ? <span style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}><Tooltip content="Page"><Icon source={PageMajor} /></Tooltip></span> : ""} </p>
                   <p>{item.type && item.type === 'additional' ? <span style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}><Tooltip content="Additional field"><Icon source={PageMajor} /></Tooltip></span> : ""} </p>
-                  <p>{item.type === 'link' || item.type === 'page' && item.type ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} type="Navigation" /> : ""}</p>
-                  <p>{item.type === 'link' || item.type === 'page' && item.type ? <EditMenu value={value} id={index} getProfileData={result} table={table} />:""}</p>
+                  <p>{item.type === 'link' || item.type === 'page' && item.type ? <DeleteMenu value={value} id={item.id} getProfileData={result} table={table} type="Navigation" activeConfirm={setActiveConfirm}/> : ""}</p>
+                  <p>{item.type === 'link' || item.type === 'page' && item.type ? <EditMenu value={value} id={index} getProfileData={result} table={table} activeConfirm={setEditConfirm}/>:""}</p>
                 </div>
               </li>
             ))}
           </ol>
         </ReactDragListView>
       </div>
-      {toastMarkup}
+      {active}
     </div>
   );
 }

@@ -5,6 +5,8 @@ import Toggle from '../Toggle'
 import { useAuthenticatedFetch } from "../../hooks";
 import PopoverSetting from './Popover'
 import SkeletonExample from '../SkeletonExample';
+import Confirm from '../Confirm';
+import setting_json from ".././metafields/setting";
 export default function Setting() {
   const navigate = useNavigate();
   const fetch = useAuthenticatedFetch();
@@ -13,10 +15,32 @@ export default function Setting() {
   const [progress, setProgress] = useState(true);
   const [save, setSave] = useState(false);
   const [active, setActive] = useState(false);
+  const [activeConfirm, setActiveConfirm] = useState(true);
+  
   const toggleActive = useCallback(() => setActive((active) => !active), []);
+  const InstallMetafields = async (url,data) => {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    return await response.json();
+   }
+  const settingReset=async()=>{
+   const content = await InstallMetafields('/api/set-setting',setting_json);
+   if(content.status===200){
+    setActiveConfirm(false)
+    setActive(<Toast content={content.data} onDismiss={toggleActive} />)
+    setActiveConfirm(true)
+  }
+  }
   const dataCard = [
     { heading: "Translations", value: "Add translations to use Customer Dashboard in any language.", content: "Manage Translations", link: "/translations" },
     { heading: "Plan", value: "Basic-Free", content: "Upgrade Plan", link: "/plan" },
+    { heading: "Reset Setting", value: "Default Setting", content: "Reset", link: "",function:settingReset },
   ]
   const need = [
     { heading: "Need Help", value: "", content: "Go To Support" },
@@ -26,6 +50,7 @@ export default function Setting() {
     setting.app_access_toggle = e.app_access_toggle;
     setSave(true);
   }
+
 
   const selectChange = (value, name) => {
     if (value) setSave(true);
@@ -45,10 +70,6 @@ export default function Setting() {
   useEffect(() => {
     getSetting();
   }, [])
-
-  const toastMarkup = active ? (
-    <Toast content="Data Saved" onDismiss={toggleActive} />
-  ) : null;
 
   const contextualSaveBarMarkup = save ? (
     <ContextualSaveBar
@@ -79,15 +100,7 @@ export default function Setting() {
   }
   const submit = async () => {
     setLoading(true);
-    const response = await fetch('/api/set-setting', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(setting)
-    });
-    const content = await response.json();
+    const content = await InstallMetafields('/api/set-setting',setting);
     if (content.status === 200) {
       setActive(<Toast content={content.data} onDismiss={toggleActive} />);
     }
@@ -119,7 +132,7 @@ export default function Setting() {
                         <FormLayout>
                           {ele.value ? <p>{ele.value}</p> : ""}
                           <ButtonGroup>
-                            {ele.link ? <Link className='link' to={ele.link}><Button>{ele.content ? ele.content : ""}</Button></Link> : <Button>{ele.content ? ele.content : ""}</Button>}
+                            {ele.link ? <Link className='link' to={ele.link}><Button>{ele.content ? ele.content : ""}</Button></Link> :<Confirm name={ele.content} handleFunction={ele.function} activeConfirm={activeConfirm}/>}
                           </ButtonGroup>
                         </FormLayout>
 
@@ -401,7 +414,7 @@ export default function Setting() {
                   ))
                 }
               </Layout>
-              {toastMarkup}
+              {active}
             </Page>
           </>
       }

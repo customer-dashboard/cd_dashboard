@@ -1,12 +1,13 @@
 import {useAuthenticatedFetch } from "../../hooks";
 import { useCallback, useEffect, useState } from 'react'
 import { Page,Card,Layout,TextField, Toast, Form, ContextualSaveBar, Spinner} from '@shopify/polaris'
-import translation from ".././metafields/translation"
+import SkeletonExample from "../SkeletonExample";
 export default function TranslationsFields(props){
 const [active, setActive] = useState(false);
 const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(true);
   const fetch = useAuthenticatedFetch();
-  const [state, setState] = useState(translation['en']);
+  const [state, setState] = useState([]);
 const [save, setSave] = useState(false);  
 const {value,back} = props;
 useEffect(() => {
@@ -14,12 +15,16 @@ useEffect(() => {
   }, [])
   const toggleActive = useCallback(() => setActive((active2) => !active2), []);
   const getJson = async () => {
+    const localjson = await fetch(`/api/get-json?locale=en`);
+    const contentlocaljson = await localjson.json();
+    var arr = JSON.parse(contentlocaljson.data[0].value)["en"];
     const res = await fetch(`/api/get-json?locale=${value.language}`);
     const content = await res.json();
-    if(content.status===200){
-    var arr = JSON.parse(content.data[0].value)[value.language];
-    setState(arr);
+    if(content.status===200&&content.data[0]?.value){
+    arr = JSON.parse(content.data[0].value)[value.language];
     }
+    setState(arr);
+    setProgress(false);
 }
 
 
@@ -65,192 +70,197 @@ setSave(false);
   ) : null;
 
   return (
-   <Page title={value.language} 
-    breadcrumbs={[{content: 'Products',onAction:()=>back(false)}]}>
-  {contextualSaveBarMarkup}
- <Form>
+<>
+{
+  progress?
+  <SkeletonExample/>:
+  <Page title={value.language} 
+  breadcrumbs={[{content: 'Products',onAction:()=>back(false)}]}>
+{contextualSaveBarMarkup}
+<Form>
 <Card title="Navigation">
 <Card.Section>
 <Layout>
-  {
-      state.map((local,index)=>{
-        if(local.name==='Navigation'){
-          return(
-            <Layout.AnnotatedSection
-            title={local.heading} key={index}>
-            <Card sectioned>
-            <TextField
-            name="value"
-            type="text"                          
-            value={local.value}
-            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
-            />  
-            </Card>
-            </Layout.AnnotatedSection>
-          )
-        }
-      })
-  }
-    </Layout>
+{
+    state.map((local,index)=>{
+      if(local.name==='Navigation'){
+        return(
+          <Layout.AnnotatedSection
+          title={local.heading} key={index}>
+          <Card sectioned>
+          <TextField
+          name="value"
+          type="text"                          
+          value={local.value}
+          onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+          />  
+          </Card>
+          </Layout.AnnotatedSection>
+        )
+      }
+    })
+}
+  </Layout>
 </Card.Section>
 </Card>
 
 <Card title="My Profile">
 <Card.Section>
 <Layout>
-  {
-      state.map((local,index)=>{
-        if(local.name==='My Profile'){
-          return(
-            <Layout.AnnotatedSection
-            title={local.heading} key={index}>
-            <Card sectioned>
-            <TextField
-            name="value"
-            type="text"                          
-            value={local.value}
-            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
-            />  
-            </Card>
-            </Layout.AnnotatedSection>
-          )
-        }
-      })
-  }
-    </Layout>
+{
+    state.map((local,index)=>{
+      if(local.name==='My Profile'){
+        return(
+          <Layout.AnnotatedSection
+          title={local.heading} key={index}>
+          <Card sectioned>
+          <TextField
+          name="value"
+          type="text"                          
+          value={local.value}
+          onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+          />  
+          </Card>
+          </Layout.AnnotatedSection>
+        )
+      }
+    })
+}
+  </Layout>
 </Card.Section>
 </Card>
 
 <Card title="Addresses">
 <Card.Section>
 <Layout>
-  {
-      state.map((local,index)=>{
-        if(local.name==='Addresses'){
-          return(
-            <Layout.AnnotatedSection
-            title={local.heading} key={index}>
-            <Card sectioned>
-            <TextField
-            name="value"
-            type="text"                          
-            value={local.value}
-            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
-            />  
-            </Card>
-            </Layout.AnnotatedSection>
-          )
-        }
-      })
-  }
-    </Layout>
+{
+    state.map((local,index)=>{
+      if(local.name==='Addresses'){
+        return(
+          <Layout.AnnotatedSection
+          title={local.heading} key={index}>
+          <Card sectioned>
+          <TextField
+          name="value"
+          type="text"                          
+          value={local.value}
+          onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+          />  
+          </Card>
+          </Layout.AnnotatedSection>
+        )
+      }
+    })
+}
+  </Layout>
 </Card.Section>
 </Card>
 
 <Card title="Change Password">
 <Card.Section>
 <Layout>
-  {
-      state.map((local,index)=>{
-        if(local.name==='Change Password'){
-          return(
-            <Layout.AnnotatedSection
-            title={local.heading} key={index}>
-            <Card sectioned>
-            <TextField
-            name="value"
-            type="text"                          
-            value={local.value}
-            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
-            />  
-            </Card>
-            </Layout.AnnotatedSection>
-          )
-        }
-      })
-  }
-    </Layout>
+{
+    state.map((local,index)=>{
+      if(local.name==='Change Password'){
+        return(
+          <Layout.AnnotatedSection
+          title={local.heading} key={index}>
+          <Card sectioned>
+          <TextField
+          name="value"
+          type="text"                          
+          value={local.value}
+          onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+          />  
+          </Card>
+          </Layout.AnnotatedSection>
+        )
+      }
+    })
+}
+  </Layout>
 </Card.Section>
 </Card>
 
 <Card title="Orders">
 <Card.Section>
 <Layout>
-  {
-      state.map((local,index)=>{
-        if(local.name==='Orders'){
-          return(
-            <Layout.AnnotatedSection
-            title={local.heading} key={index}>
-            <Card sectioned>
-            <TextField
-            name="value"
-            type="text"                          
-            value={local.value}
-            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
-            />  
-            </Card>
-            </Layout.AnnotatedSection>
-          )
-        }
-      })
-  }
-    </Layout>
+{
+    state.map((local,index)=>{
+      if(local.name==='Orders'){
+        return(
+          <Layout.AnnotatedSection
+          title={local.heading} key={index}>
+          <Card sectioned>
+          <TextField
+          name="value"
+          type="text"                          
+          value={local.value}
+          onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+          />  
+          </Card>
+          </Layout.AnnotatedSection>
+        )
+      }
+    })
+}
+  </Layout>
 </Card.Section>
 </Card>
 
 <Card title="Shared">
 <Card.Section>
 <Layout>
-  {
-      state.map((local,index)=>{
-        if(local.name==='Shared'){
-          return(
-            <Layout.AnnotatedSection
-            title={local.heading} key={index}>
-            <Card sectioned>
-            <TextField
-            name="value"
-            type="text"                          
-            value={local.value}
-            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
-            />  
-            </Card>
-            </Layout.AnnotatedSection>
-          )
-        }
-      })
-  }
-    </Layout>
+{
+    state.map((local,index)=>{
+      if(local.name==='Shared'){
+        return(
+          <Layout.AnnotatedSection
+          title={local.heading} key={index}>
+          <Card sectioned>
+          <TextField
+          name="value"
+          type="text"                          
+          value={local.value}
+          onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+          />  
+          </Card>
+          </Layout.AnnotatedSection>
+        )
+      }
+    })
+}
+  </Layout>
 </Card.Section>
 </Card>
 <Card title="Button">
 <Card.Section>
 <Layout>
-  {
-      state.map((local,index)=>{
-        if(local.name==='Button'){
-          return(
-            <Layout.AnnotatedSection
-            title={local.heading} key={index}>
-            <Card sectioned>
-            <TextField
-            name="value"
-            type="text"                          
-            value={local.value}
-            onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
-            />  
-            </Card>
-            </Layout.AnnotatedSection>
-          )
-        }
-      })
-  }
-    </Layout>
+{
+    state.map((local,index)=>{
+      if(local.name==='Button'){
+        return(
+          <Layout.AnnotatedSection
+          title={local.heading} key={index}>
+          <Card sectioned>
+          <TextField
+          name="value"
+          type="text"                          
+          value={local.value}
+          onChange = {(e)=>hendleChangeUpdate(e,'value',index)}                                                
+          />  
+          </Card>
+          </Layout.AnnotatedSection>
+        )
+      }
+    })
+}
+  </Layout>
 </Card.Section>
 </Card>
-         {active}
-        </Form>
-   </Page>
+       {active}
+      </Form>
+ </Page>
+}</>
    )
 }

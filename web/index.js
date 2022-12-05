@@ -2,7 +2,6 @@ import { join } from "path";
 import express from "express";
 import cookieParser from "cookie-parser";
 import {Shopify, LATEST_API_VERSION } from "@shopify/shopify-api";
-import { BillingInterval } from "./helpers/ensure-billing.js";
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
 import { setupGDPRWebHooks } from "./gdpr.js";
@@ -17,9 +16,6 @@ const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 const DEV_INDEX_PATH = `${process.cwd()}/frontend/`;
 const PROD_INDEX_PATH = `${process.cwd()}/frontend/dist/`;
 const DB_PATH = `${process.cwd()}/database.sqlite`;
-const app = express();
-app.use(cors());
-app.use(express.json());
  Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY||"",
   API_SECRET_KEY: process.env.SHOPIFY_API_SECRET||"",
@@ -42,14 +38,6 @@ Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
 });
 // The transactions with Shopify will always be marked as test transactions, unless NODE_ENV is production.
 // See the ensureBilling helper to learn more about billing in this template.
-const BILLING_SETTINGS = {
-  required: false,
-  // This is an example configuration that would do a one-time charge for $5 (only USD is currently supported)
-  chargeName: "My Shopify One-Time Charge",
-  amount: 5.0,
-  currencyCode: "USD",
-  interval: BillingInterval.OneTime,
-};
 
 // This sets up the mandatory GDPR webhooks. You’ll need to fill in the endpoint
 // in the “GDPR mandatory webhooks” section in the “App setup” tab, and customize
@@ -62,16 +50,14 @@ setupGDPRWebHooks("/api/webhooks");
 export async function createServer(
   root = process.cwd(),
   isProd = process.env.NODE_ENV === "production",
-  billingSettings = BILLING_SETTINGS
 ) {
+  const app = express();
+app.use(cors());
   app.set("top-level-oauth-cookie", TOP_LEVEL_OAUTH_COOKIE);
   app.set("active-shopify-shops", ACTIVE_SHOPIFY_SHOPS);
   app.set("use-online-tokens", USE_ONLINE_TOKENS);
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
-  Database(app);
-    
-  applyAuthMiddleware(app,{billing: billingSettings});  
   app.post("/api/webhooks", async (req, res) => {
     try {
       await Shopify.Webhooks.Registry.process(req, res);
@@ -83,9 +69,11 @@ export async function createServer(
       }
     }
   });
-
+  app.use(express.json());
   // All endpoints after this point will require an active session
-  app.use("/api/*",verifyRequest(app, {billing: billingSettings}));
+  Database(app);
+  applyAuthMiddleware(app);  
+  app.use("/api/*",verifyRequest(app));
   app.get("/api/products/count", async (req, res) => {
     const session = await Shopify.Utils.loadCurrentSession(
       req,
@@ -149,33 +137,25 @@ export async function createServer(
       res.status(500);
       return res.send("No shop provided");
     }
-
     const shop = Shopify.Utils.sanitizeShop(req.query.shop);
     const appInstalled = await AppInstallations.includes(shop);
-
     if (!appInstalled && !req.originalUrl.match(/^\/exitiframe/i)) {
       return redirectToAuth(req, res, app);
     }
-
     if (Shopify.Context.IS_EMBEDDED_APP && req.query.embedded !== "1") {
       const embeddedUrl = Shopify.Utils.getEmbeddedAppUrl(req);
-
       return res.redirect(embeddedUrl + req.path);
     }
-
     const htmlFile = join(
       isProd ? PROD_INDEX_PATH : DEV_INDEX_PATH,
       "index.html"
     );
-
     return res
       .status(200)
       .set("Content-Type", "text/html")
       .send(readFileSync(htmlFile));
   });
 */
-
-
   app.use("/*", async (req, res) => {
     const shop = req.query.shop;
     if (app.get("active-shopify-shops")[shop] === undefined && shop) {

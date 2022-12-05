@@ -287,6 +287,7 @@
 .customerdb-parent .cd_main-content .cd_main-section .cd_box .cd_box-logo .cd_box-content p:last-child {
   color: black;
   font-weight: 600;
+  margin-top: 5px;
 }
 
 .customerdb-parent .cd_main-section .cd_header #cd_edit-svg {
@@ -578,6 +579,7 @@ justify-content: center;
 
 .customerdb-parent #cd_add-address {
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .customerdb-parent .cd_main-content .cd_main-section .cd_main-section .cd_address-box {
@@ -893,6 +895,11 @@ width: 100%;
   margin-left: 10px;
 }
 
+.customerdb-parent .cd_table-1 a{
+  color: #0582cd;
+  text-decoration: none;
+  }
+
 .customerdb-parent button[type=button] {
   background-color: #fff;
   color: #000;
@@ -1027,13 +1034,15 @@ display: none !important;
 .customerdb-parent .cd_container {
   border-radius: 5px;
   padding: 15px;
-  font-size: var(--main_content_text_size);
+  font-size: var(--main_content_text_size); 
+  text-decoration: none;
 }
 
 .customerdb-parent .cd_col-25 {
   float: left;
   color: var(--main_content_text);
   font-size: var(--main_content_text_size);
+  color: #000;
 }
 
 .customerdb-parent .cd_col-05 {
@@ -1214,12 +1223,14 @@ vertical-align: middle;
     width: 27px;
     vertical-align: sub;
   }
-  .customerdb-parent .cd_table-1 th, .cd_table-1 td,
-  .customerdb-parent .cd_table-1 th, .cd_table-2 td {
+  .customerdb-parent .cd_table-1 th, .customerdb-parent .cd_table-1 td,
+  .customerdb-parent .cd_table-1 th, .customerdb-parent .cd_table-2 td {
     padding: 3px 0 !important;
     width: 35% !important;
     font-size: 14px !important;
 }
+
+
 
 .customerdb-parent .cd_sidebar_menu .cd_menu li:last-child {
   border-bottom: 1px solid gray;
