@@ -29,7 +29,7 @@
   <script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
   <link rel="preload" href="{{ 'customer-dashboard.css' | asset_url }}" as="style">
   <link href="{{ 'customer-dashboard.css' | asset_url }}" rel="stylesheet" type="text/css" media="all">
-  <div id="customer_dashboard">
+  <div id="customer_dashboard" style="display:none;">
     <div class="cd_message_contact">
       <div id="cd_success_message_contact">Message Sent Successfully</div>
       <div id="cd_success_message">{{ shop.metafields.customer_dashboard[translation].value[lang][4].value }}</div>
@@ -37,7 +37,6 @@
       <div id="cd_success_message_address_create">{{ shop.metafields.customer_dashboard[translation].value[lang][13].value }}</div>
       <div id="cd_success_message_address_update">{{ shop.metafields.customer_dashboard[translation].value[lang][14].value }}</div>
       <div id="cd_success_message_delete_update">{{ shop.metafields.customer_dashboard[translation].value[lang][16].value }}</div>
-      <div id="cd_success_message_confirm_delete_address">{{ shop.metafields.customer_dashboard[translation].value[lang][15].value }}</div>
       <div id="cd_success_message_make_default_address">{{ shop.metafields.customer_dashboard[translation].value[lang][17].value }}</div>
     </div>
     <div class="cd_main_box">

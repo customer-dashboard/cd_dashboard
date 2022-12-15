@@ -1,6 +1,6 @@
-import { Button, ButtonGroup, Card, FormLayout, Layout, Page, ContextualSaveBar, Toast, ResourceList, TextField, TextStyle, RangeSlider, Frame, Spinner } from '@shopify/polaris'
+import { Button, ButtonGroup, Card, FormLayout, Layout, Page, ContextualSaveBar, Toast, ResourceList, TextField, TextStyle, RangeSlider, Frame, Spinner, Link } from '@shopify/polaris'
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Toggle from '../Toggle'
 import { useAuthenticatedFetch } from "../../hooks";
 import PopoverSetting from './Popover'
@@ -16,8 +16,17 @@ export default function Setting() {
   const [save, setSave] = useState(false);
   const [active, setActive] = useState(false);
   const [activeConfirm, setActiveConfirm] = useState(true);
-  
   const toggleActive = useCallback(() => setActive((active) => !active), []);
+  useEffect(() => {
+    getSetting();
+  }, [])
+
+  const handleColorSetting = (e) => {
+    if (e) setSave(true);
+    else setSave(false);
+    var obj = Object.assign(setting, e);
+    setSetting(obj);
+  }
   const InstallMetafields = async (url,data) => {
     const response = await fetch(url, {
       method: 'POST',
@@ -35,15 +44,13 @@ export default function Setting() {
     setActiveConfirm(false)
     setActive(<Toast content={content.data} onDismiss={toggleActive} />)
     setActiveConfirm(true)
+    getSetting();
   }
   }
   const dataCard = [
     { heading: "Translations", value: "Add translations to use Customer Dashboard in any language.", content: "Manage Translations", link: "/translations" },
     { heading: "Plan", value: "Basic-Free", content: "Upgrade Plan", link: "/plan" },
     { heading: "Reset Setting", value: "Default Setting", content: "Reset", link: "",function:settingReset },
-  ]
-  const need = [
-    { heading: "Need Help", value: "", content: "Go To Support" },
   ]
 
   const hendlChange = (e) => {
@@ -66,11 +73,6 @@ export default function Setting() {
     textAlign: 'right',
   };
 
-
-  useEffect(() => {
-    getSetting();
-  }, [])
-
   const contextualSaveBarMarkup = save ? (
     <ContextualSaveBar
       message="Unsaved changes"
@@ -92,12 +94,6 @@ export default function Setting() {
       setProgress(false);
     }
   }
-  const handleColorSetting = (e) => {
-    if (e) setSave(true);
-    else setSave(false);
-    var obj = Object.assign(setting, e);
-    setSetting(obj);
-  }
   const submit = async () => {
     setLoading(true);
     const content = await InstallMetafields('/api/set-setting',setting);
@@ -117,7 +113,7 @@ export default function Setting() {
       {
         progress ?
           <SkeletonExample /> :
-          <>
+          <div style={{marginBottom:"50px"}}>
             <Page title='Setting'
               breadcrumbs={[{ content: 'Products', onAction: () => navigate(-1) }]} />
             <Toggle content="Customers Dashboard Is" name="app_access_toggle" value={setting.app_access_toggle} hendleChange={hendlChange} />
@@ -132,7 +128,7 @@ export default function Setting() {
                         <FormLayout>
                           {ele.value ? <p>{ele.value}</p> : ""}
                           <ButtonGroup>
-                            {ele.link ? <Link className='link' to={ele.link}><Button>{ele.content ? ele.content : ""}</Button></Link> :<Confirm name={ele.content} handleFunction={ele.function} activeConfirm={activeConfirm}/>}
+                            {ele.link ? <NavLink className='link' to={ele.link}><Button>{ele.content ? ele.content : ""}</Button></NavLink> :<Confirm name={ele.content} handleFunction={ele.function} activeConfirm={activeConfirm}/>}
                           </ButtonGroup>
                         </FormLayout>
 
@@ -175,35 +171,39 @@ export default function Setting() {
                       <ResourceList
                         resourceName={{ singular: 'product', plural: 'products' }}
                         items={[
-                          // {
-                          //   id: 0,
-                          //   name: 'Border',
-                          //   sku: setting.sidebar_border,
-                          //   media: (
-                          //     <PopoverSetting cd_title="sidebar_border"  ColorChange = {handleColorSetting} value={setting.sidebar_border}/>
-                          //   ),
-                          // },
+                          {
+                            id: 0,
+                            name: 'Border',
+                            sku: setting.sidebar_border,
+                            media: (
+                              <PopoverSetting cd_title="sidebar_border"  ColorChange = {handleColorSetting} value={setting.sidebar_border}/>
+                            ),
+                          },                          
                           {
                             id: 1,
-                            name: 'Background',
-                            sku: setting.sidebar_background,
-                            media: (<PopoverSetting cd_title="sidebar_background" ColorChange={handleColorSetting} value={setting.sidebar_background} />
-                            ),
-                          }, {
-                            id: 2,
                             name: 'Customer Name',
                             sku: setting.sidebar_customer_name,
                             media: (
                               <PopoverSetting cd_title="sidebar_customer_name" ColorChange={handleColorSetting} value={setting.sidebar_customer_name} />
                             ),
-                          }, {
+                          },
+                          {
+                            id: 2,
+                            name: 'Menu Header Background',
+                            sku: setting.sidebar_menu_header_background,
+                            media: (
+                              <PopoverSetting cd_title="sidebar_menu_header_background" ColorChange={handleColorSetting} value={setting.sidebar_menu_header_background} />
+                            ),
+                          },
+                          {
                             id: 3,
                             name: 'Menu Background',
                             sku: setting.sidebar_menu_background,
                             media: (
                               <PopoverSetting cd_title="sidebar_menu_background" ColorChange={handleColorSetting} value={setting.sidebar_menu_background} />
                             ),
-                          }, {
+                          },
+                          {
                             id: 4,
                             name: 'Menu Text',
                             sku: setting.sidebar_menu_text,
@@ -220,24 +220,31 @@ export default function Setting() {
                           },
                           {
                             id: 6,
+                            name: 'Menu Active Text',
+                            sku: setting.sidebar_menu_active_text,
+                            media: (
+                              <PopoverSetting cd_title="sidebar_menu_active_text" ColorChange={handleColorSetting} value={setting.sidebar_menu_active_text} />
+                            ),
+                          },
+                          {
+                            id: 7,
+                            name: 'Menu Hover',
+                            sku: setting.sidebar_menu_hover,
+                            media: (
+                              <PopoverSetting cd_title="sidebar_menu_hover" ColorChange={handleColorSetting} value={setting.sidebar_menu_hover} />
+                            ),
+                          },
+                          {
+                            id: 8,
                             name: 'Menu Text Hover',
                             sku: setting.sidebar_menu_text_hover,
                             media: (
                               <PopoverSetting cd_title="sidebar_menu_text_hover" ColorChange={handleColorSetting} value={setting.sidebar_menu_text_hover} />
                             ),
                           },
-                          // {
-                          //   id: 7,
-                          //   name: 'Icon',
-                          //   sku: setting.sidebar_icon,
-                          //   media: (
-                          //     <PopoverSetting cd_title="sidebar_icon"  ColorChange = {handleColorSetting} value={setting.sidebar_icon}/>
-                          //   ),
-                          // },
                         ]}
                         renderItem={(item) => {
                           const { id, name, sku, media } = item;
-
                           return (
                             <ResourceList.Item
                               id={id}
@@ -279,10 +286,6 @@ export default function Setting() {
                           suffix={<p style={suffixStyles}>{setting.main_content_heading_size}px</p>}
                           output
                         />
-                        {/* <Select
-                  label="Font-Family"
-                  options={options}
-                /> */}
                       </FormLayout>
 
                     </Card.Section>
@@ -292,72 +295,71 @@ export default function Setting() {
                         items={[
                           {
                             id: 0,
-                            name: 'Primary',
+                            name: 'Primary Background Button',
                             sku: setting.main_content_primary,
-                            media: (
-                              <PopoverSetting cd_title="main_content_primary" ColorChange={handleColorSetting} value={setting.main_content_primary} />
-                            ),
-                          }, {
+                            media: (<PopoverSetting cd_title="main_content_primary" ColorChange={handleColorSetting} value={setting.main_content_primary} />),                            
+                          },
+                          {
                             id: 1,
+                            name: 'Primary Button Text',
+                            sku: setting.main_content_primary_text,
+                            media: (
+                              <PopoverSetting cd_title="main_content_primary_text" ColorChange={handleColorSetting} value={setting.main_content_primary_text} />
+                            ),
+                          },
+                          {
+                            id: 2,
+                            name: 'Primary Button Hover',
+                            sku: setting.main_content_primary_hover,
+                            media: (
+                              <PopoverSetting cd_title="main_content_primary_hover" ColorChange={handleColorSetting} value={setting.main_content_primary_hover} />
+                            ),
+                          },
+                          {
+                            id: 3,
                             name: 'Background',
                             sku: setting.main_content_background,
                             media: (
                               <PopoverSetting cd_title="main_content_background" ColorChange={handleColorSetting} value={setting.main_content_background} />
                             ),
                           }, {
-                            id: 2,
+                            id: 4,
                             name: 'Foreground',
                             sku: setting.main_content_foreground,
                             media: (
                               <PopoverSetting cd_title="main_content_foreground" ColorChange={handleColorSetting} value={setting.main_content_foreground} />
                             ),
                           }, {
-                            id: 4,
+                            id: 5,
                             name: 'Foreground Text',
                             sku: setting.main_content_foreground_text,
                             media: (
                               <PopoverSetting cd_title="main_content_foreground_text" ColorChange={handleColorSetting} value={setting.main_content_foreground_text} />
                             ),
                           },
-                          // {
-                          //   id: 5,
-                          //   name: 'Border',
-                          //   sku: setting.main_content_border,
-                          //   media: (
-                          //     <PopoverSetting cd_title="main_content_border"  ColorChange = {handleColorSetting} value={setting.main_content_border}/>
-                          //   ),
-                          // }, 
                           {
-                            id: 5,
+                            id: 6,
                             name: 'Text',
                             sku: setting.main_content_text,
                             media: (
                               <PopoverSetting cd_title="main_content_text" ColorChange={handleColorSetting} value={setting.main_content_text} />
                             ),
                           }, {
-                            id: 6,
+                            id: 7,
                             name: 'Heading',
                             sku: setting.main_content_heading,
                             media: (
                               <PopoverSetting cd_title="main_content_heading" ColorChange={handleColorSetting} value={setting.main_content_heading} />
                             ),
                           },
-                          // {
-                          //   id: 7,
-                          //   name: 'Order Item Background',
-                          //   sku: setting.main_content_order_item_back,
-                          //   media: (
-                          //     <PopoverSetting cd_title="main_content_order_item_back"  ColorChange = {handleColorSetting} value={setting.main_content_order_item_back}/>
-                          //   ),
-                          // },
-                          //  {
-                          //   id: 9,
-                          //   name: 'Reorder Text',
-                          //   sku: setting.main_content_reorder_text,
-                          //   media: (
-                          //     <PopoverSetting cd_title="main_content_reorder_text"  ColorChange = {handleColorSetting} value={setting.main_content_reorder_text}/>
-                          //   ),
-                          // },
+                          {
+                            id: 8,
+                            name: 'Label Color',
+                            sku: setting.main_content_label,
+                            media: (
+                              <PopoverSetting cd_title="main_content_label" ColorChange={handleColorSetting} value={setting.main_content_label} />
+                            ),
+                          }
                         ]}
                         renderItem={(item) => {
                           const { id, name, sku, media } = item;
@@ -397,26 +399,17 @@ export default function Setting() {
             </Page>
             <Page>
               <Layout>
-                {
-                  need.map((ele, index) => (
-                    <Layout.AnnotatedSection
-                      title={ele.heading} key={index}>
+              <Layout.AnnotatedSection
+                      title="Need Help?">
                       <Card sectioned>
-                        <FormLayout>
-                          {ele.value ? <p>{ele.value}</p> : ""}
-                          <ButtonGroup>
-                            <Button>{ele.content ? ele.content : ""}</Button>
-                          </ButtonGroup>
-                        </FormLayout>
-
+                       <p>Send us an email</p>
+                        <Link removeUnderline url="mailto:support@customerdashboard.pro" external>Go To Support</Link>
                       </Card>
                     </Layout.AnnotatedSection>
-                  ))
-                }
               </Layout>
               {active}
             </Page>
-          </>
+          </div>
       }
     </Frame>
   )

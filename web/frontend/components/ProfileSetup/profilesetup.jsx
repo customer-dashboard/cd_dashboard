@@ -176,10 +176,8 @@ setLocal(content.data.body.data.shopLocales);
                 </Layout.Section>
               </Layout>
             </Page>
-            <Page>
               <Toggle content="Allows your customers to update their marketing preference from within their customer account profiles." name="updatebycustomer_toggle" value={setting.updatebycustomer_toggle} hendleChange={hendlChange} />
               {active}
-            </Page>
           </>
       }
     </Frame>

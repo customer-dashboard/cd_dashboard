@@ -150,11 +150,26 @@
             </span>
             <span>${{ orders.total_price | money_without_currency }}</span>
           </div>
-          <div class="cd_row">
-            {% if setting.reorder_toggle == true %}
-              <a class="cd_reorder" reorder_id="{{ orders.id }}" href="#cd_reorder_popup1">{{ shop.metafields.customer_dashboard[translation].value[lang][36].value }}</a>
-            {% endif %}
-          </div>
+          {% if setting.reorder_toggle == true %}
+            <div class="cd_row cd_trigger">
+              <button class="cd_reorder" reorder_id="{{ orders.id }}">{{ shop.metafields.customer_dashboard[translation].value[lang][36].value }}</button>
+              <div class="cd_modal">
+                <div class="cd_modal-content">
+                  <p>All available items in this order have been added to your cart</p>
+                  <div class="cd_content">
+                    <ul class="cd_button_reorder">
+                      <li class="cd_reorder_button">
+                        <a reorder_id="" href="/cart">{{ shop.metafields.customer_dashboard[translation].value[lang][37].value }}</a>
+                      </li>
+                      <li class="cd_reorder_button">
+                        <a reorder_id="" href="/account?a=cd_orders">{{ shop.metafields.customer_dashboard[translation].value[lang][38].value }}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
         </div>
       </div>
       <div class="cd_view-detail">
@@ -168,19 +183,4 @@
 
     </div>
   {% endfor %}
-  <div id="cd_reorder_popup1" class="cd_overlay">
-    <div class="cd_popup">
-      <p>All available items in this order have been added to your cart</p>
-      <div class="cd_content">
-        <ul class="cd_buttons">
-          <li>
-            <a class="cd_reorder_button" reorder_id="" href="/cart">{{ shop.metafields.customer_dashboard[translation].value[lang][37].value }}</a>
-          </li>
-          <li>
-            <a class="cd_reorder_button" reorder_id="" href="/account?a=cd_orders">{{ shop.metafields.customer_dashboard[translation].value[lang][38].value }}</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
 </section>

@@ -21,10 +21,6 @@ const pages = import.meta.globEager("./pages/**/!(*.test.[jt]sx)*.([jt]sx)");
               destination:'/'
           },
           {
-            label: "Customers",
-            destination:'/customers'
-          },
-          {
             label: "Profile Setup",
             destination:'/profilesetup'
 
@@ -32,6 +28,11 @@ const pages = import.meta.globEager("./pages/**/!(*.test.[jt]sx)*.([jt]sx)");
           {
             label: "Menu Builder",
             destination:'/menubuilder'
+
+          },
+          {
+            label: "Translations",
+            destination:'/translations'
 
           },
           {

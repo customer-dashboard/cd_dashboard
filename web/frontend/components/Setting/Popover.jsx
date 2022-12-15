@@ -6,9 +6,7 @@ export default function PopoverSetting(props){
   const MINIMUM_DIFFERENCE = 100;
 const [popoverActive, setPopoverActive] = useState(false);
 const [first, setfirst] = useState(value);
-const [toggle, setToggle] = useState(false);
 const togglePopoverActive = () =>{
-  setToggle(true)
   setPopoverActive(!popoverActive);
 }
     const [state, setState] = useState({
@@ -22,14 +20,10 @@ const togglePopoverActive = () =>{
       focusColor: null
     });
 
-    
-
 
 const { color } = state;
 const { hue, brightness, saturation } = color;
 const rgb = hsbToRgb(hue / 360, saturation, brightness);
-const { r, g, b } = rgb;
-const hex = rgbToHex(r, g, b);
 const diff = calcColorDifference(ShopifyAdmin, rgb);
 const isOkay = isColorOkay(diff);
 const error = isOkay ? null : "Color is not okay";
@@ -37,11 +31,11 @@ const error = isOkay ? null : "Color is not okay";
 const divStyle = {
   width: "60px",
   height: "20px",
-  backgroundColor: hex,
-  borderRadius: "3px 3px 3px 3px"
+  backgroundColor: first,
+  borderRadius: "3px 3px 3px 3px",
+  border:"1px solid black"
 };
 
-  
   
 const handleColorChange = color => {
 const { hue, brightness, saturation } = color;
@@ -60,25 +54,15 @@ const hex = rgbToHex(r, g, b);
 
 
 const handleHexChange = hex => {
-  const rgb = hexToRgb(hex);
-  if (rgb == null) {
-    setState({ invalidHex: hex, focusColor: null, focusHex: true });
-    return;
-  }
-  // const color = rgbToHsv(rgb);
-  // setState({
-  //   color,
-  //   invalidHex: undefined,
-  //   focusColor: null,
-  //   focusHex: true
-  // });
+  setfirst(hex)
+  ColorChange({[cd_title]:hex});
 };
 
 return (
 <div>
 <Popover
 active={popoverActive}
-activator={toggle?<div className='color_picker' style={{backgroundColor:first}} onClick={togglePopoverActive}></div>:<div className='color_picker' style={{backgroundColor:value}} onClick={togglePopoverActive}></div>}
+activator={<div className='color_picker' style={{backgroundColor:first}} onClick={togglePopoverActive}></div>}
 onClose={togglePopoverActive}
 ariaHaspopup={false}
 sectioned
@@ -98,9 +82,8 @@ sectioned
                 <TextField
                   label="Your color"
                   labelHidden
-                  disabled 
                   onChange={handleHexChange}
-                  value={state.invalidHex || hex}
+                  value={first}
                   error={error}
                   prefix={<div style={divStyle} />}
                   autoFocus={state.focusHex}

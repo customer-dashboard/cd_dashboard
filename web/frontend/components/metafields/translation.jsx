@@ -61,8 +61,8 @@ const localjson = {
              "name": "Addresses"
           },
           {
-            "heading": "Set Us Default Address",
-            "value": "Set Us Default Address",
+            "heading": "Set as Default Address",
+            "value": "Set as Default Address",
              "name": "Addresses"
           },
           {
@@ -111,18 +111,18 @@ const localjson = {
             "name": "Change Password"
           },
           {
-            "heading": "New Password Must be at least 8 Characters",
-            "value": "New Password Must be at least 8 Characters",
+            "heading": "Password Must be at least 8 Characters",
+            "value": "Password Must be at least 8 Characters",
             "name": "Change Password"
           },
           {
-            "heading": "The Two Password are not the Same",
-            "value": "The Two Password are not the Same",
+            "heading": "Password and confirm password must be match",
+            "value": "Password and confirm password must be match",
             "name": "Change Password"
           },
           {
-            "heading": "Password Updated. Login you  Out",
-            "value": "Password Updated. Login you  Out",
+            "heading": "Password updated. please login again.",
+            "value": "Password updated. please login again.",
             "name": "Change Password"
           },
           {

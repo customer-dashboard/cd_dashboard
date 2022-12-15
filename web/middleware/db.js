@@ -57,6 +57,23 @@ export const Database = (app) => {
     res.status(status).send({ status, data, error });
   });
 
+  app.get("/api/get-theme", async (req, res) => {
+    const session = await Shopify.Utils.loadCurrentSession(req, res, app.get("use-online-tokens"));
+    let status = 200;
+    let error = null;
+    let data = [];
+    try {
+      data = await Theme.all({
+        session: session,
+      });
+    } catch (error) {
+      status = 500;
+      error = error.message;
+    }
+    res.status(status).send({ status, data, error });
+  });
+
+
   app.get("/api/get-shop", async (req, res) => {
     const session = await Shopify.Utils.loadCurrentSession(req, res, app.get("use-online-tokens"));
     try {

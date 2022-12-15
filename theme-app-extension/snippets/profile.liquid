@@ -91,50 +91,18 @@
             {% endif %}
           {% endfor %}
         {% endfor %}
-
-
-        <!-- <div class="cd_row">
-        <div class="cd_col-05">
-        <label for="fname">First Name:</label>
-        </div>
-        <div class="cd_col-25">
-        <p>{{ customer.first_name }}</p>
-        </div>
-        </div>
-        <div class="cd_row">
-        <div class="cd_col-05">
-        <label for="fname">Last Name:</label>
-        </div>
-        <div class="cd_col-25">
-        <p>{{ customer.last_name }}</p>
-        </div>
-        </div>
-        <div class="cd_row">
-        <div class="cd_col-05">
-        <label for="fname">Email:</label>
-        </div>
-        <div class="cd_col-25">
-        <p>{{ customer.email }}</p>
-        </div>
-        </div>
-        <div class="cd_row">
-        <div class="cd_col-05">
-        <label for="fname">Phone:</label>
-        </div>
-        <div class="cd_col-25">
-        <p>{{ customer.phone }}</p> 
-        </div>
-        </div> -->
       </div>
       <div>
         {% if setting.updatebycustomer_toggle == true %}
           <div class="cd_check-marketing">
-            <span>{{ shop.metafields.customer_dashboard[translation].value[lang][5].value }}
+            <label>{{ shop.metafields.customer_dashboard[translation].value[lang][5].value }}
             </br>
-            <p style="color:black">
-              {% if customer.accepts_marketing==true %}Yes{% else %}No{% endif%}
-            </p>
-          </span>
+            <div class="cd_col-25">
+              <p>
+                {% if customer.accepts_marketing==true %}Yes{% else %}No{% endif%}
+              </p>
+            </div>
+          </label>
         </div>
       {% endif %}
     </div>

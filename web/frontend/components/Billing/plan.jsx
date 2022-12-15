@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, Card, FormLayout, Grid, Toast, Layout, Page, TextStyle, Frame } from '@shopify/polaris'
-import { Link, useNavigate } from 'react-router-dom';
+import { Button, ButtonGroup, Card, FormLayout, Grid, Toast, Layout, Page, TextStyle, Frame, Link} from '@shopify/polaris'
+import {useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {useAuthenticatedFetch } from "../../hooks";
 import SkeletonExample from '../SkeletonExample';
@@ -13,10 +13,6 @@ export default function Billing(){
     { title: "Standard", price: "4.00", content: "Upgrade", value: ["4$/month", "1500+ customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
     // { title: "Standard", price:"7.00", content: "Upgrade", value: ["7$/month", "100k customers", "New Account page", "Multi language support", "Reorder", "Order history", "Add custom pages and links"] },
   ]
-  const needHelp = [
-    { heading: "Need Help", value: "", content: "Go To Support", link: "" },
-  ]
-
   useEffect(() => {
     getPaymentList();
   }, [])
@@ -78,24 +74,15 @@ export default function Billing(){
     </Grid>
   </Page>
   <Page>
-    <Layout>
-      {
-        needHelp.map((ele, index) => (
-          <Layout.AnnotatedSection
-            title={ele.heading} key={index}>
-            <Card sectioned>
-              <FormLayout>
-                {ele.value ? <p>{ele.value}</p> : ""}
-                <ButtonGroup>
-                  {ele.link ? <Link to={ele.link}><Button>{ele.content ? ele.content : ""}</Button></Link> : <Button>{ele.content ? ele.content : ""}</Button>}
-                </ButtonGroup>
-              </FormLayout>
-
-            </Card>
-          </Layout.AnnotatedSection>
-        ))
-      }
-    </Layout>
+  <Layout>
+  <Layout.AnnotatedSection
+                      title="Need Help?">
+                      <Card sectioned>
+                       <p>Send us an email</p>
+                        <Link removeUnderline url="mailto:support@customerdashboard.pro" external>Go To Support</Link>
+                      </Card>
+                    </Layout.AnnotatedSection>
+              </Layout>
   </Page>
 </>
 }

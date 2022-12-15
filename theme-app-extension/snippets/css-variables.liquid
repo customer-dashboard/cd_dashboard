@@ -1,25 +1,31 @@
- {% assign setting = shop.metafields.customer_dashboard.setting.value %}
-<style>
-:root {
---app_access_toggle: {{ setting.app_access_toggle }};
-    --updatebycustomer_toggle: {{ setting.updatebycustomer_toggle }};
-    --reorder_toggle: {{ setting.reorder_toggle }};
-    --sidebar_menu_size: {{ setting.sidebar_menu_size | append: "px" }};
-    --sidebar_heading_size: {{ setting.sidebar_heading_size | append: "px" }};
-    --sidebar_background:{{ setting.sidebar_background }};
-    --sidebar_customer_name:{{ setting.sidebar_customer_name }};
-    --sidebar_menu_background:{{ setting.sidebar_menu_background }};
-    --sidebar_menu_text:{{ setting.sidebar_menu_text }};
-    --sidebar_menu_active:{{ setting.sidebar_menu_active }};
-    --sidebar_menu_text_hover: {{ setting.sidebar_menu_text_hover }};
-    --main_content_text_size: {{ setting.main_content_text_size | append: "px" }};
-    --main_content_heading_size: {{ setting.main_content_heading_size | append: "px" }};
-    --main_content_background: {{ setting.main_content_background }};
-    --main_content_foreground: {{ setting.main_content_foreground }};
-    --main_content_primary: {{ setting.main_content_primary }};
-    --main_content_heading: {{ setting.main_content_heading }};
-    --main_content_text: {{ setting.main_content_text }};
-    --main_content_foreground_text: {{ setting.main_content_foreground_text }};
-    --main_content_order_item_back: {{ setting.main_content_order_item_back }};
+{% assign setting = shop.metafields.customer_dashboard.setting.value %}
+<style > :root
+{
+  --app_access_toggle: {{ setting.app_access_toggle }};
+  --updatebycustomer_toggle: {{ setting.updatebycustomer_toggle }};
+  --reorder_toggle: {{ setting.reorder_toggle }};
+  --sidebar_menu_size: {{ setting.sidebar_menu_size | append: "px" }};
+  --sidebar_heading_size: {{ setting.sidebar_heading_size | append: "px" }};
+  --sidebar_border: {{ setting.sidebar_border }};
+  --sidebar_menu_header_background: {{ setting.sidebar_menu_header_background }};
+  --sidebar_menu_background: {{ setting.sidebar_menu_background }};
+  --sidebar_customer_name: {{ setting.sidebar_customer_name }};
+  --sidebar_menu_text: {{ setting.sidebar_menu_text }};
+  --sidebar_menu_active: {{ setting.sidebar_menu_active }};
+  --sidebar_menu_hover: {{ setting.sidebar_menu_hover }};
+  --sidebar_menu_active_text: {{ setting.sidebar_menu_active_text }};
+  --sidebar_menu_text_hover: {{ setting.sidebar_menu_text_hover }};
+  --main_content_text_size: {{ setting.main_content_text_size | append: "px" }};
+  --main_content_heading_size: {{ setting.main_content_heading_size | append: "px" }};
+  --main_content_background: {{ setting.main_content_background }};
+  --main_content_foreground: {{ setting.main_content_foreground }};
+  --main_content_primary: {{ setting.main_content_primary }};
+  --main_content_primary_text: {{ setting.main_content_primary_text }};
+  --main_content_primary_hover: {{ setting.main_content_primary_hover }};
+  --main_content_heading: {{ setting.main_content_heading }};
+  --main_content_text: {{ setting.main_content_text }};
+  --main_content_label: {{ setting.main_content_label }};
+  --main_content_foreground_text: {{ setting.main_content_foreground_text }};
+  --main_content_order_item_back: {{ setting.main_content_order_item_back }};
 }
-</style> 
+</style>

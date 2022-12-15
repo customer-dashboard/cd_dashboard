@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Card, FormLayout, Layout, Page, TextStyle, ContextualSaveBar, Toast, Link, Frame, Spinner } from '@shopify/polaris'
 import { useCallback, useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Feedback from './FeedbackModel/Feedback'
 import Toggle from './Toggle'
 import SkeletonExample from './SkeletonExample'
@@ -14,6 +14,7 @@ const [loading, setLoading] = useState(false);
 const [save, setSave] = useState(false);
   const [active, setActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
+  const navigate = useNavigate();
   const cardData = [
     { title: "Customers", content: <NavLink to="/customers">View Customers</NavLink>, value: count?.customer_count },
     { title: "Order", content: <Link url={`https://${shop}/admin/orders`} external>All Orders</Link>, value: count?.order_count },
@@ -22,9 +23,7 @@ const [save, setSave] = useState(false);
   const dataCard = [
     { heading: "Translations", content: <NavLink className="link" to="/translations"><Button >Manage Translations</Button></NavLink>, value: "Add translations to use Customer Dashboard in any language." },
     { heading: "Plan", content: <NavLink className="link" to="/plan"><Button>Upgrade Plan</Button></NavLink>, value: "Basic-Free" },
-    { heading: "Need Help", content: <Link removeUnderline url="https://customerdashboard.pro/documentation" external><Button>Go To Support</Button></Link>, value:"" },
-    { heading: "What Do You Think About This App", content: <Link removeUnderline className="link" url="https://customerdashboard.pro/feedback" external><Button>Give Us Feedback</Button></Link>, value: ""},
-    { heading: "Don't Have What You Need", content:<Feedback value="Request A Feature" shop={shop} />, value:"" },
+    // { heading: "What Do You Think About This App", content: <Link removeUnderline className="link" url="https://customerdashboard.pro/feedback" external><Button>Give Us Feedback</Button></Link>, value: ""},
   ]
   useEffect(() => {
     getSetting();
@@ -96,7 +95,7 @@ getSetting();
         progress ?
           <SkeletonExample /> :
           <div style={{paddingBottom:"100px"}}>
-            <Page title='Dashboard'>
+            <Page title='Dashboard' primaryAction={{content:"Installation",onAction:()=>navigate("installation")}}>
               {contextualSaveBarMarkup}
               <button style={{display:"none"}} onClick={DeleteMetafields}>Delete Metafields</button>
               <Layout>
@@ -120,15 +119,27 @@ getSetting();
                       title={ele.heading} key={index}>
                       <Card sectioned>
                         <FormLayout>
-                          {ele.value ? <p>{ele.value}</p> : ""}
-                          <ButtonGroup>
-                            {ele.content}
-                          </ButtonGroup>
+                          {ele.value?<p>{ele.value}</p> : ""}
+                          {ele.content}
                         </FormLayout>
                       </Card>
                     </Layout.AnnotatedSection>
                   ))
                 }
+                 <Layout.AnnotatedSection
+                      title="Need Help?">
+                      <Card sectioned>
+                       <p>Send us an email</p>
+                        <Link removeUnderline url="mailto:support@customerdashboard.pro" external>Go To Support</Link>
+                      </Card>
+                    </Layout.AnnotatedSection>
+                <Layout.AnnotatedSection
+                      title="Don't Have What You Need">
+                      <Card sectioned>
+                        <p>Send us an email</p>
+                        <Link removeUnderline url="mailto:support@customerdashboard.pro" external>support@customerdashboard.pro</Link>
+                      </Card>
+                    </Layout.AnnotatedSection>
                 {active}
               </Layout>
             </Page>

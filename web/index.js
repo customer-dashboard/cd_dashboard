@@ -58,6 +58,40 @@ app.use(cors());
   app.set("use-online-tokens", USE_ONLINE_TOKENS);
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
+
+  app.post("/api/webhooks/customers/data_request", async (req, res) => {
+    try {
+      await handle(req, res);
+      res.statusCode = 200;
+      console.log(res);
+    } catch (error) {
+      console.log(`Failed to process webhook: ${error}`);
+    }
+  });
+
+  app.post("/api/webhooks/customers/redact", async (req, res) => {
+    try {
+      await handle(req, res);
+      res.statusCode = 200;
+      console.log(res);
+    } catch (error) {
+      console.log(`Failed to process webhook: ${error}`);
+    }
+  });
+
+  app.post("/api/webhooks/shop/redact", async (req, res) => {
+    try {
+      await handle(req, res);
+      res.statusCode = 200;
+      console.log(res);
+    } catch (error) {
+      console.log(`Failed to process webhook: ${error}`);
+    }
+  });
+
+
+
+
   app.post("/api/webhooks", async (req, res) => {
     try {
       await Shopify.Webhooks.Registry.process(req, res);

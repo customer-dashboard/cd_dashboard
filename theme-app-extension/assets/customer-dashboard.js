@@ -12,6 +12,7 @@ if (cd_main || mainContentClass || mainClass || mainTag || mainId || nt_content 
   var maincontainer = cd_main || mainContentClass || mainClass || mainTag || mainId || nt_content || MainContent;
   maincontainer.classList.add('customerdb-parent');
   var NewElement = document.getElementById('customer_dashboard');
+  NewElement.removeAttribute("style");
   maincontainer.prepend(NewElement);
 }
 window.onload = function () {
@@ -23,6 +24,19 @@ window.onload = function () {
     }
   }
 }
+
+
+// var modal = document.querySelector(".cd_modal");
+// var trigger = document.querySelector(".cd_trigger");
+// var closeButton = document.querySelector(".cd_close-button");
+
+// function toggleModal() {
+//     modal.classList.toggle("cd_show-modal");
+// }
+// trigger.addEventListener("click", toggleModal);
+// closeButton.addEventListener("click", toggleModal);
+
+
 
 fetch(`${hostname}/api/get-billing-frontend?shop=${Shop_name}`)
   .then((response) => response.json())
@@ -130,27 +144,27 @@ document.querySelector("#cd_form_customer").addEventListener("submit", function 
   }
   var phone_length = array.phone.replace(/undefined,/g, "");
   var phoneno = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-if(phoneno.test(phone_length)||phone_length.length==0){
-  function myGreeting() {
-    location.replace("/account?a=cd_my-profile");
-  }
-  cd_submit_data.classList.add('cd_none');
-  cd_submit_loader.classList.remove('cd_none');
-  fetch(`${hostname}/api/post-customer-data?shop=${Shop_name}`, {
-    method: "POST",
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(array).replace(/undefined,/g, "")
-  }).then(res => {
-    if (res.status == 200) {
-      success_message.classList.add('cd_show');
-      cd_submit_data.classList.remove('cd_none');
-      cd_submit_loader.classList.add('cd_none');
-      setTimeout(myGreeting, 1000);
+  if (phoneno.test(phone_length) || phone_length.length == 0) {
+    function myGreeting() {
+      location.replace("/account?a=cd_my-profile");
     }
-  });
-}else{
-  validation_phone.classList.add('cd_error');
-}
+    cd_submit_data.classList.add('cd_none');
+    cd_submit_loader.classList.remove('cd_none');
+    fetch(`${hostname}/api/post-customer-data?shop=${Shop_name}`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(array).replace(/undefined,/g, "")
+    }).then(res => {
+      if (res.status == 200) {
+        success_message.classList.add('cd_show');
+        cd_submit_data.classList.remove('cd_none');
+        cd_submit_loader.classList.add('cd_none');
+        setTimeout(myGreeting, 1000);
+      }
+    });
+  } else {
+    validation_phone.classList.add('cd_error');
+  }
 });
 
 
@@ -161,7 +175,8 @@ function cd_logout() {
   fetch(logoutBtn.href).then(() => window.location.href = REDIRECT_PATH);
 }
 
-document.querySelector(".cd_add_address").addEventListener("submit", function () {
+document.querySelector(".cd_add_address").addEventListener("submit", function (e) {
+  e.preventDefault();
   var REDIRECT_PATH = "/account?a=cd_addresses";
   var cd_create_address = document.querySelector(".cd_create_address");
   var cd_submit_data = cd_create_address.querySelector(".cd_submit_data");
@@ -170,31 +185,46 @@ document.querySelector(".cd_add_address").addEventListener("submit", function ()
   var addresses = this.action;
   cd_submit_data.classList.add('cd_none');
   cd_submit_loader.classList.remove('cd_none');
-  fetch(addresses.href).then(() =>{
+  function myGreeting() {
+    window.location.href = REDIRECT_PATH;
+  }
+  var formData = new FormData(this);
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST',addresses, true);
+  xhr.onload = function () {
     success_message.classList.add('cd_show');
     cd_submit_data.classList.remove('cd_none');
     cd_submit_loader.classList.add('cd_none');
-    window.location.href = REDIRECT_PATH;
-  });
+    setTimeout(myGreeting,1500);
+  };
+  xhr.send(formData);
 });
 
 var cd_address_edit = document.getElementsByClassName("cd_address_edit");
 for (var i = 0; i < cd_address_edit.length; i++) {
-  cd_address_edit[i].addEventListener('submit', function () {
-  var REDIRECT_PATH = "/account?a=cd_addresses";
-  var cd_update_address = document.querySelector(".cd_update_address");
-  var cd_submit_data = cd_update_address.querySelector(".cd_submit_data");
-  var success_message = document.getElementById('cd_success_message_address_update');
-  var cd_submit_loader = cd_update_address.querySelector(".cd_submit_loader");
-  var addresses = this.action;
-  cd_submit_data.classList.add('cd_none');
-  cd_submit_loader.classList.remove('cd_none');
-  fetch(addresses).then(() =>{
-    success_message.classList.add('cd_show');
-    cd_submit_data.classList.remove('cd_none');
-    cd_submit_loader.classList.add('cd_none');
-    window.location.href = REDIRECT_PATH;
-  });
+  cd_address_edit[i].addEventListener('submit', function (e) {
+    e.preventDefault();
+    var REDIRECT_PATH = "/account?a=cd_addresses";
+    var cd_update_address = document.querySelector(".cd_update_address");
+    var cd_submit_data = cd_update_address.querySelector(".cd_submit_data");
+    var success_message = document.getElementById('cd_success_message_address_update');
+    var cd_submit_loader = cd_update_address.querySelector(".cd_submit_loader");
+    var addresses = this.action;
+    cd_submit_data.classList.add('cd_none');
+    cd_submit_loader.classList.remove('cd_none');
+    function myGreeting() {
+      window.location.href = REDIRECT_PATH;
+    }
+    var formData = new FormData(this);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST',addresses, true);
+    xhr.onload = function () {
+      success_message.classList.add('cd_show');
+      cd_submit_data.classList.remove('cd_none');
+      cd_submit_loader.classList.add('cd_none');
+      setTimeout(myGreeting,1500);
+    };
+    xhr.send(formData);
   }, false);
 }
 
@@ -221,7 +251,8 @@ for (var i = 0; i < cd_backFunction.length; i++) {
 
 var cd_delete_button = document.getElementsByClassName("cd_delete_address");
 for (var i = 0; i < cd_delete_button.length; i++) {
-  cd_delete_button[i].addEventListener("submit", function () {
+  cd_delete_button[i].addEventListener("submit", function (e) {
+    e.preventDefault();
     var REDIRECT_PATH = "/account?a=cd_addresses";
     var cd_delete_address = this.querySelector(".cd_delete-button");
     var cd_submit_data = cd_delete_address.querySelector(".cd_submit_data");
@@ -229,16 +260,31 @@ for (var i = 0; i < cd_delete_button.length; i++) {
     var success_message = document.getElementById('cd_success_message_delete_update');
     var cd_submit_loader = cd_delete_address.querySelector(".cd_delete_this_address");
     var addresses = this.action;
-    cd_submit_data.classList.add('cd_none');
-    cd_submit_loader.classList.remove('cd_none');
-    if (confirm(cd_success_message_confirm_delete_address.innerHTML) == true) {
-    fetch(addresses).then(() =>{
-      success_message.classList.add('cd_show');
-      cd_submit_data.classList.remove('cd_none');
-      cd_submit_loader.classList.add('cd_none');
+    function myGreeting() {
       window.location.href = REDIRECT_PATH;
-    });
-  }
+    }
+    var modal = cd_delete_address.querySelector(".cd_modal");
+    modal.classList.toggle("cd_show-modal");
+    var cd_reorder_button = modal.getElementsByClassName("cd_reorder_button");
+    for (var i = 0; i < cd_reorder_button.length; i++) {
+      cd_reorder_button[i].addEventListener("click", function () {
+        if (this.innerHTML == "Yes") {
+          cd_submit_data.classList.add('cd_none');
+          cd_submit_loader.classList.remove('cd_none');
+          var data = new FormData();
+          data.append('_method', 'delete');
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', addresses, true);
+          xhr.onload = function () {
+            cd_submit_data.classList.remove('cd_none');
+            cd_submit_loader.classList.add('cd_none');
+            success_message.classList.add('cd_show');
+            setTimeout(myGreeting, 1000);
+          };
+          xhr.send(data);
+        }
+      })
+    }
   })
 }
 
@@ -248,7 +294,7 @@ for (var i = 0; i < cd_make_default_address.length; i++) {
     var REDIRECT_PATH = "/account?a=cd_addresses";
     var success_message = document.getElementById('cd_success_message_make_default_address');
     var addresses = this.action;
-    fetch(addresses).then(() =>{
+    fetch(addresses).then(() => {
       success_message.classList.add('cd_show');
       window.location.href = REDIRECT_PATH;
     });
@@ -262,13 +308,18 @@ document.querySelector("#cd_change_password_form").addEventListener("submit", fu
   var cd_change_password = document.querySelector(".cd_change_password");
   var cd_submit_data = cd_change_password.querySelector(".cd_submit_data");
   var cd_submit_loader = cd_change_password.querySelector(".cd_submit_loader");
+  var cd_default_store = document.querySelector(".cd_default_store");
   var success_message = document.getElementById('cd_success_message_password');
   var formData = new FormData(this);
   var array = {};
   for (var pair of formData.entries()) {
     array[pair[0]] = pair[1];
   }
-  if (array.password === array.passwordConfirmation) {
+  if(array.id==="6715665285442"){
+    cd_default_store.classList.add('cd_error');
+  }else{
+    cd_default_store.classList.remove('cd_error');
+    if (array.password === array.passwordConfirmation) {
     function myGreeting() {
       window.location.href = "/account/login";
     }
@@ -287,13 +338,13 @@ document.querySelector("#cd_change_password_form").addEventListener("submit", fu
           setTimeout(myGreeting, 2000);
         }
       });
-    } else {
+    }else {
       cd_length_char.classList.add('cd_error'); cd_not_same.classList.remove('cd_error');
     }
   } else {
     cd_not_same.classList.add('cd_error'); cd_length_char.classList.remove('cd_error');
 
-  }
+  }}
 });
 
 
@@ -302,6 +353,8 @@ var cd_order_variant = document.getElementsByClassName("cd_order_variant");
 for (var i = 0; i < elements.length; i++) {
   elements[i].addEventListener('click', function (event) {
     var reorder_id = event.target.getAttribute('reorder_id');
+    var modal = document.querySelector(".cd_modal");
+    modal.classList.toggle("cd_show-modal");
     const items = [];
     for (let index = 0; index < cd_order_variant.length; index++) {
       let element = cd_order_variant[index];

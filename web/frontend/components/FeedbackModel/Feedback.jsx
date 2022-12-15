@@ -1,18 +1,16 @@
 import { Button, FormLayout, Modal, TextContainer, TextField } from '@shopify/polaris'
-import axios from 'axios';
 import { useCallback, useState } from 'react'
+import { useAuthenticatedFetch } from '../../hooks';
 
 export default function Feedback(props){
-  const Result = props.value;
-  const {shop} = props;
+  const {value, shop} = props;
   const [error, setError] = useState('');
-  const [state, setState] = useState({
-    type:"link",
-  })
+  const [state, setState] = useState({})
     const [active, setActive] = useState(false);
+  const fetch = useAuthenticatedFetch();
   const [toggle, setToggle] = useState(true);
     const handleChange = useCallback(() => {Clear();setActive(!active), [active]});
-    const activator = <Button onClick={handleChange}>{Result}</Button>;
+    const activator = <Button onClick={handleChange}>{value}</Button>;
 
   const ChangeHendle = (value,name)=>{
         setState((preValue)=>{
@@ -25,12 +23,22 @@ export default function Feedback(props){
         })
   }
 
-  const Submit = ()=>{
+  const Submit = async()=>{
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(state.email))
   {
     setError('');
-    axios.post(`https://www.customerdashboard.pro/index.php`,state).then((response) => {
-      });
+    const getRequestFeature = await fetch('/api/set-requestFeature', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(state)
+    });
+    const content = await getRequestFeature.json();
+    if(content.status===200){
+      console.log(content);
+    }
   }else {
     setError("You have entered an invalid email address!")
     return (false)
@@ -38,9 +46,7 @@ export default function Feedback(props){
   }
 
   const Clear = () =>{
-    setState({
-      type:"link"
-    });
+    setState({});
   }
   return (
   
@@ -49,7 +55,7 @@ export default function Feedback(props){
             activator={activator}
             open={active}
             onClose={handleChange}
-            title={Result}
+            title={value}
             primaryAction={{
               content: 'Submit',
               onAction: Submit,

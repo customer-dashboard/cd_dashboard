@@ -49,7 +49,7 @@ export default function MenuBuilder(){
   {
     progress?
     <SkeletonExample/>:
-    <>
+    <div style={{marginBottom:"50px"}}>
     <Page title='Menu Builder' breadcrumbs={[{ content: 'Menu', onAction: () => navigate(-1) }]}>
       <Layout>
         <Layout.Section oneHalf>
@@ -59,16 +59,16 @@ export default function MenuBuilder(){
             </Card.Section>
           </Card>
         </Layout.Section>
-      </Layout>
-    </Page>
-    <Page>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Layout.Section>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
         <CustomePageModel defaultProfile={defaultProfile} getProfileData={getProfileData} activeConfirm={setActiveConfirm}/>
         <CustomeLinkPage defaultProfile={defaultProfile} getProfileData={getProfileData} activeConfirm={setActiveConfirm}/>
       </div>
+        </Layout.Section>
+      </Layout>
       {active}
     </Page>
-  </>
+  </div>
   }
  </Frame>
   )
