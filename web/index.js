@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import {Shopify, LATEST_API_VERSION } from "@shopify/shopify-api";
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
-import { setupGDPRWebHooks } from "./gdpr.js";
+import { setupGDPRWebHooks,shopifyWebhook_SHOP_REDACT, shopifyWebhook_CUSTOMERS_DATA_REQUEST,shopifyWebhook_CUSTOMERS_REDACT } from "./gdpr.js";
 import productCreator from "./helpers/product-creator.js";
 import { Database } from "./middleware/db.js";
 import cors from 'cors';
@@ -58,40 +58,9 @@ app.use(cors());
   app.set("use-online-tokens", USE_ONLINE_TOKENS);
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
-
-  app.post("/api/webhooks/customers/data_request", async (req, res) => {
-    try {
-      await handle(req, res);
-      res.statusCode = 200;
-      console.log(res);
-    } catch (error) {
-      console.log(`Failed to process webhook: ${error}`);
-    }
-  });
-
-  app.post("/api/webhooks/customers/redact", async (req, res) => {
-    try {
-      await handle(req, res);
-      res.statusCode = 200;
-      console.log(res);
-    } catch (error) {
-      console.log(`Failed to process webhook: ${error}`);
-    }
-  });
-
-  app.post("/api/webhooks/shop/redact", async (req, res) => {
-    try {
-      await handle(req, res);
-      res.statusCode = 200;
-      console.log(res);
-    } catch (error) {
-      console.log(`Failed to process webhook: ${error}`);
-    }
-  });
-
-
-
-
+shopifyWebhook_SHOP_REDACT(app);
+shopifyWebhook_CUSTOMERS_DATA_REQUEST(app);
+shopifyWebhook_CUSTOMERS_REDACT(app);
   app.post("/api/webhooks", async (req, res) => {
     try {
       await Shopify.Webhooks.Registry.process(req, res);

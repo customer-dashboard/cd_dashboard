@@ -11,24 +11,6 @@ export function setupGDPRWebHooks(path) {
     path,
     webhookHandler: async (topic, shop, body) => {
       const payload = JSON.parse(body);
-      // Payload has the following shape:
-      // {
-      //   "shop_id": 954889,
-      //   "shop_domain": "{shop}.myshopify.com",
-      //   "orders_requested": [
-      //     299938,
-      //     280263,
-      //     220458
-      //   ],
-      //   "customer": {
-      //     "id": 191167,
-      //     "email": "john@example.com",
-      //     "phone": "555-625-1199"
-      //   },
-      //   "data_request": {
-      //     "id": 9999
-      //   }
-      // }
     },
   });
 
@@ -42,21 +24,6 @@ export function setupGDPRWebHooks(path) {
     path,
     webhookHandler: async (topic, shop, body) => {
       const payload = JSON.parse(body);
-      // Payload has the following shape:
-      // {
-      //   "shop_id": 954889,
-      //   "shop_domain": "{shop}.myshopify.com",
-      //   "customer": {
-      //     "id": 191167,
-      //     "email": "john@example.com",
-      //     "phone": "555-625-1199"
-      //   },
-      //   "orders_to_redact": [
-      //     299938,
-      //     280263,
-      //     220458
-      //   ]
-      // }
     },
   });
 
@@ -70,11 +37,39 @@ export function setupGDPRWebHooks(path) {
     path,
     webhookHandler: async (topic, shop, body) => {
       const payload = JSON.parse(body);
-      // Payload has the following shape:
-      // {
-      //   "shop_id": 954889,
-      //   "shop_domain": "{shop}.myshopify.com"
-      // }
     },
+  });
+}
+
+export const shopifyWebhook_CUSTOMERS_DATA_REQUEST = (app) => {
+  app.post('/api/webhooks/customers_data_request', async (req, res) => {
+    try {
+      await Shopify.Webhooks.Registry.process(req, res);
+      console.log({status:200});
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
+}
+
+export const shopifyWebhook_CUSTOMERS_REDACT = (app) => {
+  app.post('/api/webhooks/customers_redact', async (req, res) => {
+    try {
+      await Shopify.Webhooks.Registry.process(req, res);
+      console.log({status:200});
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
+}
+
+export const shopifyWebhook_SHOP_REDACT = (app) => {
+  app.post('/api/webhooks/shop_redact', async (req, res) => {
+    try {
+      await Shopify.Webhooks.Registry.process(req, res);
+      console.log({status:200});
+    } catch (error) {
+      console.log(error.message);
+    }
   });
 }
