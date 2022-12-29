@@ -1,9 +1,7 @@
-{% assign lang = request.locale.iso_code %}
 {% assign setting = shop.metafields.customer_dashboard.setting.value %}
-{% assign translation = "translations_" | append:lang %}
 <section id="cd_orders" class="cd_main-section cd_main-section-2">
   <div class="cd_header">
-    <p id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][25].value }}</p>
+    <h2 id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][25].value }}</h2>
   </div>
   {% for orders in customer.orders %}
     <div class="cd_container cd_order-container">
@@ -23,9 +21,20 @@
       </div>
       <div class="cd_order-img">
         {%- for line_item in orders.line_items -%}
-          <a class="cd_order_variant" id="{{ orders.id }}" variant_id="{{ line_item.variant.id }}" target="_blank" href="{{ line_item.variant.url }}">
+          <a
+            class="cd_order_variant"
+            id="{{ orders.id }}"
+            variant_id="{{ line_item.variant.id }}"
+            target="_blank"
+            href="{{ line_item.variant.url }}">
             <div class="cd_price-detail">
-              <img loading="lazy" width="100" height="100" src="{{ line_item.image | img_url: "300x" }}" alt="order-picture" defer>
+              <img
+                loading="lazy"
+                width="100"
+                height="100"
+                src="{{ line_item.image | img_url: "300x" }}"
+                alt="order-picture"
+                defer>
               <p>{{ line_item.title }}</p>
               <p>${{ line_item.price | money_without_currency }}</p>
             </div>
@@ -173,10 +182,22 @@
         </div>
       </div>
       <div class="cd_view-detail">
-        <button type="button" onclick="accordion('cd_panel_'+'{{ orders.id }}','btn_'+'{{ orders.id }}')" id="btn_{{ orders.id }}" class="cd_accordion">
+        <button
+          type="button"
+          onclick="accordion('cd_panel_'+'{{ orders.id }}','btn_'+'{{ orders.id }}')"
+          id="btn_{{ orders.id }}"
+          class="cd_accordion">
           <span>View Details</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 20 12" fill="none">
-            <path d="M1 1.57916L9.80141 10.3806L18.5478 1.63417" stroke="#202020" stroke-width="2"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="10"
+            viewBox="0 0 20 12"
+            fill="none">
+            <path
+              d="M1 1.57916L9.80141 10.3806L18.5478 1.63417"
+              stroke="#202020"
+              stroke-width="2" />
           </svg>
         </button>
       </div>

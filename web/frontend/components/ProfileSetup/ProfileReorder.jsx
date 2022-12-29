@@ -35,6 +35,8 @@ export default function ProfileReorder(props){
     onDragEnd(fromIndex, toIndex) {
       const data = [...state];
       const item = data.splice(fromIndex, 1)[0];
+      if(toIndex===0||toIndex===1||toIndex===2||fromIndex===0||fromIndex===1||fromIndex===2)data.splice(fromIndex, 0, item);
+      else{
       data.splice(toIndex, 0, item);
       if (status === 'default' || status === 'menu_default') {
         setState(data)
@@ -45,6 +47,7 @@ export default function ProfileReorder(props){
       });
     setActive(<Toast content="Reorder Saved" onDismiss={toggleActive} />)
     }
+      }
     },
     nodeSelector: 'li',
     handleSelector: 'span'
@@ -56,7 +59,7 @@ export default function ProfileReorder(props){
         <ReactDragListView {...dragProps}>
           <ol>
             {state.map((item, index) => (
-              <li key={index}><p><Icon source={DragHandleMinor} /></p>
+              <li key={index}><p><Icon source={DragHandleMinor} color={item.name==="first_name"||item.name==="last_name"||item.name==="email"?"subdued":""} /></p>
                 <p className='content'>{item.label}</p>
                 {status === 'menu_default' ? <p>
                   {defaultsvg.map((svg_element,index) => {

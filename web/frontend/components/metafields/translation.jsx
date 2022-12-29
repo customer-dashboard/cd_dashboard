@@ -235,11 +235,11 @@ const localjson = {
             "value": "Email",
              "name": "Shared"
           },
-          {
-            "heading": "Phone",
-            "value": "Phone",
-             "name": "Shared"
-          }
+          // {
+          //   "heading": "Phone",
+          //   "value": "Phone",
+          //    "name": "Shared"
+          // }
     ]
   };
 

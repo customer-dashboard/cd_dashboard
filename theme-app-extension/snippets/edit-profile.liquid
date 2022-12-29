@@ -1,15 +1,19 @@
 {% assign setting = shop.metafields.customer_dashboard.setting.value %}
-{% assign lang = request.locale.iso_code %}
-{% assign translation = "translations_" | append:lang %}
 <section id="cd_edit-profile" class="cd_main-section cd_main-section-2">
-  <form id="cd_form_customer">
+  <div class="cd_header" id="cd_address_heading_1">
     <div>
+      <h2 id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][6].value }}</h2>
+    </div>
+  </div>
+  <div class="cd_container">
+    <form id="cd_form_customer">
       <div class="cd_form-header">
-        <div style="display:flex">
-          <p id="cd_heading">{{ shop.metafields.customer_dashboard[translation].value[lang][6].value }}</p>
-        </div>
         <div class="all_edit_fields">
-          <input type="hidden" id="id" name="id" value="{{ customer.id }}">
+          <input
+            type="hidden"
+            id="id"
+            name="id"
+            value="{{ customer.id }}">
           {% for profile in shop.metafields.customer_dashboard.profile_fields.value %}
             {% for nav in shop.metafields.customer_dashboard[translation].value[lang] %}
               {% if nav.name == "Shared" and nav.heading == profile.label %}
@@ -26,8 +30,8 @@
                   {% assign profile_value = customer.phone %}
                 {% endif %}
                 {% for metafields_data in customer.metafields.customer_dashboard.additional_data.value %}
-                  {% if profile.name == metafields_data[0] and profile.name != "first_name" and profile.name !=
-                    "last_name" and profile.name != "email" and profile.name != "phone" %}
+                  {% if profile.name == metafields_data[0] and profile.name != "first_name" and profile.name != 
+ "last_name" and profile.name != "email" and profile.name != "phone" %}
                     {% assign profile_value = metafields_data[1] %}
                   {% endif %}
                 {% endfor %}
@@ -48,8 +52,14 @@
                     {% endfor %}
                     {% capture readiocheckbox %}
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" {{ checked_value }} type="{{profile.value}}" id="cd_{{profile.id }}_{{forloop.index0}}" name="{{label_name}}" value="{{multipleField.value}}">
-                        <label class="form-check-label" for="cd_{{profile.id }}_{{forloop.index0}}">{{multipleField.value}}</label>
+                        <input
+                          class="form-check-input"
+                          {{ checked_value }}
+                          type="{{profile.value}}"
+                          id="cd_{{profile.id }}_{{forloop.index0}}"
+                          name="{{label_name}}"
+                          value="{{multipleField.value}}">
+                        <label class="form-check-label" for="cd_{{profile.id }}_{{forloop.index0}}">{{ multipleField.value }}</label>
                       </div>
                     {% endcapture %}
                     {% assign everything = everything | append: readiocheckbox %}
@@ -58,21 +68,32 @@
                     <div>
                       <label>{{ nav.value }}</label>
                     </div>
-                    <div style="width:fit-content;">{{ everything }}</div>
+                    <div class="cd_multiple_object">{{ everything }}</div>
                   </div>
                 {% elsif profile.value == "email" or profile.value == "text" or profile.value == "date" %}
                   <div class="cd_row">
                     <div class="cd_col-25">
                       <label for="cd_{{profile.id }}">{{ nav.value }}</label>
                     </div>
-                    <div class="cd_col-75"><input type="{{profile.value}}" id="cd_{{profile.id }}" name="{{label_name}}" value="{{ profile_value }}"></div>
+                    <div class="cd_col-75">
+                      <input
+                        type="{{profile.value}}"
+                        id="cd_{{profile.id }}"
+                        name="{{label_name}}"
+                        {% if label_name == "email" %}readonly{% endif %}
+                        value="{{ profile_value }}" />
+                    </div>
                   </div>
                 {% elsif profile.value == "textarea" and profile.value == "textarea" %}
                   <div class="cd_row">
                     <div class="cd_col-25">
                       <label for="cd_{{profile.id }}">{{ nav.value }}</label>
                     </div>
-                    <textarea class="form-control" id="cd_{{profile.id }}" rows="2" name="{{label_name}}">{{ profile_value }}</textarea>
+                    <textarea
+                      class="form-control"
+                      id="cd_{{profile.id }}"
+                      rows="2"
+                      name="{{label_name}}">{{ profile_value }}</textarea>
                   </div>
                 {% endif %}
               {% endif %}
@@ -82,20 +103,24 @@
         </div>
         {% if setting.updatebycustomer_toggle == true %}
           <div class="cd_check-marketing">
-            <input type="checkbox" name="cd_accepts_marketing" id="checkbox" {% if customer.accepts_marketing %}checked="checked"{% endif %}>
+            <input
+              type="checkbox"
+              name="cd_accepts_marketing"
+              id="checkbox"
+              {% if customer.accepts_marketing %}checked="checked"{% endif %}>
             <label for="checkbox">{{ shop.metafields.customer_dashboard[translation].value[lang][5].value }}
               from {{ shop.name }} store
             </label>
           </div>
         {% endif %}
         <div class="cd_row cd_update_profile">
-          <button type="submit" class="cd_submit_data">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
+          <button type="submit" class="cd_submit_data">{{ shop.metafields.customer_dashboard[translation].value[lang][40].value }}</button>
           <button class="cd_submit_loader cd_none">
             <div class="cd_loader"></div>
           </button>
-          <button class="cd_backFunction" type="button">{{shop.metafields.customer_dashboard[translation].value[lang][9].value}}</button>
+          <button class="cd_backFunction" type="button">{{ shop.metafields.customer_dashboard[translation].value[lang][9].value }}</button>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </section>

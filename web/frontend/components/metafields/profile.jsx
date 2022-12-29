@@ -23,14 +23,14 @@ const profile = [
         "type": "profile",
         "multipleValue": []
     },
-    {
-        "id": "3",
-        "label": "Phone",
-        "value": "text",
-        "name": "phone",
-        "type": "profile",
-        "multipleValue": []
-    }
+    // {
+    //     "id": "3",
+    //     "label": "Phone",
+    //     "value": "text",
+    //     "name": "phone",
+    //     "type": "profile",
+    //     "multipleValue": []
+    // }
 ];
 
 export default profile

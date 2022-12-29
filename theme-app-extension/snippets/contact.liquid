@@ -1,21 +1,19 @@
-{% assign lang = request.locale.iso_code %}
-{% assign translation = "translations_" | append:lang %}
 <section id="cd_contact-2" class="cd_main-section cd_main-section-2">
   <div class="cd_container">
     <div>
       <div class="cd_form-header" style="padding: 10px;">
         <div>
-          <p id="cd_heading">Contact</p>
+          <h2 id="cd_heading">Contact</h2>
         </div>
       </div>
-      {% form 'contact', class:'cd_contact' %}
+      {% form 'contact', class: 'cd_contact' %}
         {{ form.errors | default_errors }}
         {%- if form.posted_successfully? -%}
           <script>
             localStorage.setItem("contact_posted", "yes");
             window.location = "/account?a=cd_orders";
           </script>
-        {%-endif -%}
+        {%- endif -%}
         <div class="cd_container">
           <div class="cd_flex-row">
             <div class="cd_row">
@@ -23,7 +21,11 @@
                 <label for="first-name">First Name</label>
               </div>
               <div class="cd_col-75">
-                <input type="text" name="contact[first_name]" id="first-name" value="{{ customer.first_name }}"/>
+                <input
+                  type="text"
+                  name="contact[first_name]"
+                  id="first-name"
+                  value="{{ customer.first_name }}" />
               </div>
             </div>
             <div class="cd_row">
@@ -31,7 +33,11 @@
                 <label for="last-name">Last Name</label>
               </div>
               <div class="cd_col-75">
-                <input type="text" name="contact[last_name]" id="last-name" value="{{ customer.last_name }}"/>
+                <input
+                  type="text"
+                  name="contact[last_name]"
+                  id="last-name"
+                  value="{{ customer.last_name }}" />
               </div>
             </div>
           </div>
@@ -41,7 +47,11 @@
                 <label for="phone">Phone</label>
               </div>
               <div class="cd_col-75">
-                <input type="text" name="contact[phone]" id="phone" value="{{ customer.phone }}"/>
+                <input
+                  type="text"
+                  name="contact[phone]"
+                  id="phone"
+                  value="{{ customer.phone }}" />
               </div>
             </div>
             <div class="cd_row">
@@ -49,17 +59,28 @@
                 <label for="email">Email</label>
               </div>
               <div class="cd_col-75">
-                <input type="email" name="contact[email]" id="email" readonly value="{{ customer.email }}"/>
+                <input
+                  type="email"
+                  name="contact[email]"
+                  id="email"
+                  readonly
+                  value="{{ customer.email }}" />
               </div>
             </div>
           </div>
           <div class="cd_message">
             <label for="message">Message</label>
-            <textarea name="contact[body]" id="message" value="{{ form.body }}"></textarea>
+            <textarea
+              name="contact[body]"
+              id="message"
+              value="{{ form.body }}"></textarea>
           </div>
           <div class="cd_row" style="margin-top:15px;">
-            <button type="submit">{{shop.metafields.customer_dashboard[translation].value[lang][40].value}}</button>
-            <button class="cd_backContact" type="button" id="cd_submit_loader">{{shop.metafields.customer_dashboard[translation].value[lang][9].value}}</button>
+            <button type="submit">{{ shop.metafields.customer_dashboard[translation].value[lang][40].value }}</button>
+            <button
+              class="cd_backContact"
+              type="button"
+              id="cd_submit_loader">{{ shop.metafields.customer_dashboard[translation].value[lang][9].value }}</button>
           </div>
         </div>
       {% endform %}

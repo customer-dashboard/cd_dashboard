@@ -1,6 +1,6 @@
 
 var hostname = "https://customer-dashboard-pro.fly.dev";
-Shop_name = window.location.hostname;
+Shop_name = Shopify.shop;
 var mainContentClass = document.getElementsByClassName("main-content")[0]
 var mainClass = document.getElementsByClassName("main")[0]
 var mainTag = document.getElementsByTagName("main")[0]
@@ -15,27 +15,6 @@ if (cd_main || mainContentClass || mainClass || mainTag || mainId || nt_content 
   NewElement.removeAttribute("style");
   maincontainer.prepend(NewElement);
 }
-window.onload = function () {
-  if (document.getElementsByClassName('nav-menu')[0]) document.getElementsByClassName('nav-menu')[0].scrollLeft = 0;
-  var menus = document.getElementsByClassName('nav-menu__item');
-  for (var i = 0; i < menus.length; i++) {
-    if (menus[i].classList.contains('cd_active')) {
-      document.getElementsByClassName('nav-menu')[0].scrollLeft = menus[i].offsetLeft;
-    }
-  }
-}
-
-
-// var modal = document.querySelector(".cd_modal");
-// var trigger = document.querySelector(".cd_trigger");
-// var closeButton = document.querySelector(".cd_close-button");
-
-// function toggleModal() {
-//     modal.classList.toggle("cd_show-modal");
-// }
-// trigger.addEventListener("click", toggleModal);
-// closeButton.addEventListener("click", toggleModal);
-
 
 
 fetch(`${hostname}/api/get-billing-frontend?shop=${Shop_name}`)
@@ -142,9 +121,9 @@ document.querySelector("#cd_form_customer").addEventListener("submit", function 
   for (var pair of formData.entries()) {
     array[pair[0]] += ',' + pair[1];
   }
-  var phone_length = array.phone.replace(/undefined,/g, "");
-  var phoneno = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-  if (phoneno.test(phone_length) || phone_length.length == 0) {
+  // var phone_length = array.phone.replace(/undefined,/g, "");
+  // var phoneno = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  // if (phoneno.test(phone_length) || phone_length.length == 0) {
     function myGreeting() {
       location.replace("/account?a=cd_my-profile");
     }
@@ -162,9 +141,9 @@ document.querySelector("#cd_form_customer").addEventListener("submit", function 
         setTimeout(myGreeting, 1000);
       }
     });
-  } else {
-    validation_phone.classList.add('cd_error');
-  }
+  // } else {
+  //   validation_phone.classList.add('cd_error');
+  // }
 });
 
 

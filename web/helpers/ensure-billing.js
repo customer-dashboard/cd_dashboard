@@ -249,6 +249,7 @@ const RECURRING_PURCHASE_MUTATION = `
       name: $name
       lineItems: $lineItems
       returnUrl: $returnUrl
+      trialDays: 14
       test: $test
     ) {
       confirmationUrl

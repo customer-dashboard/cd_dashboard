@@ -335,7 +335,7 @@ fill:var(--main_content_foreground_text);
 }
 
 
-p{
+.customerdb-parent > p{
   display: block;
   margin-block-start: 1em;
   margin-block-end: 1em;
@@ -344,7 +344,7 @@ p{
   line-height: normal;
 }
 
- svg {
+.customerdb-parent svg {
   fill: transparent;
   stroke: transparent;
   height: inherit;
@@ -609,7 +609,12 @@ justify-content: center;
 
 .customerdb-parent #cd_add-address {
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 15px;
+}
+
+.customerdb-parent .cd_multiple_object {
+text-indent: 15px;
+margin-bottom:15px;
 }
 
 .customerdb-parent .cd_main-content .cd_main-section .cd_main-section .cd_address-box {
@@ -854,6 +859,7 @@ width: 100%;
 .customerdb-parent #cd_heading {
   font-size: var(--main_content_heading_size) !important;
   color: var(--main_content_heading);
+  margin-bottom: 10px;
 
 }
 
@@ -1073,7 +1079,7 @@ display: none !important;
 
 .customerdb-parent .cd_container {
   border-radius: 5px;
-  padding: 15px;
+  padding: 10px;
   font-size: var(--main_content_text_size); 
   text-decoration: none;
 }

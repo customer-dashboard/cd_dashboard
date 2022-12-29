@@ -1,7 +1,6 @@
-import { Button, ButtonGroup, Card, FormLayout, Layout, Page, TextStyle, ContextualSaveBar, Toast, Link, Frame, Spinner } from '@shopify/polaris'
+import { Button, Card, FormLayout, Layout, Page, TextStyle, ContextualSaveBar, Toast, Link, Frame, Spinner } from '@shopify/polaris'
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import Feedback from './FeedbackModel/Feedback'
 import Toggle from './Toggle'
 import SkeletonExample from './SkeletonExample'
 import { useAuthenticatedFetch } from "../hooks";
@@ -18,11 +17,11 @@ const [save, setSave] = useState(false);
   const cardData = [
     { title: "Customers", content: <NavLink to="/customers">View Customers</NavLink>, value: count?.customer_count },
     { title: "Order", content: <Link url={`https://${shop}/admin/orders`} external>All Orders</Link>, value: count?.order_count },
-    { title: "Current Plan", content: "", value: billing && billing.status === 'active' ? billing.name : "Basic-Free" },
+    { title: "Current Plan", content: "", value: billing && billing.status === 'active' ? billing.name : "0-1500 Customers" },
   ]
   const dataCard = [
     { heading: "Translations", content: <NavLink className="link" to="/translations"><Button >Manage Translations</Button></NavLink>, value: "Add translations to use Customer Dashboard in any language." },
-    { heading: "Plan", content: <NavLink className="link" to="/plan"><Button>Upgrade Plan</Button></NavLink>, value: "Basic-Free" },
+    { heading: "Plan", content: <NavLink className="link" to="/plan"><Button>Upgrade Plan</Button></NavLink>, value: billing && billing.status === 'active' ? billing.name : "0-1500 Customers" },
     // { heading: "What Do You Think About This App", content: <Link removeUnderline className="link" url="https://customerdashboard.pro/feedback" external><Button>Give Us Feedback</Button></Link>, value: ""},
   ]
   useEffect(() => {

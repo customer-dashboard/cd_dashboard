@@ -1,12 +1,10 @@
-{% assign lang = request.locale.iso_code %}
-{% assign translation = "translations_" | append:lang %}
 {% for address in customer.addresses %}
-  {% form 'customer_address', address, class:'cd_address_edit' %}
+  {% form 'customer_address', address, class: 'cd_address_edit' %}
     <section id="cd_edit-address_{{ address.id }}" class="cd_main-section cd_main-section-2">
       <section class="cd_address-section-main ">
         <div class="cd_header cd_address_heading_1">
           <div class="cd_header2">
-            <p id="cd_heading" class="cd_toggle_address">Edit Addresses</p>
+            <h2 id="cd_heading" class="cd_toggle_address">Edit Addresses</h2>
           </div>
         </div>
         <div class="cd_container form_{{ form.id }}">
@@ -16,7 +14,11 @@
                 <label for="fname">First Name</label>
               </div>
               <div class="cd_col-75">
-                <input type="text" id="fname" name="address[first_name]" value="{{ form.first_name }}">
+                <input
+                  type="text"
+                  id="fname"
+                  name="address[first_name]"
+                  value="{{ form.first_name }}">
               </div>
             </div>
             <div class="cd_row">
@@ -24,7 +26,11 @@
                 <label for="lname">Last Name</label>
               </div>
               <div class="cd_col-75">
-                <input type="text" id="lname" name="address[last_name]" value="{{ form.last_name }}">
+                <input
+                  type="text"
+                  id="lname"
+                  name="address[last_name]"
+                  value="{{ form.last_name }}">
               </div>
             </div>
           </div>
@@ -33,7 +39,11 @@
               <label for="company">Company</label>
             </div>
             <div class="cd_col-75">
-              <input type="text" id="company" name="address[company]" value="{{ form.company }}">
+              <input
+                type="text"
+                id="company"
+                name="address[company]"
+                value="{{ form.company }}">
             </div>
           </div>
           <div class="cd_row">
@@ -41,7 +51,11 @@
               <label for="address">Address</label>
             </div>
             <div class="cd_col-75">
-              <input type="text" id="address" name="address[address1]" value="{{ form.address1 }}">
+              <input
+                type="text"
+                id="address"
+                name="address[address1]"
+                value="{{ form.address1 }}">
             </div>
           </div>
           <div class="cd_row">
@@ -49,55 +63,66 @@
               <label for="address2">Apartment, suite, etc. :-</label>
             </div>
             <div class="cd_col-75">
-              <input type="text" id="address2" name="address[address2]" value="{{ form.address2 }}">
+              <input
+                type="text"
+                id="address2"
+                name="address[address2]"
+                value="{{ form.address2 }}">
             </div>
           </div>
 
           {%- comment -%}
-            <div class="cd_flex-row">
+          <div class="cd_flex-row">
           {%- endcomment -%}
           <div class="cd_row">
             <div class="cd_col-25">
               <label for="city">City</label>
             </div>
             <div class="cd_col-75">
-              <input type="text" id="city" name="address[city]" value="{{ form.city }}">
+              <input
+                type="text"
+                id="city"
+                name="address[city]"
+                value="{{ form.city }}">
             </div>
           </div>
           {%- comment -%}
-            <div class="cd_row">
-            <div class="cd_col-25">
-            <label for="country">Country/Region:-</label>
-            </div>
-            <div class="cd_col-75">
-            <select id="AddressCountry_{{ form.id }}" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">
-            {{ all_country_option_tags }}
-            </select>
-            </div>
-            </div>
-          {%- endcomment -%}
-          {%- comment -%}
-            </div>
-          {%- endcomment -%}
-
-          {%- comment -%}
-            <div class="cd_row">
-            <div class="cd_col-25">
-            <label for="province">Province :-</label>
-            </div>
-            <div class="cd_col-75">
-            <input type="text" id="province" name="address[province]" value="{{ form.province }}">
-            </div>
-            </div>
-          {%- endcomment -%}
-
-
           <div class="cd_row">
-            <div class="cd_col-25">
+          <div class="cd_col-25">
+          <label for="country">Country/Region:-</label>
+          </div>
+          <div class="cd_col-75">
+          <select id="AddressCountry_{{ form.id }}" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">
+          {{ all_country_option_tags }}
+          </select>
+          </div>
+          </div>
+          {%- endcomment -%}
+          {%- comment -%}
+          </div>
+          {%- endcomment -%}
+
+          {%- comment -%}
+          <div class="cd_row">
+          <div class="cd_col-25">
+          <label for="province">Province :-</label>
+          </div>
+          <div class="cd_col-75">
+          <input type="text" id="province" name="address[province]" value="{{ form.province }}">
+          </div>
+          </div>
+          {%- endcomment -%}
+
+
+            <div class="cd_row"> <div class="cd_col-25">
               <label for="postal">Postal/Zip Code :-</label>
             </div>
             <div class="cd_col-75">
-              <input type="text" id="postal" name="address[zip]" value="{{ form.zip }}">
+              <input
+                type="text"
+                id="postal"
+                name="address[zip]"
+                value="{{ form.zip }}">
             </div>
           </div>
 
@@ -106,11 +131,19 @@
               <label for="phone">Phone :-</label>
             </div>
             <div class="cd_col-75">
-              <input type="text" id="phone" name="address[phone]" value="{{ form.phone }}">
+              <input
+                type="text"
+                id="phone"
+                name="address[phone]"
+                value="{{ form.phone }}">
             </div>
           </div>
           <div class="cd_check-marketing">
-            <input type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" {% if address.id == customer.default_address.id %}checked="checked"{% endif %}>
+            <input
+              type="checkbox"
+              id="address_default_address_{{ form.id }}"
+              name="address[default]"
+              {% if address.id == customer.default_address.id %}checked="checked"{% endif %}>
             <label for="address_default_address_{{ form.id }}">
               {{ shop.metafields.customer_dashboard[translation].value[lang][12].value }}
             </label>
@@ -120,7 +153,10 @@
             <button class="cd_submit_loader cd_none">
               <div class="cd_loader"></div>
             </button>
-            <button class="cd_backAddress" type="button" id="cd_submit_loader">{{shop.metafields.customer_dashboard[translation].value[lang][9].value}}</button>
+            <button
+              class="cd_backAddress"
+              type="button"
+              id="cd_submit_loader">{{ shop.metafields.customer_dashboard[translation].value[lang][9].value }}</button>
           </div>
         </div>
       </section>

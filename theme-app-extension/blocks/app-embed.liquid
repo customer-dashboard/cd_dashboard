@@ -1,6 +1,10 @@
 {% assign setting = shop.metafields.customer_dashboard.setting.value %}
 {% assign lang = request.locale.iso_code %}
-{% assign translation = "translations_" | append:lang %}
+{% assign translation = "translations_" | append: lang %}
+{% unless shop.metafields.customer_dashboard[translation] %}
+  {% assign translation = "translations_en" %}
+  {% assign lang = "en" %}
+{% endunless %}
 {% if customer %}
   <script>
     customerVarOnLoad = {{ customer.id }};
@@ -27,8 +31,15 @@
 </style>
 {% if setting.app_access_toggle == true %}
   <script src="{{ 'customer-dashboard.js' | asset_url }}" defer></script>
-  <link rel="preload" href="{{ 'customer-dashboard.css' | asset_url }}" as="style">
-  <link href="{{ 'customer-dashboard.css' | asset_url }}" rel="stylesheet" type="text/css" media="all">
+  <link
+    rel="preload"
+    href="{{ 'customer-dashboard.css' | asset_url }}"
+    as="style">
+  <link
+    href="{{ 'customer-dashboard.css' | asset_url }}"
+    rel="stylesheet"
+    type="text/css"
+    media="all">
   <div id="customer_dashboard" style="display:none;">
     <div class="cd_message_contact">
       <div id="cd_success_message_contact">Message Sent Successfully</div>
@@ -40,17 +51,17 @@
       <div id="cd_success_message_make_default_address">{{ shop.metafields.customer_dashboard[translation].value[lang][17].value }}</div>
     </div>
     <div class="cd_main_box">
-      {% render "header" %}
+      {% render "header", translation: translation, lang: lang %}
       <div class="cd_main-content">
-        {% render "profile" %}
-        {% render "edit-profile" %}
-        {% render "orders" %}
-        {% render "addresses" %}
-        {% render "add-address" %}
-        {% render "edit-address" %}
-        {% render "contact" %}
-        {% render "page" %}
-        {% render "change-password" %}
+        {% render "profile", translation: translation, lang: lang %}
+        {% render "edit-profile", translation: translation, lang: lang %}
+        {% render "orders", translation: translation, lang: lang %}
+        {% render "addresses", translation: translation, lang: lang %}
+        {% render "add-address", translation: translation, lang: lang %}
+        {% render "edit-address", translation: translation, lang: lang %}
+        {% render "contact", translation: translation, lang: lang %}
+        {% render "page", translation: translation, lang: lang %}
+        {% render "change-password", translation: translation, lang: lang %}
       </div>
     </div>
   </div>
